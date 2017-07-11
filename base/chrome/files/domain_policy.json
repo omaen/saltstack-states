@@ -1,0 +1,3 @@
+{
+    "AuthServerWhitelist": "{{ salt['pillar.get']('chrome:AuthServerWhitelist', salt['pillar.get']('chrome:default_AuthServerWhitelist', '')) }}"
+}

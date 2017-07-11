@@ -1,0 +1,6 @@
+zfsonlinux:
+  dkms: zfs-dkms
+  zfsutils: zfsutils-linux
+  zed: zfs-zed
+  config: {
+  }

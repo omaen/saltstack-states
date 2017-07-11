@@ -1,0 +1,2 @@
+[org.gnome.shell]
+favorite-apps=['chromium.desktop', 'icedove.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop', 'gnome-terminal.desktop']

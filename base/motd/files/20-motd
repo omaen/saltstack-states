@@ -1,0 +1,12 @@
+#!/bin/sh
+
+cat <<EOF
+
+
+                 ** Authorized access only! **
+
+Please log out immediately if you have not been explicitly given
+               permission to access this server!
+
+
+EOF

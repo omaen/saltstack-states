@@ -1,0 +1,19 @@
+{% import_yaml 'aliases/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+        'Debian': {
+            'aliases_file': '/etc/aliases',
+        },
+    },
+    grain='os_family',
+    merge=salt['pillar.get']('aliases:lookup'))
+%}
+
+{% do defaults.aliases.update(os_family_map) %}
+
+{% set aliases = salt['pillar.get'](
+        'aliases',
+        default=defaults.aliases,
+        merge=True
+    )
+%}

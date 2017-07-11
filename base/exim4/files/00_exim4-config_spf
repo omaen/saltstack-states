@@ -1,0 +1,2 @@
+# Enable spf checking
+CHECK_RCPT_SPF = true

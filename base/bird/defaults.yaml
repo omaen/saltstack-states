@@ -1,0 +1,19 @@
+bird:
+  bird_conf: /etc/bird/bird.conf
+  bird6_conf: /etc/bird/bird6.conf
+  bird_service: bird
+  bird6_service: bird6
+  bird_disable: False
+  bird6_disable: False
+  bird_config:
+    - router id 198.51.100.1
+    - protocol device: {}
+    - protocol kernel:
+      - metric 64
+      - import none
+  bird6_config:
+    - router id 198.51.100.1
+    - protocol device: {}
+    - protocol kernel:
+      - metric 64
+      - import none

@@ -1,0 +1,15 @@
+{% import_yaml 'autofs/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+    'Debian': {
+      'autofs': 'autofs',
+      'service': 'autofs',
+    },
+  }, grain='os_family', merge=salt['pillar.get']('autofs:lookup'))
+%}
+
+{% do defaults.autofs.update(os_family_map) %}
+
+{% set autofs = salt['pillar.get'](
+  'autofs', default=defaults.autofs, merge=True)
+%}

@@ -1,0 +1,20 @@
+{% import_yaml 'snmpd/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+		'Debian': {
+			'package': 'snmpd',
+			'service': 'snmpd'
+		},
+	},
+	grain='os_family',
+	merge=salt['pillar.get']('snmpd:lookup'))
+%}
+
+{% do defaults.snmpd.update(os_family_map) %}
+
+{% set snmpd = salt['pillar.get'](
+		'snmpd',
+		default=defaults.snmpd,
+		merge=True
+	)
+%}

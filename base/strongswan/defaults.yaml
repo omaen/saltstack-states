@@ -1,0 +1,9 @@
+strongswan:
+  strongswan: strongswan
+  libstrongswan_extra_plugins: libstrongswan-extra-plugins
+  ipsec_conf: /etc/ipsec.conf
+  ipsec_secrets_inc: /var/lib/strongswan/ipsec.secrets.inc
+  cacerts: {}
+  certs: {}
+  secrets: {}
+  config: {}

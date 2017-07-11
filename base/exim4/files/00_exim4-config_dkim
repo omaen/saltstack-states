@@ -1,0 +1,6 @@
+# Enable DKIM signing
+DKIM_CANON = relaxed
+DKIM_SELECTOR = {{ salt['pillar.get']('exim4:dkim:selector') }}
+DKIM_PRIVATE_KEY = /etc/exim4/keys/dkim.{{ salt['pillar.get']('exim4:dkim:selector') }}.key
+DKIM_DOMAIN = {{ salt['pillar.get']('exim4:dkim:domain') }}
+DKIM_STRICT = true

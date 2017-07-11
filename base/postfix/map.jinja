@@ -1,0 +1,21 @@
+{% import_yaml 'postfix/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+        'Debian': {
+            'main_cf': '/etc/postfix/main.cf',
+            'package': 'postfix',
+            'service': 'postfix'
+        },
+    },
+    grain='os_family',
+    merge=salt['pillar.get']('postfix:lookup'))
+%}
+
+{% do defaults.postfix.update(os_family_map) %}
+
+{% set postfix = salt['pillar.get'](
+        'postfix',
+        default=defaults.postfix,
+        merge=True
+    )
+%}

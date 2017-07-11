@@ -1,0 +1,20 @@
+#!/bin/sh
+
+UPTIME=$(uptime -p)
+USERS=$(users | wc -w)
+OS=$(which lsb_release > /dev/null && lsb_release -ds)
+APT_UPGRADABLE=$(which aptitude > /dev/null && aptitude -q search ~U | wc -l)
+CPU_MODEL=$(awk -F ': ' '/model name/ {print $2; exit}' /proc/cpuinfo)
+CPU_SOCKETS=$(awk -F ': ' '/physical id/ {print $2}' /proc/cpuinfo | sort -u | wc -l)
+CPU_CORES=$(awk -F ': ' '/cpu cores/ {print $2; exit}' /proc/cpuinfo)
+CPU_LOGICAL=$(awk -F ': ' '/siblings/ {print $2; exit}' /proc/cpuinfo)
+MEM_TOTAL=$(free -h | awk '/Mem:/ {print $2}')
+
+
+printf " Operating system\t: %s\n" "${OS}"
+printf " CPU\t\t\t: %s\n" "${CPU_SOCKETS} x ${CPU_MODEL} (${CPU_CORES} core(s), ${CPU_LOGICAL} logical)"
+printf " Memory\t\t\t: %s\n" "${MEM_TOTAL}"
+printf " Uptime\t\t\t: %s\n" "${UPTIME}"
+printf " Users logged in\t: %s\n" "${USERS}"
+printf " Upgrades waiting\t: %s\n" "${APT_UPGRADABLE}"
+echo

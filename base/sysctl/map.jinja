@@ -1,0 +1,16 @@
+{% import_yaml 'sysctl/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+    'Debian': {
+      'config_file': '/etc/sysctl.conf'
+    },
+  }, grain='os_family', merge=salt['pillar.get']('sysctl:lookup'))
+%}
+
+{% do defaults.sysctl.update(os_family_map) %}
+
+{% set sysctl = salt['pillar.get'](
+  'sysctl',
+  default=defaults.sysctl,
+  merge=True)
+%}

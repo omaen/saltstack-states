@@ -1,0 +1,8 @@
+unattended_upgrades:
+  unattended_upgrades_config: /etc/apt/apt.conf.d/50unattended-upgrades
+  listchanges_config: /etc/apt/listchanges.conf
+  auto_upgrades_config: /etc/apt/apt.conf.d/20auto-upgrades
+  unattended_upgrades: {}
+  listchanges: {}
+  auto_upgrades:
+    autoclean_interval: 0

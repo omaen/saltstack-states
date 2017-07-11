@@ -1,0 +1,25 @@
+{{ salt['pillar.get']('salt:managed_file_header', '# This file is managed by Salt') }}
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+{%- for interface in salt['pillar.get']('network:interfaces') %}
+
+# {{ interface.get('description', interface.get('name')) }}
+allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
+iface {{ interface.get('name') }} inet {{ interface.get('mode') }}
+{%- for param in interface.get('config', []) %}
+    {{ param }}
+{%- endfor %}
+{%- if interface.get('dns') %}
+{%- set dns_search = salt['pillar.get']('dns:presets:%s:dns-search' % interface.get('dns')) %}
+{%- if dns_search %}
+    dns-search {%- for domain in dns_search %} {{ domain }}{%- endfor %}
+{%- endif %}
+{%- set dns_nameservers = salt['pillar.get']('dns:presets:%s:dns-nameservers' % interface.get('dns')) %}
+{%- if dns_nameservers %}
+    dns-nameservers {%- for nameserver in dns_nameservers %} {{ nameserver }}{%- endfor %}
+{%- endif %}
+{%- endif %}
+{%- endfor %}

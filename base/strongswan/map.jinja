@@ -1,0 +1,19 @@
+{% import_yaml 'strongswan/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+    'Debian': {
+      'strongswan': 'strongswan',
+      'libstrongswan_extra_plugins': 'libstrongswan-extra-plugins',
+      'ipsec_conf': '/etc/ipsec.conf',
+      'ipsec_secrets_inc': '/var/lib/strongswan/ipsec.secrets.inc',
+    },
+  }, grain='os_family', merge=salt['pillar.get']('strongswan:lookup'))
+%}
+
+{% do defaults.strongswan.update(os_family_map) %}
+
+{% set strongswan = salt['pillar.get'](
+  'strongswan',
+  default=defaults.strongswan,
+  merge=True)
+%}

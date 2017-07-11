@@ -1,0 +1,21 @@
+{% import_yaml 'zfsonlinux/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+		'Debian': {
+			'dkms': 'zfs-dkms',
+			'zfsutils': 'zfsutils-linux',
+			'zed': 'zfs-zed'
+		},
+	},
+	grain='os_family',
+	merge=salt['pillar.get']('zfsonlinux:lookup'))
+%}
+
+{% do defaults.zfsonlinux.update(os_family_map) %}
+
+{% set zfsonlinux = salt['pillar.get'](
+		'zfsonlinux',
+		default=defaults.zfsonlinux,
+		merge=True
+	)
+%}

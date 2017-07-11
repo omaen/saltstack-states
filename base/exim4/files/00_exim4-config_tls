@@ -1,0 +1,3 @@
+# Enable TLS
+MAIN_TLS_ENABLE = true
+MAIN_TLS_ADVERTISE_HOSTS = *

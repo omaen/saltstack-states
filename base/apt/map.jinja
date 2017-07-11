@@ -1,0 +1,16 @@
+{% import_yaml 'apt/defaults.yaml' as defaults %}
+
+{% set lookup = salt['grains.filter_by']({
+    'Debian': {}
+  },
+  grain='os_family',
+  merge=salt['pillar.get']('apt:lookup'))
+%}
+
+{% do defaults.apt.update(lookup) %}
+
+{% set apt = salt['pillar.get'](
+  'apt',
+  default=defaults.apt,
+  merge=True)
+%}

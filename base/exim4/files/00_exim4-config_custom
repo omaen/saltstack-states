@@ -1,0 +1,8 @@
+# Disable ident-sjekk mot klienter
+rfc1413_query_timeout = 0s
+
+# Use if the exposed FQDN is different from the actual hostname
+MAIN_HARDCODE_PRIMARY_HOSTNAME = {{ salt['pillar.get']('exim4:primary_hostname', grains['fqdn']) }}
+
+# Remove MTA software and version from banner
+smtp_banner = $smtp_active_hostname ESMTP $tod_full

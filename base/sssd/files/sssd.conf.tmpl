@@ -1,0 +1,22 @@
+[sssd]
+services = nss, pam
+config_file_version = 2
+domains = {{ salt['pillar.get']('ad:domain') }}
+
+[nss]
+
+[pam]
+
+[domain/{{ salt['pillar.get']('ad:domain') }}]
+id_provider = ad
+access_provider = ad
+ldap_id_mapping = false
+ldap_group_nesting_level = 5
+
+# 2017.02.24:
+# We are not using GPOs for access crontrol on Linux hosts, and
+# as a consequence lots of things are now denied access.
+# One example is "permission denied" for sssd users' crontab jobs.
+# "permissive" could be used but what's the point of evaluating the
+# GPOs if it's not used..
+ad_gpo_access_control = disabled

@@ -1,0 +1,3 @@
+samba:
+  config_file: /etc/samba/smb.conf
+  config: {}
