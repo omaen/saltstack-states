@@ -1,4 +1,4 @@
-{% for namespace in salt['pillar.get']('firewall:namespaces', []) %}
+{% for namespace in salt['pillar.get']('firewall:namespaces', {}) %}
 iptables_rules_{{ namespace }}:
   file.managed:
     - name: /usr/local/bin/iptables-gen.{{ namespace }}
