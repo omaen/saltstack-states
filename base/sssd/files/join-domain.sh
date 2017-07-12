@@ -8,8 +8,10 @@ keytab="{{ pillar['ad']['domain_join_keytab'] }}"
 computer_ou="{{ pillar['ad']['computer_ou'] }}"
 retry_count=1
 
+
+[ -f /etc/krb5.keytab ] && rm /etc/krb5.keytab
+
 kinit ${user}@${realm} -k -t "${keytab}"
-net ads keytab flush -k
 
 # net ads tries to ask for password before trying the kerberos credentials when
 # executed via salt-call. Work around by giving it /dev/null as stdin
