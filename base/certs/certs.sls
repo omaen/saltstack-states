@@ -14,8 +14,10 @@ host_cert_key_{{ count }}:
     - name: /usr/local/etc/ssl/private/{{ name }}.key
     - contents_pillar: certs:{{ name }}:key
     - user: root
-    - group: root
+    - group: ssl-cert
     - mode: 640
     - makedirs: True
+    - require:
+      - pkg: ssl-cert
 {% set count = count + 1 %}
 {% endfor %}
