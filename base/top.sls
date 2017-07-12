@@ -1,8 +1,6 @@
 base:
-  'cns-*.ad.proikt.com':
-    - keepalived
-
-  'lb-*.ad.proikt.com':
+  'roles:keepalived:prod':
+    - match: pillar
     - keepalived
 
   'roles:standalone-host:prod':
