@@ -1,12 +1,12 @@
 include:
   - certs
 
-dhparams-2048:
+dhparams:
   file.managed:
     - name: /etc/ssl/private/dhparams.pem
-    - source: salt://dhparams/files/dhparams-2048.pem
+    - contents_pillar: dhparams
     - user: root
     - group: ssl-cert
     - mode: 640
-    - require: 
+    - require:
       - pkg: ssl-cert

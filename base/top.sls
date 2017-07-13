@@ -57,3 +57,8 @@ base:
   'roles:logstash:prod':
     - match: pillar
     - logstash
+
+  'roles:nginx:prod':
+    - match: pillar
+    - dhparams
+    - nginx.ng
