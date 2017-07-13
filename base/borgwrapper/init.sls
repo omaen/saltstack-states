@@ -1,7 +1,7 @@
 {% if salt['pillar.get']('borgwrapper:configs', {}) %}
 
 include:
-  - borgwrapper.package
-  - borgwrapper.config
+  - .package
+  - .config
 
 {% endif %}

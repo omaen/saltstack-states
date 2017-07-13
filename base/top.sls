@@ -28,9 +28,10 @@ base:
     - mailx
     - aliases
 
-  'roles:mysql-server:prod':
+  'roles:mariadb_server:prod':
     - match: pillar
-    - mysql.server
+    - mariadb.server
+    - mariadb-backup
 
   'roles:docker:prod':
     - match: pillar
