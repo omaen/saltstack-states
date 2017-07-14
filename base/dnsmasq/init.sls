@@ -1,4 +1,4 @@
-{% if salt['pillar.get']('dnsmasq', {}) %}
+{% if pillar['dnsmasq'] is defined %}
 include:
   - dnsmasq.package
   - dnsmasq.config
