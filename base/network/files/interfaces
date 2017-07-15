@@ -4,7 +4,28 @@
 auto lo
 iface lo inet loopback
 
-{%- for interface in salt['pillar.get']('network:interfaces') %}
+{%- for namespace in config.get('namespaces', []) %}
+
+# Network namespace "{{ namespace }}"
+allow-auto {{ namespace }}
+iface {{ namespace }} inet manual
+    up ip netns add ${IFACE}
+    post-up ip netns exec ${IFACE} ip link set lo up
+    down ip netns del ${IFACE}
+{%- endfor %}
+
+{%- for vrf in config.get('vrfs', []) %}
+
+# VRF "{{ vrf }}"
+allow-auto {{ vrf }}
+iface {{ vrf }} inet manual
+    pre-up echo "{{ 500 + loop.index0 }} vrf-{{ vrf }}" > /etc/iproute2/rt_tables.d/vrf-{{ vrf }}.conf
+    pre-up ip link add ${IFACE} type vrf table vrf-{{ vrf }}
+    post-down rm -f /etc/iproute2/rt_tables.d/vrf-{{ vrf }}.conf
+    post-down ip link del ${IFACE}
+{%- endfor %}
+
+{%- for interface in config.interfaces %}
 
 # {{ interface.get('description', interface.get('name')) }}
 allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
