@@ -10,11 +10,14 @@ CPU_CORES=$(awk -F ': ' '/cpu cores/ {print $2; exit}' /proc/cpuinfo)
 CPU_LOGICAL=$(awk -F ': ' '/siblings/ {print $2; exit}' /proc/cpuinfo)
 MEM_TOTAL=$(free -h | awk '/Mem:/ {print $2}')
 
+[ ${CPU_SOCKETS} -gt 0 ] || CPU_SOCKETS="N/A"
+[ ${CPU_CORES} -gt 0 ] || CPU_CORES="N/A"
+[ ${CPU_LOGICAL} -gt 0 ] || CPU_LOGICAL="N/A"
 
-printf " Operating system\t: %s\n" "${OS}"
-printf " CPU\t\t\t: %s\n" "${CPU_SOCKETS} x ${CPU_MODEL} (${CPU_CORES} core(s), ${CPU_LOGICAL} logical)"
-printf " Memory\t\t\t: %s\n" "${MEM_TOTAL}"
-printf " Uptime\t\t\t: %s\n" "${UPTIME}"
-printf " Users logged in\t: %s\n" "${USERS}"
-printf " Upgrades waiting\t: %s\n" "${APT_UPGRADABLE}"
+printf " Operating system : %s\n" "${OS}"
+printf " CPU              : %s\n" "${CPU_SOCKETS} x ${CPU_MODEL} (${CPU_CORES} core(s), ${CPU_LOGICAL} logical)"
+printf " Memory           : %s\n" "${MEM_TOTAL}"
+printf " Uptime           : %s\n" "${UPTIME}"
+printf " Users logged in  : %s\n" "${USERS}"
+printf " Upgrades waiting : %s\n" "${APT_UPGRADABLE}"
 echo
