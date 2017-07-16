@@ -30,7 +30,19 @@ iface {{ vrf }} inet manual
 # {{ interface.get('description', interface.get('name')) }}
 allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
 iface {{ interface.get('name') }} inet {{ interface.get('mode') }}
-    {%- for k, v in interface.get('config', {}).iteritems() %}
+    {%- set params = interface.get('config', {}) %}
+
+    {%- if interface.get('vrf') %}
+    pre-up ip link set dev ${IFACE} vrf {{ interface.vrf }}
+    post-down ip link set dev ${IFACE} nomaster
+    {%- if params.get('gateway') %}
+    post-up ip route add default via {{ params.gateway }} vrf {{ interface.vrf }}
+    pre-down ip route del default via {{ params.gateway }} vrf {{ interface.vrf }}
+    {%- do params.pop('gateway') %}
+    {%- endif %}
+    {%- endif %}
+
+    {%- for k, v in params.iteritems() %}
     {%- if v is iterable and v is not string %}
     {%- for i in v %}
     {{ k }} {{ i }}
