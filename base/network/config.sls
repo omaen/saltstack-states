@@ -1,4 +1,6 @@
-{% if grains['os'] == 'Debian' %}
+{% from 'network/map.jinja' import network with context %}
+
+{% if grains['os']|lower == 'debian' %}
 
 interfaces:
   file.managed:
@@ -9,6 +11,6 @@ interfaces:
     - group: root
     - mode: 644
     - context:
-        config: {{ pillar['network'] }}
+        config: {{ network }}
 
 {% endif %}

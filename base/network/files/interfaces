@@ -30,17 +30,13 @@ iface {{ vrf }} inet manual
 # {{ interface.get('description', interface.get('name')) }}
 allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
 iface {{ interface.get('name') }} inet {{ interface.get('mode') }}
-{%- for param in interface.get('config', []) %}
-    {{ param }}
-{%- endfor %}
-{%- if interface.get('dns') %}
-{%- set dns_search = salt['pillar.get']('dns:presets:%s:dns-search' % interface.get('dns')) %}
-{%- if dns_search %}
-    dns-search {%- for domain in dns_search %} {{ domain }}{%- endfor %}
-{%- endif %}
-{%- set dns_nameservers = salt['pillar.get']('dns:presets:%s:dns-nameservers' % interface.get('dns')) %}
-{%- if dns_nameservers %}
-    dns-nameservers {%- for nameserver in dns_nameservers %} {{ nameserver }}{%- endfor %}
-{%- endif %}
-{%- endif %}
+    {%- for k, v in interface.get('config', {}).iteritems() %}
+    {%- if v is iterable and v is not string %}
+    {%- for i in v %}
+    {{ k }} {{ i }}
+    {%- endfor %}
+    {%- else %}
+    {{ k }} {{ v }}
+    {%- endif %}
+    {%- endfor %}
 {%- endfor %}
