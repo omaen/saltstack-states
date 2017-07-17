@@ -6,7 +6,7 @@ iface lo inet loopback
 
 {%- for namespace in config.get('namespaces', []) %}
 
-# Network namespace "{{ namespace }}"
+# Network namespace: {{ namespace }}
 allow-auto {{ namespace }}
 iface {{ namespace }} inet manual
     up ip netns add ${IFACE}
@@ -16,12 +16,12 @@ iface {{ namespace }} inet manual
 
 {%- for vrf in config.get('vrfs', []) %}
 
-# VRF "{{ vrf }}"
+# VRF: {{ vrf }}
 allow-auto {{ vrf }}
 iface {{ vrf }} inet manual
-    pre-up echo "{{ 500 + loop.index0 }} vrf-{{ vrf }}" > /etc/iproute2/rt_tables.d/vrf-{{ vrf }}.conf
-    pre-up ip link add ${IFACE} type vrf table vrf-{{ vrf }}
-    post-down rm -f /etc/iproute2/rt_tables.d/vrf-{{ vrf }}.conf
+    pre-up echo "{{ 500 + loop.index0 }} ${IFACE}" > /etc/iproute2/rt_tables.d/${IFACE}.conf
+    pre-up ip link add ${IFACE} type vrf table ${IFACE}
+    post-down rm -f /etc/iproute2/rt_tables.d/${IFACE}.conf
     post-down ip link del ${IFACE}
 {%- endfor %}
 
