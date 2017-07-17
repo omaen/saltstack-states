@@ -26,10 +26,20 @@ iface {{ vrf }} inet manual
 {%- endfor %}
 
 {%- for interface in config.interfaces %}
+{%- set auto_ns_exec = [] %}
 
 # {{ interface.get('description', interface.get('name')) }}
 allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
-iface {{ interface.get('name') }} inet {{ interface.get('mode') }}
+{%- if interface.get('vrf') %}
+{%- set mode = 'manual' %}
+{%- elif interface.get('namespace') %}
+{%- set mode = 'manual' %}
+{%- set ns_exec = 'ip netns exec %s' % interface.namespace %}
+{%- set auto_ns_exec = ['pre-up', 'up', 'post-up', 'pre-down', 'down', 'post-down'] %}
+{%- else %}
+{%- set mode = interface.mode %}
+{%- endif %}
+iface {{ interface.get('name') }} inet {{ mode }}
     {%- set params = interface.get('config', {}) %}
 
     {%- if interface.get('vrf') %}
@@ -42,13 +52,41 @@ iface {{ interface.get('name') }} inet {{ interface.get('mode') }}
     {%- endif %}
     {%- endif %}
 
+    {%- if interface.get('namespace') %}
+    pre-up ip link set ${IFACE} netns {{ interface.namespace }}
+    {%- if params.get('address') %}
+    up {{ ns_exec }} ip addr add {{ params.address }} dev ${IFACE}
+    down {{ ns_exec }} ip addr del {{ params.address }} dev ${IFACE}
+    {%- do params.pop('address') %}
+    {%- endif %}
+    {%- if params.get('gateway') %}
+    post-up {{ ns_exec }} ip route add default via {{ params.gateway }}
+    pre-down {{ ns_exec }} ip route del default via {{ params.gateway }}
+    {%- do params.pop('gateway') %}
+    {%- endif %}
+    up {{ ns_exec }} ip link set ${IFACE} up
+    down {{ ns_exec }} ip link set ${IFACE} down
+    {%- endif %}
+
     {%- for k, v in params.iteritems() %}
     {%- if v is iterable and v is not string %}
     {%- for i in v %}
+    {%- if k in auto_ns_exec %}
+    {{ k }} {{ ns_exec }} {{ i }}
+    {%- else %}
     {{ k }} {{ i }}
+    {%- endif %}
     {%- endfor %}
+    {%- else %}
+    {%- if k in auto_ns_exec %}
+    {{ k }} {{ ns_exec }} {{ v }}
     {%- else %}
     {{ k }} {{ v }}
     {%- endif %}
+    {%- endif %}
     {%- endfor %}
+
+    {%- if interface.get('namespace') %}
+    post-down {{ ns_exec }} ip link set ${IFACE} netns 1
+    {%- endif %}
 {%- endfor %}
