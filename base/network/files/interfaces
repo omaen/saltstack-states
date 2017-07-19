@@ -30,9 +30,7 @@ iface {{ vrf }} inet manual
 
 # {{ interface.get('description', interface.get('name')) }}
 allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
-{%- if interface.get('vrf') %}
-{%- set mode = 'manual' %}
-{%- elif interface.get('namespace') %}
+{%- if interface.get('namespace') %}
 {%- set mode = 'manual' %}
 {%- set ns_exec = 'ip netns exec %s' % interface.namespace %}
 {%- set auto_ns_exec = ['pre-up', 'up', 'post-up', 'pre-down', 'down', 'post-down'] %}
@@ -44,15 +42,13 @@ iface {{ interface.get('name') }} inet {{ mode }}
 
     {%- if interface.get('vrf') %}
     pre-up ip link set dev ${IFACE} vrf {{ interface.vrf }}
-    post-down ip link set dev ${IFACE} nomaster
     {%- if params.get('gateway') %}
     post-up ip route add default via {{ params.gateway }} vrf {{ interface.vrf }}
     pre-down ip route del default via {{ params.gateway }} vrf {{ interface.vrf }}
     {%- do params.pop('gateway') %}
     {%- endif %}
-    {%- endif %}
 
-    {%- if interface.get('namespace') %}
+    {%- elif interface.get('namespace') %}
     pre-up ip link set ${IFACE} netns {{ interface.namespace }}
     {%- if params.get('address') %}
     up {{ ns_exec }} ip addr add {{ params.address }} dev ${IFACE}
@@ -86,7 +82,10 @@ iface {{ interface.get('name') }} inet {{ mode }}
     {%- endif %}
     {%- endfor %}
 
-    {%- if interface.get('namespace') %}
+    {%- if interface.get('vrf') %}
+    post-down ip link set dev ${IFACE} nomaster
+
+    {%- elif interface.get('namespace') %}
     post-down {{ ns_exec }} ip link set ${IFACE} netns 1
     {%- endif %}
 {%- endfor %}
