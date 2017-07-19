@@ -1,0 +1,5 @@
+dnsmasq:
+  package: dnsmasq
+  config_file: /etc/dnsmasq.conf
+  service: dnsmasq
+  config: {}

@@ -1,6 +1,6 @@
 include:
   - salt.cron_salt-call
-  - dns.resolver
+  - resolvconf
   - users
   - syslog.remote-syslog
   - virtualization.guest-tools
