@@ -9,8 +9,8 @@ bird_conf:
     - group: bird
     - mode: 640
     - context:
-        # Filter via yaml to avoid unset dict values becoming 'None'
-        config: {{ bird.bird_config | yaml() }}
+        # Filter via json to avoid unset dict values becoming 'None'
+        config: {{ bird.bird_config|json }}
 
 {% if bird.bird_disable %}
   service.dead:
@@ -36,8 +36,8 @@ bird6_conf:
     - group: bird
     - mode: 640
     - context:
-        # Filter via yaml to avoid unset dict values becoming 'None'
-        config: {{ bird.bird6_config | yaml() }}
+        # Filter via json to avoid unset dict values becoming 'None'
+        config: {{ bird.bird6_config|json }}
 
 {% if bird.bird6_disable %}
   service.dead:
