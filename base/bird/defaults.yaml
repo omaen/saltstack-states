@@ -6,14 +6,14 @@ bird:
   bird_disable: False
   bird6_disable: False
   bird_config:
-    - router id 198.51.100.1
-    - protocol device: {}
-    - protocol kernel:
-      - metric 64
-      - import none
+    router id: 198.51.100.1
+    protocol device: {}
+    protocol kernel:
+      metric: 64
+      import: 'none'
   bird6_config:
-    - router id 198.51.100.1
-    - protocol device: {}
-    - protocol kernel:
-      - metric 64
-      - import none
+    router id: 198.51.100.1
+    protocol device: {}
+    protocol kernel:
+      metric: 64
+      import: 'none'
