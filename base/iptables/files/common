@@ -213,6 +213,8 @@ store () {
 commit () {
     local STORE="$1"
 
+    add_ipsets
+
     commit_ipsets
     commit_ipv4_rules
     commit_ipv6_rules
