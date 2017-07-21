@@ -1,0 +1,10 @@
+ssh:
+  client:
+    package: openssh-client
+    config: {}
+  server:
+    package: openssh-server
+    service: ssh
+    config_file: /etc/ssh/sshd_config
+    authorized_keys: {}
+    config: {}

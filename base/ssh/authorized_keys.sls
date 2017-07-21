@@ -1,4 +1,4 @@
-{% for user, keys in salt['pillar.get']('ssh:authorized_keys', {}).iteritems() %}
+{% for user, keys in salt['pillar.get']('ssh:server:authorized_keys', {}).items() %}
 {% set gid = salt['user.info'](user).gid %}
 {% set ssh_dir = salt['user.info'](user).home + '/.ssh' %}
 {% set auth_file = ssh_dir + '/authorized_keys' %}
