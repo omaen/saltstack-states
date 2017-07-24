@@ -31,6 +31,7 @@ include:
   - samba
   - network
   - iptables
+  - fwgen
   - tc
   - autofs
   - icinga2
