@@ -19,9 +19,11 @@ fwgen_config_{{ namespace }}:
   cmd.wait:
     - name: ip netns exec {{ namespace }} /usr/local/bin/fwgen --no-confirm
     - watch:
+      - file: fwgen
       - file: fwgen_defaults
       - file: fwgen_config_{{ namespace }}
     - require:
+      - file: fwgen
       - file: fwgen_defaults
       - file: fwgen_config_{{ namespace }}
 {% endfor %}
@@ -47,9 +49,11 @@ fwgen_config:
   cmd.wait:
     - name: /usr/local/bin/fwgen --no-confirm
     - watch:
+      - file: fwgen
       - file: fwgen_defaults
       - file: fwgen_config
     - require:
+      - file: fwgen
       - file: fwgen_defaults
       - file: fwgen_config
 {% endif %}

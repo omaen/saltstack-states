@@ -6,6 +6,7 @@ import re
 import subprocess
 import os
 import signal
+from collections import OrderedDict
 
 import yaml
 
@@ -59,35 +60,18 @@ class FwGen(object):
         return output.stdout.strip()
 
     def output_ipsets(self, reset=False):
-        ipset_family_map = {
-            'ip': 'inet',
-            'ip6': 'inet6'
-        }
-        list_type = {
-            'networks': 'hash:net',
-            'hosts': 'hash:ip'
-        }
-
         if reset:
             yield 'flush'
             yield 'destroy'
         else:
-            for group_type, names in self.config.get('groups', {}).items():
-                for name, families in names.items():
-                    yield '-exist create %s list:set' % name
-                    yield 'flush %s' % name
+            for ipset, params in self.config.get('ipsets', {}).items():
+                create_cmd = ['-exist create %s %s' % (ipset, params['type'])]
+                create_cmd.append(params.get('options', None))
+                yield ' '.join([i for i in create_cmd if i])
+                yield 'flush %s' % ipset
 
-                    for family, entries in families.items():
-                        family_set = '%s_%s' % (name, family)
-
-                        yield '-exist create %s %s family %s' % (family_set,
-                                                                 list_type[group_type],
-                                                                 ipset_family_map[family])
-                        yield 'add %s %s' % (name, family_set)
-                        yield 'flush %s' % family_set
-
-                        for entry in entries:
-                            yield 'add %s %s' % (family_set, entry)
+                for entry in params['entries']:
+                    yield 'add %s %s' % (ipset, entry)
 
     def get_policy_rules(self, family, reset=False):
         for table, chains in self.default_chains[family].items():
@@ -161,7 +145,7 @@ class FwGen(object):
                         raise Exception('%s is not a valid default chain' % chain)
 
     def expand_zones(self, rule):
-        zone_pattern = re.compile(r'^(.+?\s)%\{(.+?)\}(\s.+)$')
+        zone_pattern = re.compile(r'^(.*?)%\{(.+?)\}(.*)$')
         match = re.search(zone_pattern, rule)
 
         if match:
@@ -173,13 +157,29 @@ class FwGen(object):
         else:
             yield rule
 
+    def substitute_variables(self, rule):
+        variable_pattern = re.compile(r'^(.*?)\$\{(.+?)\}(.*)$')
+        match = re.search(variable_pattern, rule)
+
+        if match:
+            variable = match.group(2)
+            value = self.config['variables'][variable]
+            result = '%s%s%s' % (match.group(1), value, match.group(3))
+            return self.substitute_variables(result)
+        else:
+            return rule
+
+    def parse_rule(self, rule):
+        rule = self.substitute_variables(rule)
+        yield from self.expand_zones(rule)
+
     def output_rules(self, rules, family):
         for table in self.default_chains[family]:
             yield '*%s' % table
 
             for rule_table, rule in rules:
                 if rule_table == table:
-                    yield from self.expand_zones(rule)
+                    yield from self.parse_rule(rule)
 
             yield 'COMMIT'
 
@@ -293,6 +293,14 @@ def dict_merge(d1, d2):
 
     return d2
 
+def setup_yaml():
+    """
+    Use to preserve dict order from imported yaml config
+    """
+    represent_dict_order = lambda self, data: self.represent_mapping('tag:yaml.org,2002:map',
+                                                                      data.items())
+    yaml.add_representer(OrderedDict, represent_dict_order)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', metavar='PATH', help='Path to config file')
@@ -307,17 +315,15 @@ def main():
     if args.config:
         user_config = args.config
 
+    setup_yaml()
     with open(DEFAULTS, 'r') as f:
         config = yaml.load(f)
-
     with open(user_config, 'r') as f:
         config = dict_merge(yaml.load(f), config)
 
     fw = FwGen(config)
-
     if args.with_reset:
         fw.reset()
-
     if args.no_confirm:
         fw.commit()
     else:
