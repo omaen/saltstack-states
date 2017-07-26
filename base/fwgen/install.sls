@@ -3,7 +3,7 @@ restore-fw:
     - name: ipset
   file.managed:
     - name: /usr/local/bin/restore-fw
-    - source: salt://iptables/files/restore-fw
+    - source: salt://fwgen/files/restore-fw.sh
     - user: root
     - group: root
     - mode: 755
