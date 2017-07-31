@@ -1,13 +1,4 @@
 {% for namespace in salt['pillar.get']('fwgen:namespaces', {}) %}
-fwgen_defaults_{{ namespace }}:
-  file.managed:
-    - name: /etc/netns/{{ namespace }}/fwgen/defaults.yml
-    - source: salt://fwgen/files/defaults.yml
-    - user: root
-    - group: root
-    - makedirs: True
-    - mode: 600
-
 fwgen_config_{{ namespace }}:
   file.managed:
     - name: /etc/netns/{{ namespace }}/fwgen/config.yml
@@ -19,25 +10,14 @@ fwgen_config_{{ namespace }}:
   cmd.wait:
     - name: ip netns exec {{ namespace }} /usr/local/bin/fwgen --no-confirm
     - watch:
-      - file: fwgen
-      - file: fwgen_defaults
+      - pip: fwgen
       - file: fwgen_config_{{ namespace }}
     - require:
-      - file: fwgen
-      - file: fwgen_defaults
+      - pip: fwgen
       - file: fwgen_config_{{ namespace }}
 {% endfor %}
 
 {% if not salt['pillar.get']('fwgen:no_default_firewall', False) %}
-fwgen_defaults:
-  file.managed:
-    - name: /etc/fwgen/defaults.yml
-    - source: salt://fwgen/files/defaults.yml
-    - user: root
-    - group: root
-    - makedirs: True
-    - mode: 600
-
 fwgen_config:
   file.managed:
     - name: /etc/fwgen/config.yml
@@ -49,11 +29,9 @@ fwgen_config:
   cmd.wait:
     - name: /usr/local/bin/fwgen --no-confirm
     - watch:
-      - file: fwgen
-      - file: fwgen_defaults
+      - pip: fwgen
       - file: fwgen_config
     - require:
-      - file: fwgen
-      - file: fwgen_defaults
+      - pip: fwgen
       - file: fwgen_config
 {% endif %}
