@@ -1,4 +1,5 @@
-{% for namespace in salt['pillar.get']('fwgen:namespaces', {}) %}
+{% from 'fwgen/map.jinja' import fwgen with context %}
+{% for namespace in fwgen.namespaces %}
 fwgen_config_{{ namespace }}:
   file.managed:
     - name: /etc/netns/{{ namespace }}/fwgen/config.yml
@@ -8,7 +9,7 @@ fwgen_config_{{ namespace }}:
     - group: root
     - mode: 600
   cmd.wait:
-    - name: ip netns exec {{ namespace }} /usr/local/bin/fwgen --no-confirm
+    - name: ip netns exec {{ namespace }} fwgen --no-confirm
     - watch:
       - pip: fwgen
       - file: fwgen_config_{{ namespace }}
@@ -17,7 +18,7 @@ fwgen_config_{{ namespace }}:
       - file: fwgen_config_{{ namespace }}
 {% endfor %}
 
-{% if not salt['pillar.get']('fwgen:no_default_firewall', False) %}
+{% if not fwgen.no_default_firewall %}
 fwgen_config:
   file.managed:
     - name: /etc/fwgen/config.yml
@@ -27,7 +28,7 @@ fwgen_config:
     - group: root
     - mode: 600
   cmd.wait:
-    - name: /usr/local/bin/fwgen --no-confirm
+    - name: fwgen --no-confirm
     - watch:
       - pip: fwgen
       - file: fwgen_config

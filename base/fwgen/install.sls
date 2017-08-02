@@ -1,3 +1,4 @@
+{% from 'fwgen/map.jinja' import fwgen with context %}
 fwgen:
   pkg.installed:
     - pkgs:
@@ -6,15 +7,18 @@ fwgen:
       - python3-pip
       - python3-yaml
   pip.installed:
+    {% if fwgen.version %}
+    - name: fwgen{{ fwgen.version }}
+    {% else %}
     - name: fwgen
+    {% endif %}
     - bin_env: /usr/bin/pip3
     - require:
       - pkg: fwgen
 
 restore-fw:
-  file.symlink:
-    - name: /etc/network/if-pre-up.d/restore-fw
-    - target: /usr/local/lib/python3.5/dist-packages/fwgen/sbin/restore-fw
-    - force: True
+  cmd.script:
+    - source: salt://fwgen/files/post-install.sh
+    - unless: readlink -f /etc/network/if-pre-up.d/restore-fw | grep '/fwgen/sbin/restore-fw'
     - require:
       - pip: fwgen

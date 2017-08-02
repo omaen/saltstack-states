@@ -1,7 +1,7 @@
 {% if pillar['bird'] is defined %}
 
 include:
-  - .package
+  - .install
   - .config
 
 {% endif %}

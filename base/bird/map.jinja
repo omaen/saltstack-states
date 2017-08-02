@@ -1,6 +1,6 @@
 {% import_yaml 'bird/defaults.yaml' as defaults %}
 
-{% set lookup = salt['grains.filter_by']({
+{% set os_family_map = salt['grains.filter_by']({
     'Debian': {
     },
   },
@@ -8,7 +8,7 @@
   merge=salt['pillar.get']('bird:lookup'))
 %}
 
-{% do defaults.bird.update(lookup) %}
+{% do defaults.bird.update(os_family_map) %}
 
 {% set bird = salt['pillar.get'](
   'bird',
