@@ -2,9 +2,13 @@
 WEBSERVERCOMBINED %{URIHOST:server_name} %{IPORHOST:client_ip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp}\] "%{WORD:verb} %{URIPATHPARAM:request} HTTP/%{NUMBER:http_version}" %{NUMBER:response} (?:%{NUMBER:bytes}|-) (?:"(?:%{URI:referrer}|-)"|%{QS:referrer}) %{QS:agent}
 
 # Logged iptables packets prefixed with "<action>: "
-IPTABLESCOMMON \[%{BASE16FLOAT:kernel_timestamp}\] %{DATA:action}: IN=(%{DATA:in_if})? OUT=(%{DATA:out_if})?( MAC=(%{COMMONMAC:dst_mac}:%{COMMONMAC:src_mac}:(?<frame_type>(?:[A-Fa-f0-9]{2}:){1}[A-Fa-f0-9]{2}))?)? SRC=%{IP:src_ip} DST=%{IP:dst_ip} LEN=%{INT:l3_len} TOS=%{BASE16NUM:tos} PREC=%{BASE16NUM:prec} TTL=%{INT:ttl} ID=%{INT:id}( %{WORD:df})? PROTO=%{WORD:proto}
-IPTABLESICMP %{IPTABLESCOMMON} TYPE=%{INT:icmp_type} CODE=%{INT:icmp_code} %{GREEDYDATA:proto_info}
-IPTABLESTCPORUDP %{IPTABLESCOMMON} SPT=%{INT:l4_src_port} DPT=%{INT:l4_dst_port} %{GREEDYDATA:proto_info}
+IPV4COMMON \[%{BASE16FLOAT:kernel_timestamp}\] %{DATA:action}: IN=(%{DATA:in_if})? OUT=(%{DATA:out_if})?( MAC=(%{COMMONMAC:dst_mac}:%{COMMONMAC:src_mac}:(?<frame_type>(?:[A-Fa-f0-9]{2}:){1}[A-Fa-f0-9]{2}))?)? SRC=%{IPV4:src_ip} DST=%{IPV4:dst_ip} LEN=%{INT:l3_len} TOS=%{BASE16NUM:tos} PREC=%{BASE16NUM:prec} TTL=%{INT:ttl} ID=%{INT:id}( %{WORD:df})? PROTO=%{WORD:proto}
+IPV4ICMP %{IPV4COMMON} TYPE=%{INT:icmp_type} CODE=%{INT:icmp_code}?%{GREEDYDATA:proto_info}
+IPV4TCPORUDP %{IPV4COMMON} SPT=%{INT:l4_src_port} DPT=%{INT:l4_dst_port}?%{GREEDYDATA:proto_info}
+
+IPV6COMMON %{DATA:action}: IN=(%{DATA:in_if})? OUT=(%{DATA:out_if})?( MAC=(%{COMMONMAC:dst_mac}:%{COMMONMAC:src_mac}:(?<frame_type>(?:[A-Fa-f0-9]{2}:){1}[A-Fa-f0-9]{2}))?)? SRC=%{IPV6:src_ip} DST=%{IPV6:dst_ip} LEN=%{INT:l3_len} TC=%{INT:tc} HOPLIMIT=%{INT:hoplimit} FLOWLBL=%{INT:flowlbl} PROTO=%{WORD:proto}
+IPV6ICMP %{IPV6COMMON} TYPE=%{INT:icmp_type} CODE=%{INT:icmp_code}?%{GREEDYDATA:proto_info}
+IPV6TCPORUDP %{IPV6COMMON} SPT=%{INT:l4_src_port} DPT=%{INT:l4_dst_port}?%{GREEDYDATA:proto_info}
 
 #  syslog
 CISCOSG300SYSLOG <%{POSINT:priority}>1 %{TIMESTAMP_ISO8601:timestamp} %{IPORHOST:logsource} %{WORD:facility_label} - %{WORD:subfacility_label} - %%{DATA:mnemonic}: %{GREEDYDATA:message}
