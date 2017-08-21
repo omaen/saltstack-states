@@ -17,8 +17,8 @@ MEM_TOTAL=$(free -h | awk '/Mem:/ {print $2}')
 [ ${CPU_LOGICAL} -gt 0 ] || CPU_LOGICAL="N/A"
 
 printf " Operating system : %s\n" "${OS}"
-printf " CPU              : %s\n" "${CPUS} x ${CPU_MODEL}"
-printf "                    %s\n" "${CPU_SOCKETS} socket(s) with ${CPU_CORES} core(s) per socket and and ${CPU_THREADS} thread(s) per core"
+printf " CPU              : %s\n" "${CPU_SOCKETS} x ${CPU_MODEL}"
+printf "                    %s\n" "${CPU_CORES} core(s) per socket and ${CPU_THREADS} thread(s) per core, ${CPUS} in total"
 printf " Memory           : %s\n" "${MEM_TOTAL}"
 printf " Uptime           : %s\n" "${UPTIME}"
 printf " Users logged in  : %s\n" "${USERS}"
