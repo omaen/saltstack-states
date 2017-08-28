@@ -2,10 +2,11 @@
 
 set -e
 
+master="${1}"
+ticket="${2}"
+
 fqdn=$(hostname --fqdn)
 pki_path="/etc/icinga2/pki"
-ticket="{{ salt['pillar.get']('icinga2:ticket') }}"
-master="{{ salt['pillar.get']('icinga2:master', salt['pillar.get']('icinga2:lookup:master')) }}"
 port=5665
 user="nagios"
 group="nagios"
