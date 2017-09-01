@@ -10,7 +10,7 @@ iface lo inet loopback
 allow-auto {{ namespace }}
 iface {{ namespace }} inet manual
     up ip netns add ${IFACE}
-    post-up ip netns exec ${IFACE} ip link set lo up
+    up ip netns exec ${IFACE} ip link set lo up
     down ip netns del ${IFACE}
 {%- endfor %}
 
@@ -31,60 +31,61 @@ iface {{ vrf }} inet manual
 # {{ interface.get('description', interface.get('name')) }}
 allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
 {%- if interface.get('namespace') %}
-{%- set mode = 'manual' %}
-{%- set ns_exec = 'ip netns exec %s' % interface.namespace %}
-{%- set auto_ns_exec = ['pre-up', 'up', 'post-up', 'pre-down', 'down', 'post-down'] %}
+    {%- set mode = 'manual' %}
+    {%- set ns_exec = 'ip netns exec %s' % interface.namespace %}
+    {%- set auto_ns_exec = ['pre-up', 'up', 'post-up', 'pre-down', 'down', 'post-down'] %}
 {%- else %}
-{%- set mode = interface.mode %}
+    {%- set mode = interface.mode %}
 {%- endif %}
 iface {{ interface.get('name') }} inet {{ mode }}
     {%- set params = interface.get('config', {}) %}
 
     {%- if interface.get('vrf') %}
     pre-up ip link set dev ${IFACE} vrf {{ interface.vrf }}
-    {%- if params.get('gateway') %}
+        {%- if params.get('gateway') %}
     post-up ip route add default via {{ params.gateway }} vrf {{ interface.vrf }}
     pre-down ip route del default via {{ params.gateway }} vrf {{ interface.vrf }}
-    {%- do params.pop('gateway') %}
-    {%- endif %}
-
+            {%- do params.pop('gateway') %}
+        {%- endif %}
     {%- elif interface.get('namespace') %}
     pre-up ip link set ${IFACE} netns {{ interface.namespace }}
-    {%- if params.get('address') %}
+        {%- if params.get('address') %}
     up {{ ns_exec }} ip addr add {{ params.address }} dev ${IFACE}
+    up {{ ns_exec }} ip link set ${IFACE} up
+            {%- if params.get('gateway') %}
+    up {{ ns_exec }} ip route add default via {{ params.gateway }}
+    down {{ ns_exec }} ip route del default via {{ params.gateway }}
+                {%- do params.pop('gateway') %}
+            {%- endif %}
+    down {{ ns_exec }} ip link set ${IFACE} down
     down {{ ns_exec }} ip addr del {{ params.address }} dev ${IFACE}
-    {%- do params.pop('address') %}
-    {%- endif %}
-    {%- if params.get('gateway') %}
-    post-up {{ ns_exec }} ip route add default via {{ params.gateway }}
-    pre-down {{ ns_exec }} ip route del default via {{ params.gateway }}
-    {%- do params.pop('gateway') %}
-    {%- endif %}
+            {%- do params.pop('address') %}
+        {%- else %}
     up {{ ns_exec }} ip link set ${IFACE} up
     down {{ ns_exec }} ip link set ${IFACE} down
+        {%- endif %}
     {%- endif %}
 
     {%- for k, v in params.iteritems() %}
-    {%- if v is iterable and v is not string %}
-    {%- for i in v %}
-    {%- if k in auto_ns_exec %}
+        {%- if v is iterable and v is not string %}
+            {%- for i in v %}
+                {%- if k in auto_ns_exec %}
     {{ k }} {{ ns_exec }} {{ i }}
-    {%- else %}
+                {%- else %}
     {{ k }} {{ i }}
-    {%- endif %}
-    {%- endfor %}
-    {%- else %}
-    {%- if k in auto_ns_exec %}
+                {%- endif %}
+            {%- endfor %}
+        {%- else %}
+            {%- if k in auto_ns_exec %}
     {{ k }} {{ ns_exec }} {{ v }}
-    {%- else %}
+            {%- else %}
     {{ k }} {{ v }}
-    {%- endif %}
-    {%- endif %}
+            {%- endif %}
+        {%- endif %}
     {%- endfor %}
 
     {%- if interface.get('vrf') %}
     post-down ip link set dev ${IFACE} nomaster
-
     {%- elif interface.get('namespace') %}
     post-down {{ ns_exec }} ip link set ${IFACE} netns 1
     {%- endif %}
