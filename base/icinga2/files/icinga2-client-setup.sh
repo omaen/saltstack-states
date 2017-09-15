@@ -44,5 +44,6 @@ icinga2 node setup \
     --zone $fqdn \
     --master_host $master \
     --trustedcert $trustedcert \
-    --accept-commands
+    --accept-commands \
+    --accept-config
 

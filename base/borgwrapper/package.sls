@@ -13,3 +13,12 @@ borgwrapper_bin:
     - makedirs: True
     - require:
       - pkg: borgbackup
+
+check_borgwrapper:
+  file.managed:
+    - name: {{ borgwrapper.nagios_plugin_dir }}/check_borgwrapper
+    - source: salt://borgwrapper/files/check_borgwrapper
+    - onlyif: test -d {{ borgwrapper.nagios_plugin_dir }}
+    - user: root
+    - group: root
+    - mode: 755

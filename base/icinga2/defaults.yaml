@@ -1,0 +1,4 @@
+icinga2:
+  package: icinga2
+  service: icinga2
+  config: {}
