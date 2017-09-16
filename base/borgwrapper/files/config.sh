@@ -25,6 +25,3 @@ BWLIMIT={{ config.bwlimit }}
 {%- if config.use_nice is defined %}
 USE_NICE={{ config.use_nice }}
 {%- endif %}
-{%- if config.nice is defined %}
-NICE={{ config.nice }}
-{%- endif %}
