@@ -1,4 +1,6 @@
-{{ salt['pillar.get']('salt:managed_file_header', '# This file is managed by Salt') }}
+#
+# This file is managed by Salt. Changes will be overwritten
+#
 
 BORG="{{ config.borg }}"
 BORG_REPO="{{ config.repo }}"
@@ -19,4 +21,10 @@ KEEP_MONTHLY={{ config.keep_monthly }}
 KEEP_YEARLY={{ config.keep_yearly }}
 {%- if config.bwlimit is defined %}
 BWLIMIT={{ config.bwlimit }}
+{%- endif %}
+{%- if config.use_nice is defined %}
+USE_NICE={{ config.use_nice }}
+{%- endif %}
+{%- if config.nice is defined %}
+NICE={{ config.nice }}
 {%- endif %}

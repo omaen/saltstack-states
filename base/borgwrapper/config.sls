@@ -21,11 +21,7 @@ borgwrapper_{{ name }}_config:
 
 borgwrapper_{{ name }}_cron_backup:
   cron.present:
-    {% if config.nice %}
-    - name: nice {{ borgwrapper.bin }} -c {{ config_file }} backup
-    {% else %}
     - name: {{ borgwrapper.bin }} -c {{ config_file }} backup
-    {% endif %}
     - identifier: borgwrapper backup ({{ name }})
     - user: root
     - hour: random
@@ -33,11 +29,7 @@ borgwrapper_{{ name }}_cron_backup:
 
 borgwrapper_{{ name }}_cron_verify:
   cron.present:
-    {% if config.nice %}
-    - name: nice {{ borgwrapper.bin }} -c {{ config_file }} verify
-    {% else %}
     - name: {{ borgwrapper.bin }} -c {{ config_file }} verify
-    {% endif %}
     - identifier: borgwrapper verify ({{ name }})
     - user: root
     - hour: random

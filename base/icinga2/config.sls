@@ -26,3 +26,15 @@ zones_conf:
       - service: icinga2
     - require:
       - cmd: icinga2-client-setup
+
+api_conf:
+  file.managed:
+    - name: /etc/icinga2/features-available/api.conf
+    - source: salt://icinga2/files/api.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - watch_in:
+      - service: icinga2
+    - require:
+      - cmd: icinga2-client-setup

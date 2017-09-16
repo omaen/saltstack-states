@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="1.1.0"
+VERSION="1.2.0"
 
 
 print_usage () {
@@ -56,7 +56,7 @@ borg_backup () {
         BORG_CREATE_ARGS+=( --dry-run )
     fi
 
-    ${BORG} create \
+    ${NICE} ${BORG} create \
         "${BORG_CREATE_ARGS[@]}" \
         "${BORG_REPO}"::"{hostname}-$(date -u +'%Y%m%dT%H%M%SZ')" \
         "${PATHS[@]}" \
@@ -76,7 +76,7 @@ borg_prune () {
         BORG_PRUNE_ARGS+=( --dry-run )
     fi
 
-    ${BORG} prune \
+    ${NICE} ${BORG} prune \
         "${BORG_PRUNE_ARGS[@]}" \
         --prefix "{hostname}-" \
         --keep-daily=${KEEP_DAILY} \
@@ -93,20 +93,26 @@ borg_verify () {
         )
     fi
 
-    ${BORG} check "${BORG_CHECK_ARGS[@]}" "${BORG_REPO}"
+    ${NICE} ${BORG} check "${BORG_CHECK_ARGS[@]}" "${BORG_REPO}"
 }
 
 borg_delete_checkpoints () {
+    local DELETE_ARGS=()
+
+    if ${DRY_RUN}; then
+        DELETE_ARGS+=( --dry-run )
+    fi
+
     ${BORG} list "${BORG_REPO}" \
         | { grep .checkpoint || true; } \
         | cut -d ' ' -f 1 \
         | xargs -I % -n 1 --no-run-if-empty \
-        ${BORG} delete "${BORG_REPO}"::%
+        ${BORG} delete "${DELETE_ARGS[@]}" "${BORG_REPO}"::%
 }
 
 borg_exec () {
     export BORG_REPO
-    ${BORG} "$@"
+    ${NICE} ${BORG} "$@"
 }
 
 write_backup_status () {
@@ -208,10 +214,9 @@ DRY_RUN=false
 BORG="/usr/bin/borg"
 LOCKDIR="/run/lock/borgwrapper"
 STATUSDIR="/var/lib/borgwrapper/status"
-PRE_BACKUP_CMD=()
-POST_BACKUP_CMD=()
-POST_VERIFY_CMD=()
 BWLIMIT=0
+USE_NICE=true
+NICE="/usr/bin/nice"
 
 while getopts ":c:dV" OPT; do
     case ${OPT} in
@@ -239,6 +244,10 @@ MODE="${1}"
 echo "Loading config from ${CONFIG}"
 source "${CONFIG}" || exit 1
 export BORG_PASSPHRASE
+
+if ! ${USE_NICE}; then
+    NICE=""
+fi
 
 LOCKFILE="${LOCKDIR}/$(echo -n "${BORG_REPO}" | md5sum | cut -d ' ' -f 1).lock"
 mkdir -p "${LOCKDIR}"

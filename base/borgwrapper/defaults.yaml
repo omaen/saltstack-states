@@ -10,6 +10,5 @@ borgwrapper:
     keep_yearly: 5
     paths: []
     excludes: []
-    nice: True
     cron_enable: True
   configs: {}
