@@ -1,4 +1,5 @@
 icinga2:
   package: icinga2
   service: icinga2
+  nagios_plugin_dir: /usr/lib/nagios/plugins
   config: {}

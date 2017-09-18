@@ -1,7 +1,6 @@
 borgwrapper:
   bin: /usr/local/bin/borgwrapper
   config_dir: /etc/borgwrapper
-  nagios_plugin_dir: /usr/lib/nagios/plugins
   config_defaults:
     borg: /usr/bin/borg
     keep_daily: 31
@@ -10,5 +9,4 @@ borgwrapper:
     keep_yearly: 5
     paths: []
     excludes: []
-    cron_enable: True
   configs: {}
