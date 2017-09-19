@@ -1,4 +1,4 @@
-{% if grains['oscodename'] == 'jessie' %}
+{% if grains['oscodename'] == 'jessie' or grains['oscodename'] == 'stretch' %}
 include:
   - apt.repo-backports
 {% endif %}
@@ -13,6 +13,11 @@ zfsonlinux:
       - {{ zfsonlinux.zed }}
 {% if grains['oscodename'] == 'jessie' %}
     - fromrepo: jessie-backports
+    - require:
+      - pkgrepo: repo-backports
+{% endif %}
+{% if grains['oscodename'] == 'stretch' %}
+    - fromrepo: stretch-backports
     - require:
       - pkgrepo: repo-backports
 {% endif %}
