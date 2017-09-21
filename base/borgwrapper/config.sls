@@ -40,16 +40,12 @@ borgwrapper_{{ name }}_backup_timer:
     - mode: 644
     - watch_in:
       - cmd: reload_systemd_config
-  cmd.run:
-    - name: systemctl enable borgwrapper-backup@{{ name }}.timer
-    - unless: systemctl is-enabled borgwrapper-backup@{{ name }}.timer
+  service.running:
+    - name: borgwrapper-backup@{{ name }}.timer
+    - enable: True
     - require:
       - file: borgwrapper_{{ name }}_backup_service
       - file: borgwrapper_{{ name }}_backup_timer
-  service.running:
-    - name: borgwrapper-backup@{{ name }}.timer
-    - require:
-      - cmd: systemctl enable borgwrapper-backup@{{ name }}.timer
 
 borgwrapper_{{ name }}_verify_service:
   file.managed:
@@ -70,15 +66,11 @@ borgwrapper_{{ name }}_verify_timer:
     - mode: 644
     - watch_in:
       - cmd: reload_systemd_config
-  cmd.run:
-    - name: systemctl enable borgwrapper-verify@{{ name }}.timer
-    - unless: systemctl is-enabled borgwrapper-verify@{{ name }}.timer
+  service.running:
+    - name: borgwrapper-verify@{{ name }}.timer
+    - enable: True
     - require:
       - file: borgwrapper_{{ name }}_verify_service
       - file: borgwrapper_{{ name }}_verify_timer
-  service.running:
-    - name: borgwrapper-verify@{{ name }}.timer
-    - require:
-      - cmd: systemctl enable borgwrapper-verify@{{ name }}.timer
 
 {% endfor %}
