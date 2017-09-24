@@ -1,6 +1,6 @@
 {%- macro ssh_config(config, indent=4) %}
     {%- for k, v in config.items() recursive %}
-        {%- if v is iterable and v is not string %}
+        {%- if v is list %}
             {%- set outer_loop = loop %}
             {%- for i in v %}
                 {%- if i is mapping %}
