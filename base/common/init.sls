@@ -8,7 +8,6 @@ include:
   - ddclient
   - ifenslave
   - apt
-  - proxy
   - less
   - vim
   - bash-completion
