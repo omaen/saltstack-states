@@ -5,5 +5,9 @@ After=network.target borgwrapper-backup@%i.service
 [Service]
 Type=oneshot
 ExecStart=/usr/local/bin/borgwrapper -c /etc/borgwrapper/%i.sh verify
+
+# Only temporary test
+ExecStopPost=-/usr/local/bin/icinga2-update --service "backup verification" --systemd
+
 User=root
 Group=root

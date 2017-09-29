@@ -1,6 +1,6 @@
 {% if salt['pillar.get']('icinga2:ticket', False) %}
 include:
-  - .package
+  - .install
   - .config
   - .command-execution-client
 {% endif %}
