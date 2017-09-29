@@ -12,48 +12,38 @@ mariadb-backup_config:
     - context:
         config: {{ mariadb_backup.config }}
 
+reload_systemd_config:
+  cmd.wait:
+    - name: systemctl daemon-reload
 
-{% if mariadb_backup.cron_enable %}
-
-{% if mariadb_backup.config.keep_daily is defined and mariadb_backup.config.keep_daily > 0 %}
-mariadb-backup_cron_daily:
-  cron.present:
-    {% if mariadb_backup.nice %}
-    - name: nice {{ mariadb_backup.bin }} daily
-    {% else %}
-    - name: {{ mariadb_backup.bin }} daily
-    {% endif %}
-    - identifier: mariadb-backup daily backup
+mariadb-backup_service:
+  file.managed:
+    - name: /etc/systemd/system/mariadb-backup@.service
+    - source: salt://mariadb-backup/files/mariadb-backup@.service
     - user: root
-    - hour: random
-    - minute: random
-{% else %}
-include:
-  - .remove_daily_cronjob
-{% endif %}
+    - group: root
+    - mode: 644
+    - watch_in:
+      - cmd: reload_systemd_config
 
-{% if mariadb_backup.config.keep_monthly is defined and mariadb_backup.config.keep_monthly > 0 %}
-mariadb-backup_cron_monthly:
-  cron.present:
-    {% if mariadb_backup.nice %}
-    - name: nice {{ mariadb_backup.bin }} monthly
-    {% else %}
-    - name: {{ mariadb_backup.bin }} monthly
-    {% endif %}
-    - identifier: mariadb-backup monthly backup
+mariadb-backup_timer:
+  file.managed:
+    - name: /etc/systemd/system/mariadb-backup@.timer
+    - source: salt://mariadb-backup/files/mariadb-backup@.timer
     - user: root
-    - hour: random
-    - minute: random
-    - daymonth: random
-{% else %}
-include:
-  - .remove_monthly_cronjob
-{% endif %}
+    - group: root
+    - mode: 644
+    - watch_in:
+      - cmd: reload_systemd_config
 
-{% else %}
+{% for interval in ['daily', 'monthly'] %}
 
-include:
-  - .remove_daily_cronjob
-  - .remove_monthly_cronjob
+mariadb-backup_{{ interval }}_timer:
+  service.running:
+    - name: mariadb-backup@{{ interval }}.timer
+    - enable: True
+    - require:
+      - file: mariadb-backup_service
+      - file: mariadb-backup_timer
 
-{% endif %}
+{% endfor %}

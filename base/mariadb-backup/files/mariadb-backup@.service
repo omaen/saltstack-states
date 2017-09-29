@@ -1,0 +1,9 @@
+[Unit]
+Description=%i mariadb backup
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/mariadb-backup %i
+Nice=10
+User=root
+Group=root

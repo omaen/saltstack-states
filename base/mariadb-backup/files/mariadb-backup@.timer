@@ -1,0 +1,10 @@
+[Unit]
+Description=%i mariadb backup timer
+
+[Timer]
+OnCalendar=%i
+RandomizedDelaySec=4h
+Persistent=true
+
+[Install]
+WantedBy=multi-user.target

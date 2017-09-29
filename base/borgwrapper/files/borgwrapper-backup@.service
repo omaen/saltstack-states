@@ -8,6 +8,7 @@ OnFailure=icinga2-update@backup.service
 [Service]
 Type=oneshot
 ExecStart=/usr/local/bin/borgwrapper -c /etc/borgwrapper/%i.sh backup
+Nice=10
 
 # Test for other statuses
 ExecStopPost=-/usr/local/bin/icinga2-update --service backup --systemd

@@ -1,8 +1,6 @@
 mariadb_backup:
   bin: /usr/local/bin/mariadb-backup
   config_file: /etc/mariadb-backup/config
-  cron_enable: True
-  nice: True
   config:
     backup_dir: '${HOME}/mariadb-backup'
     keep_daily: 7
