@@ -1,0 +1,7 @@
+elasticsearch:
+  package: elasticsearch
+  service: elasticsearch
+  repo:
+    5_x: deb https://artifacts.elastic.co/packages/5.x/apt stable main
+  key_url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  config: {}

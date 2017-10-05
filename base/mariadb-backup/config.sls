@@ -1,5 +1,8 @@
 {% from 'mariadb-backup/map.jinja' import mariadb_backup with context %}
 
+include:
+  - systemd.daemon-reload
+
 mariadb-backup_config:
   file.managed:
     - name: {{ mariadb_backup.config_file }}
@@ -12,10 +15,6 @@ mariadb-backup_config:
     - context:
         config: {{ mariadb_backup.config }}
 
-reload_systemd_config:
-  cmd.wait:
-    - name: systemctl daemon-reload
-
 mariadb-backup_service:
   file.managed:
     - name: /etc/systemd/system/mariadb-backup@.service
@@ -24,7 +23,7 @@ mariadb-backup_service:
     - group: root
     - mode: 644
     - watch_in:
-      - cmd: reload_systemd_config
+      - cmd: daemon-reload
 
 mariadb-backup_timer:
   file.managed:
@@ -34,7 +33,7 @@ mariadb-backup_timer:
     - group: root
     - mode: 644
     - watch_in:
-      - cmd: reload_systemd_config
+      - cmd: daemon-reload
 
 {% for interval in ['daily', 'monthly'] %}
 

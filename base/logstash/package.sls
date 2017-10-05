@@ -2,13 +2,19 @@
 
 include:
   - java.java-8-jre
-  - .repo-elastic-5_x
+
+logstash-repo:
+  pkgrepo.managed:
+    - name: {{ logstash.repo['5_x'] }}
+    - key_url: {{ logstash.key_url }}
+    - file: /etc/apt/sources.list.d/elastic-5_x.list
+    - clean_file: True
 
 logstash:
   pkg.installed:
     - name: {{ logstash.package }}
     - require:
-      - pkgrepo: repo-elastic-5_x
+      - pkgrepo: logstash-repo
       - pkg: java-8-jre
   service.running:
     - name: {{ logstash.service }}

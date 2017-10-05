@@ -1,8 +1,7 @@
 {% from 'borgwrapper/map.jinja' import borgwrapper with context %}
 
-reload_systemd_config:
-  cmd.wait:
-    - name: systemctl daemon-reload
+include:
+  - systemd.daemon-reload
 
 {% for name, params in borgwrapper.configs.iteritems() %}
 {% set config = borgwrapper.config_defaults %}
@@ -29,7 +28,7 @@ borgwrapper_{{ name }}_backup_service:
     - group: root
     - mode: 644
     - watch_in:
-      - cmd: reload_systemd_config
+      - cmd: daemon-reload
 
 borgwrapper_{{ name }}_backup_timer:
   file.managed:
@@ -39,7 +38,7 @@ borgwrapper_{{ name }}_backup_timer:
     - group: root
     - mode: 644
     - watch_in:
-      - cmd: reload_systemd_config
+      - cmd: daemon-reload
   service.running:
     - name: borgwrapper-backup@{{ name }}.timer
     - enable: True
@@ -55,7 +54,7 @@ borgwrapper_{{ name }}_verify_service:
     - group: root
     - mode: 644
     - watch_in:
-      - cmd: reload_systemd_config
+      - cmd: daemon-reload
 
 borgwrapper_{{ name }}_verify_timer:
   file.managed:
@@ -65,7 +64,7 @@ borgwrapper_{{ name }}_verify_timer:
     - group: root
     - mode: 644
     - watch_in:
-      - cmd: reload_systemd_config
+      - cmd: daemon-reload
   service.running:
     - name: borgwrapper-verify@{{ name }}.timer
     - enable: True

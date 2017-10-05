@@ -4,6 +4,10 @@ Description=%i mariadb backup
 [Service]
 Type=oneshot
 ExecStart=/usr/local/bin/mariadb-backup %i
+
+# Test only
+ExecStopPost=-/usr/local/bin/icinga2-update --service "%i mariadb backup" --systemd
+
 Nice=10
 User=root
 Group=root

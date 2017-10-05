@@ -1,0 +1,15 @@
+{% import_yaml 'elasticsearch/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+    'Debian': {
+    },
+  }, grain='os_family', merge=salt['pillar.get']('elasticsearch:lookup'))
+%}
+
+{% do defaults.elasticsearch.update(os_family_map) %}
+
+{% set elasticsearch = salt['pillar.get'](
+  'elasticsearch',
+  default=defaults.elasticsearch,
+  merge=True)
+%}

@@ -1,6 +1,5 @@
 {% from 'logstash/map.jinja' import logstash with context %}
 
-{%- set codename = grains['oscodename'] | lower %}
 repo-elastic-5_x:
   pkgrepo.managed:
     - name: {{ logstash.repo['5_x'] }}
