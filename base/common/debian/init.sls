@@ -5,7 +5,6 @@ include:
   - syslog.remote-syslog
   - virtualization.guest-tools
   - timesyncd
-  - ddclient
   - ifenslave
   - apt
   - less
@@ -14,21 +13,12 @@ include:
   - sudo
   - man-db
   - ssh
-  - apache2
-  - strongswan
   - unattended-upgrades
   - motd
   - rsync
   - sysctl
   - certs
-  - certbot
-  - zfsonlinux
-  - snmpd
-  - filebeat
-  - samba
-  - network
-  - iptables
-  - fwgen
-  - tc
   - autofs
-  - icinga2
+  - network
+  - borgwrapper
+  - fstrim
