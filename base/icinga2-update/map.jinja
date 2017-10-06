@@ -1,0 +1,17 @@
+{% import_yaml 'icinga2-update/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+        'Debian': {},
+    },
+    grain='os_family',
+    merge=salt['pillar.get']('icinga2_update:lookup'))
+%}
+
+{% do defaults.icinga2_update.update(os_family_map) %}
+
+{% set icinga2_update = salt['pillar.get'](
+        'icinga2_update',
+        default=defaults.icinga2_update,
+        merge=True
+    )
+%}

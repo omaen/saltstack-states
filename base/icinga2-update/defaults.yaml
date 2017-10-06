@@ -1,0 +1,4 @@
+icinga2_update:
+  bin: /usr/local/bin/icinga2-update
+  config_file: /etc/icinga2-update/config.yml
+  config: {}

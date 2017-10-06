@@ -23,8 +23,6 @@ include:
   - certs
   - certbot
   - zfsonlinux
-  - borgbackup
-  - borgwrapper
   - snmpd
   - filebeat
   - samba
