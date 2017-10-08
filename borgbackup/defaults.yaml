@@ -1,3 +1,10 @@
 borgbackup:
-  borgbackup: 'borgbackup'
-  config: {}
+  borgbackup: borgbackup
+  config:
+    client:
+      ssh_key_name: /root/.ssh/id_rsa
+      auto_add_servers: []
+    server:
+      user: borg
+      group: borg
+      backup_dir: /srv/borg

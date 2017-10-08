@@ -20,5 +20,4 @@ include:
   - certs
   - autofs
   - network
-  - borgwrapper
   - fstrim
