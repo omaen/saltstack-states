@@ -33,7 +33,7 @@ borgbackup_backup_dir_symlink:
 {% endif %}
 
 # This is used for reactor setups where the client ssh key is automatically added
-{% if salt['pillar.get']('borgbackup:new_client') %}
+{% if borgbackup.new_client and borgbackup.config.server.auto_add_allowed %}
 borgbackup_new_client:
   ssh_auth.present:
     - name: {{ borgbackup.new_client.public_key }}

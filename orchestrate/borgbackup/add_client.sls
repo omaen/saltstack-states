@@ -1,6 +1,6 @@
 {% set data = salt.pillar.get('event_data') %}
 
-add_ssh_key:
+borgbackup_add_public_key:
   salt.state:
     - tgt: {{ data.data.server }}
     - sls:

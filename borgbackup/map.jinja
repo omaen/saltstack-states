@@ -1,17 +1,16 @@
 {% import_yaml 'borgbackup/defaults.yaml' as defaults %}
 
-{% set os_family_map = salt['grains.filter_by']({
-		'Debian': {},
-	},
-	grain='os_family',
-	merge=salt['pillar.get']('borgbackup:lookup'))
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('borgbackup:lookup'),
+    base='borgbackup'
+    )
 %}
 
-{% do defaults.borgbackup.update(os_family_map) %}
-
 {% set borgbackup = salt['pillar.get'](
-		'borgbackup',
-		default=defaults.borgbackup,
-		merge=True
-	)
+    'borgbackup',
+    default=base_settings,
+    merge=True
+    )
 %}
