@@ -4,7 +4,7 @@ include:
 root_user:
   user.present:
     - name: root
-    - password: '!'
+    - password: {{ salt['pillar.get']('users:root:password', '!') }}
     - remove_groups: False
 
 {% for username in salt['pillar.get']('users', []) %}
