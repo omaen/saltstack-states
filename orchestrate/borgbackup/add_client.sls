@@ -7,6 +7,8 @@ borgbackup_add_public_key:
       - borgbackup.server
     - pillar:
         borgbackup:
-          new_client:
-            id: {{ data.id }}
-            public_key: {{ data.data.public_key }}
+          orchestrate:
+            server:
+              new_client:
+                id: {{ data.id }}
+                public_key: {{ data.data.public_key }}

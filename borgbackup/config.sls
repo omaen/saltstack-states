@@ -6,10 +6,10 @@ borgbackup_generate_ssh_key:
     - runas: root
     - unless: test -f {{ borgbackup.config.client.ssh_key_name }}
 
-{% for server in borgbackup.config.client.auto_add_servers %}
+{% for server in borgbackup.orchestrate.client.auto_add_servers %}
 
 borgbackup_add_public_key_to_{{ server }}:
-  {% if borgbackup.config.client.force_server_update %}
+  {% if borgbackup.orchestrate.client.force_server_update %}
   cmd.script:
     - source: salt://borgbackup/files/fire_ssh_key_event.py
     - env:

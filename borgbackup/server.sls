@@ -33,13 +33,13 @@ borgbackup_backup_dir_symlink:
 {% endif %}
 
 # This is used for reactor setups where the client ssh key is automatically added
-{% if borgbackup.new_client and borgbackup.config.server.auto_add_allowed %}
+{% if borgbackup.orchestrate.server.new_client and borgbackup.orchestrate.server.auto_add_allowed %}
 borgbackup_new_client:
   ssh_auth.present:
-    - name: {{ borgbackup.new_client.public_key }}
+    - name: {{ borgbackup.orchestrate.server.new_client.public_key }}
     - user: {{ borgbackup.config.server.user }}
     - options:
-      - command="borg serve --restrict-to-path {{ client_path }}/{{ borgbackup.new_client.id }}"
+      - command="borg serve --restrict-to-path {{ client_path }}/{{ borgbackup.orchestrate.server.new_client.id }}"
       - no-pty
       - no-agent-forwarding
       - no-port-forwarding
