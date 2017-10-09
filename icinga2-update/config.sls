@@ -1,5 +1,7 @@
 {% from 'icinga2-update/map.jinja' import icinga2_update with context %}
 
+{% if icinga2_update.config %}
+
 icinga2-update_config:
   file.managed:
     - name: {{ icinga2_update.config_file }}
@@ -11,3 +13,10 @@ icinga2-update_config:
     - makedirs: True
     - context:
         config: {{ icinga2_update.config }}
+{% else %}
+
+remove_icinga2-update_config:
+  file.absent:
+    - name: {{ icinga2_update.config_file }}
+
+{% endif %}

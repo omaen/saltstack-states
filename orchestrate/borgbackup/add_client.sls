@@ -5,6 +5,7 @@ borgbackup_add_public_key:
     - tgt: {{ data.data.server }}
     - sls:
       - borgbackup.server
+    - queue: True
     - pillar:
         borgbackup:
           orchestrate:
