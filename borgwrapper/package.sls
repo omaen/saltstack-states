@@ -1,7 +1,7 @@
 {% from 'borgwrapper/map.jinja' import borgwrapper with context %}
 
 include:
-  - borgbackup
+  - borgbackup.client
 
 borgwrapper_bin:
   file.managed:

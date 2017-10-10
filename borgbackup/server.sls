@@ -1,33 +1,33 @@
 {% from 'borgbackup/map.jinja' import borgbackup with context %}
-{% set client_path = borgbackup.config.server.backup_dir %}
+{% set client_path = borgbackup.server.config.backup_dir %}
 
 include:
   - .package
 
 borg_user:
   user.present:
-    - name: {{ borgbackup.config.server.user }}
-    - gid: {{ borgbackup.config.server.group }}
+    - name: {{ borgbackup.server.config.user }}
+    - gid: {{ borgbackup.server.config.group }}
     - shell: /bin/bash
     - system: True
 
 borg_backup_dir:
   file.directory:
-    - name: {{ borgbackup.config.server.backup_dir }}
-    - user: {{ borgbackup.config.server.user }}
-    - group: {{ borgbackup.config.server.group }}
+    - name: {{ borgbackup.server.config.backup_dir }}
+    - user: {{ borgbackup.server.config.user }}
+    - group: {{ borgbackup.server.config.group }}
     - mode: 755
     - require:
       - user: borg_user
 
 
-{% if borgbackup.config.server.symlink is defined %}
-{% set client_path = borgbackup.config.server.symlink %}
+{% if borgbackup.server.config.symlink is defined %}
+{% set client_path = borgbackup.server.config.symlink %}
 
 borgbackup_backup_dir_symlink:
   file.symlink:
-    - name: {{ borgbackup.config.server.symlink }}
-    - target: {{ borgbackup.config.server.backup_dir }}
+    - name: {{ borgbackup.server.config.symlink }}
+    - target: {{ borgbackup.server.config.backup_dir }}
     - require:
       - file: borg_backup_dir
 {% endif %}
@@ -37,7 +37,7 @@ borgbackup_backup_dir_symlink:
 borgbackup_new_client:
   ssh_auth.present:
     - name: {{ borgbackup.orchestrate.server.new_client.public_key }}
-    - user: {{ borgbackup.config.server.user }}
+    - user: {{ borgbackup.server.config.user }}
     - options:
       - command="borg serve --restrict-to-path {{ client_path }}/{{ borgbackup.orchestrate.server.new_client.id }}"
       - no-pty

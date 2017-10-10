@@ -17,7 +17,3 @@ icinga2:
     - name: {{ icinga2.service }}
     - require:
       - pkg: icinga2
-
-check_systemd_service:
-  file.absent:
-    - name: {{ icinga2.nagios_plugin_dir }}/check_systemd_service

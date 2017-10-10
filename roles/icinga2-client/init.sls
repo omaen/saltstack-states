@@ -1,3 +1,3 @@
 include:
-  - icinga2
+  - icinga2.client
   - icinga2-update

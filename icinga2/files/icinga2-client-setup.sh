@@ -46,4 +46,3 @@ icinga2 node setup \
     --trustedcert $trustedcert \
     --accept-commands \
     --accept-config
-
