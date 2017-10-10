@@ -7,4 +7,6 @@ icinga2_add_client:
       - icinga2.client
     - pillar:
         icinga2:
-          ticket: {{ data.data.ticket }}
+          client:
+            config:
+              ticket: {{ data.data.ticket }}

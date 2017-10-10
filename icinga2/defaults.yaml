@@ -4,7 +4,8 @@ icinga2:
   master:
     config: {}
   client:
-    config: {}
+    config:
+      ticket: ''
   orchestrate:
     master:
       new_ticket: {}

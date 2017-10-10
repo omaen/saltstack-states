@@ -3,11 +3,11 @@
 include:
   - .install
 
-{% if icinga2.ticket is defined %}
+{% if icinga2.client.config.ticket %}
 
 icinga2-client-setup:
   cmd.script:
-    - name: icinga2-client-setup.sh {{ icinga2.client.config.master }} {{ icinga2.ticket }}
+    - name: icinga2-client-setup.sh {{ icinga2.client.config.master }} {{ icinga2.client.config.ticket }}
     - source: salt://icinga2/files/icinga2-client-setup.sh
     - unless: test -f /etc/icinga2/pki/{{ grains['fqdn'] }}.key
     - require:
