@@ -11,7 +11,7 @@ def get_file_content(filename):
 
 caller = salt.client.Caller()
 server = os.environ['SERVER']
-tag = 'borgbackup/%s/client/add' % server
+tag = 'borgbackup/server/%s/client/add' % server
 
 caller.sminion.functions['event.send'](
     tag,
