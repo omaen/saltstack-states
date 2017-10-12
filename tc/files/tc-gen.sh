@@ -1,18 +1,18 @@
 #!/bin/bash
 
 
-VERSION="1.1.5"
-TC=$(which tc)
-ETHTOOL=$(which ethtool)
-IP=$(which ip)
-MODPROBE=$(which modprobe)
+VERSION="1.1.6"
+TC=$(command -v tc)
+ETHTOOL=$(command -v ethtool)
+IP=$(command -v ip)
+MODPROBE=$(command -v modprobe)
 
 
 error_handler () {
     local SCRIPT_NAME="$0"
     local LINE="$1"
     local EXIT_CODE="$2"
-    echo "${SCRIPT_NAME}: Error in line ${LINE} (exit code ${EXIT_CODE})"
+    >&2 echo "${SCRIPT_NAME}: Error in line ${LINE} (exit code ${EXIT_CODE})"
     exit ${EXIT_CODE}
 }
 
