@@ -1,0 +1,16 @@
+{% import_yaml 'dovecot/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('dovecot:lookup'),
+    base='dovecot'
+    )
+%}
+
+{% set dovecot = salt['pillar.get'](
+    'dovecot',
+    default=base_settings,
+    merge=True
+    )
+%}

@@ -1,7 +1,6 @@
 include:
   - exim4.package
   - exim4.config
-  - dovecot.conf
   - exim4.tls
 {% if salt['pillar.get']('exim4:dkim') %}
   - exim4.dkim
@@ -24,7 +23,6 @@ dovecot_lda_config:
       - service: exim4
     - require:
       - file: exim4_conf
-      - pkg: dovecot-imap
 
 custom_config:
   file.managed:

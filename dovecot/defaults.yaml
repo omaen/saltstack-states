@@ -1,0 +1,10 @@
+dovecot:
+  service: dovecot
+  local_conf: /etc/dovecot/local.conf
+  imap:
+    enable: true
+    package: dovecot-imapd
+  managesieve:
+    enable: false
+    package: dovecot-managesieved
+  config: {}
