@@ -1,7 +1,10 @@
 zfsonlinux:
   dkms: zfs-dkms
   zfsutils: zfsutils-linux
-  zed: zfs-zed
+  zed:
+    package: zfs-zed
+    service: zfs-zed
   use_backports: False
-  config: {
-  }
+  config: {}
+
+Debian: {}

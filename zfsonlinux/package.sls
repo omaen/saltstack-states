@@ -12,7 +12,7 @@ zfsonlinux:
     - pkgs:
       - {{ zfsonlinux.dkms }}
       - {{ zfsonlinux.zfsutils }}
-      - {{ zfsonlinux.zed }}
+      - {{ zfsonlinux.zed.package }}
 {% if zfsonlinux.use_backports %}
     - fromrepo: {{ grains['oscodename'] }}-backports
     - version: latest
@@ -20,6 +20,6 @@ zfsonlinux:
       - pkgrepo: repo-backports
 {% endif %}
   service.running:
-    - name: {{ zfsonlinux.zed }}
+    - name: {{ zfsonlinux.zed.service }}
     - require:
       - pkg: zfsonlinux
