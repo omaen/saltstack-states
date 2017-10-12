@@ -1,4 +1,6 @@
-{% if grains['oscodename'] == 'jessie' or grains['oscodename'] == 'stretch' %}
+{% from 'zfsonlinux/map.jinja' import zfsonlinux with context %}
+
+{% if zfsonlinux.use_backports %}
 include:
   - apt.repo-backports
 {% endif %}
@@ -11,13 +13,9 @@ zfsonlinux:
       - {{ zfsonlinux.dkms }}
       - {{ zfsonlinux.zfsutils }}
       - {{ zfsonlinux.zed }}
-{% if grains['oscodename'] == 'jessie' %}
-    - fromrepo: jessie-backports
-    - require:
-      - pkgrepo: repo-backports
-{% endif %}
-{% if grains['oscodename'] == 'stretch' %}
-    - fromrepo: stretch-backports
+{% if zfsonlinux.use_backports %}
+    - fromrepo: {{ grains['oscodename'] }}-backports
+    - version: latest
     - require:
       - pkgrepo: repo-backports
 {% endif %}
