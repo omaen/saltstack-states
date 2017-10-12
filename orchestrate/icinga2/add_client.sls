@@ -5,6 +5,7 @@ icinga2_add_client:
     - tgt: {{ data.data.client }}
     - sls:
       - icinga2.client
+    - queue: True
     - pillar:
         icinga2:
           client:
