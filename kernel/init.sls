@@ -1,4 +1,6 @@
-{% if salt.pillar.get('kernel') == 'backports'  %}
+{% from 'kernel/map.jinja' import kernel with context %}
+
+{% if kernel.use_backports %}
 
 include:
   - apt.repo-backports
