@@ -1,17 +1,16 @@
 {% import_yaml 'logstash/defaults.yaml' as defaults %}
 
-{% set os_family_map = salt['grains.filter_by']({
-    'Debian': {
-      'package': 'logstash',
-      'service': 'logstash'
-    },
-  }, grain='os_family', merge=salt['pillar.get']('logstash:lookup'))
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('logstash:lookup'),
+    base='logstash'
+    )
 %}
 
-{% do defaults.logstash.update(os_family_map) %}
-
 {% set logstash = salt['pillar.get'](
-  'logstash',
-  default=defaults.logstash,
-  merge=True)
+    'logstash',
+    default=base_settings,
+    merge=True
+    )
 %}
