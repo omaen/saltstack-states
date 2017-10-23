@@ -5,7 +5,7 @@ tc-gen:
     - name: ethtool
   file.managed:
     - name: /usr/local/bin/tc-gen
-    - source: salt://tc/files/tc-gen.sh
+    - source: salt://tc/files/tc-gen
     - user: root
     - group: root
     - mode: 700
