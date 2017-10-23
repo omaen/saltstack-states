@@ -10,5 +10,4 @@ test_conf:
     - mode: 644
     - context:
         config: {{ icinga2.config }}
-    #- watch_in:
-    # - service: icinga2
+
