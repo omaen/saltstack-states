@@ -1,6 +1,6 @@
 include:
   - apache2
-  - php5.timezone
+  - apache2.php-timezone
   - imapproxy
   - memcached
 

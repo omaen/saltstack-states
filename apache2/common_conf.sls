@@ -1,5 +1,4 @@
-include:
-  - apache2
+{% from 'apache2/map.jinja' import apache2 with context %}
 
 common_conf:
   file.managed:
@@ -9,6 +8,8 @@ common_conf:
     - user: root
     - group: root
     - mode: 644
+    - context:
+        config: {{ apache2|yaml }}
     - require:
       - pkg: apache2
     - watch_in:

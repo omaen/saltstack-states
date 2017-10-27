@@ -1,0 +1,16 @@
+{% import_yaml 'apache2/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('apache2:lookup'),
+    base='apache2'
+    )
+%}
+
+{% set apache2 = salt['pillar.get'](
+    'apache2',
+    default=base_settings,
+    merge=True
+    )
+%}

@@ -9,5 +9,69 @@ icinga2:
   orchestrate:
     master:
       new_ticket: {}
+  ido_mysql:
+    package: icinga2-ido-mysql
+    db_user: icinga2
+  icingaweb2:
+    package: icingaweb2
+    authentication:
+      icingaweb2:
+        backend: db
+        resource: icingaweb_db
+    modules:
+      monitoring:
+        backends:
+          icinga:
+            type: ido
+            resource: icinga_ido
+        commandtransports:
+          icinga2:
+            transport: local
+            path: /var/run/icinga2/cmd/icinga2.cmd
+        config:
+          security:
+            protected_customvars: '*pw*,*pass*,community'
+    configs:
+      config:
+        global:
+          show_stacktraces: 1
+          config_backend: db
+          config_resource: icingaweb_db
+        logging:
+          log: syslog
+          level: ERROR
+          application: icingaweb2
+          facility: user
+      groups:
+        icingaweb2:
+          backend: db
+          resource: icingaweb_db
+      resources:
+        icingaweb_db:
+          type: db
+          db: mysql
+          host: localhost
+          port: ''
+          dbname: icingaweb2
+          username: icingaweb2
+          charset: ''
+          persistent: 0
+          use_ssl: 0
+        icinga_ido:
+          type: db
+          db: mysql
+          host: localhost
+          port: ''
+          dbname: icinga2
+          username: icinga2
+          charset: ''
+          persistent: 0
+          use_ssl: 0
+      roles:
+        Administrators:
+          users: admin
+          permissions: '*'
+          groups: Administrators
+
 
 Debian: {}

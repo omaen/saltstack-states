@@ -1,16 +1,20 @@
+{% from 'php-fpm/map.jinja' import php_fpm with context %}
+
 php-fpm:
   pkg.installed:
-    - name: php5-fpm
+    - name: {{ php_fpm.package }}
   service.running:
-    - name: php5-fpm
+    - name: {{ php_fpm.service }}
     - require:
       - pkg: php-fpm
 
-php-timezone:
+{% set timezone = salt.cmd.run('cat /etc/timezone') %}
+
+php-fpm-timezone:
   file.managed:
-    - name: /etc/php5/fpm/conf.d/30-timezone.ini
-    - source: salt://php-fpm/files/30-timezone.ini
-    - template: jinja
+    - name: {{ php_fpm.php_conf_path }}/conf.d/99-timezone.ini
+    - contents: |
+        date.timezone = '{{ timezone }}'
     - user: root
     - group: root
     - mode: 644
@@ -19,9 +23,9 @@ php-timezone:
     - watch_in:
       - service: php-fpm
 
-php-upload:
+php-fpm-upload:
   file.managed:
-    - name: /etc/php5/fpm/conf.d/30-upload.ini
+    - name: {{ php_fpm.php_conf_path }}/conf.d/99-upload.ini
     - source: salt://php-fpm/files/30-upload.ini
     - template: jinja
     - user: root

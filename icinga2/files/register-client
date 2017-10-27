@@ -1,0 +1,44 @@
+#!/bin/bash
+
+FQDN="$1"
+ADDRESS="$2"
+
+USERNAME="director-api-user"
+PASSWORD="pKKo9VsNZdPhTGT3jaQB"
+ICINGAWEB_URL="https://icinga2.proikt.com/icingaweb2"
+API_KEY="7fff1c177d0a4554b19c172ab922bbb07cfcdf5a"
+
+test -z "$PASSWORD" || USERNAME="$USERNAME:$PASSWORD"
+
+register_host () {
+    local URL="director/self-service/register-host?name=${FQDN}&key=${API_KEY}"
+    local BODY
+
+    read -r -d '' BODY << EOB
+{
+    "address": "${ADDRESS}"
+}
+EOB
+
+    curl \
+        --insecure \
+        -u "${USERNAME}" \
+        -i "${ICINGAWEB_URL}/$URL" \
+        -H 'Accept: application/json' \
+        -X POST \
+        -d "${BODY}"
+}
+
+get_ticket () {
+    local URL="director/host/ticket?name=${FQDN}"
+
+    curl \
+        --insecure \
+        -u "${USERNAME}" \
+        -i "${ICINGAWEB_URL}/$URL" \
+        -H 'Accept: application/json' \
+        -X GET
+}
+
+register_host
+get_ticket

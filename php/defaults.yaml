@@ -1,0 +1,7 @@
+php:
+  package: php
+
+Debian:
+  {% if grains['oscodename'] == 'jessie' %}
+  package: php5
+  {% endif %}

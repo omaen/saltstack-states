@@ -1,4 +1,6 @@
-{% if salt['pillar.get']('apache2:disable_default_site') %}
+{% from 'apache2/map.jinja' import apache2 with context %}
+
+{% if apache2.disable_default_site %}
 include:
   - .disable-default-site
 {% endif %}
@@ -6,7 +8,7 @@ include:
 # State name can't have dots in them, so numbers is used
 # to create unique state names
 {% set count = 1 %}
-{% for site in salt['pillar.get']('apache2:sites', {}) %}
+{% for site in apache2.sites %}
 apache2_site_{{ count }}:
   file.managed:
     - name: /etc/apache2/sites-available/{{ site }}.conf

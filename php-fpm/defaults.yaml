@@ -1,0 +1,11 @@
+php_fpm:
+  package: php-fpm
+  service: php7.0-fpm
+  php_conf_path: /etc/php/7.0/fpm
+
+Debian:
+  {% if grains['oscodename'] == 'jessie' %}
+  package: php5-fpm
+  service: php5-fpm
+  php_conf_path: /etc/php5/fpm
+  {% endif %}
