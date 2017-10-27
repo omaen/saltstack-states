@@ -2,4 +2,7 @@ postfix:
   package: postfix
   service: postfix
   main_cf: /etc/postfix/main.cf
-  config: {}
+  config:
+    relayhost: ''
+
+Debian: {}

@@ -34,6 +34,8 @@ samba-private-dir:
     - mode: 755
 
 net-ads-join:
+  pkg.installed:
+    - name: samba-dsdb-modules
   cmd.script:
     - name: join-domain.sh
     - source: salt://sssd/files/join-domain.sh
@@ -43,6 +45,7 @@ net-ads-join:
       - file: samba_conf
       - file: samba-private-dir
       - pkg: krb5-user
+      - pkg: net-ads-join
     - watch_in:
       - file: krb5_keytab
     - require_in:
