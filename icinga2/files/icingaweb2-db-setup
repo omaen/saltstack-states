@@ -1,0 +1,6 @@
+#!/bin/bash
+
+IDO_DB_CONF="/etc/icinga2/features-enabled/ido-mysql.conf"
+DB_PASSWORD=$(sed -n 's/\s*password = "\(.*\)".*/\1/p' "${IDO_DB_CONF}")
+
+

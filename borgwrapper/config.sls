@@ -34,11 +34,14 @@ borgwrapper_{{ name }}_backup_timer:
   file.managed:
     - name: /etc/systemd/system/borgwrapper-backup@.timer
     - source: salt://borgwrapper/files/borgwrapper-backup@.timer
+    - template: jinja
     - user: root
     - group: root
     - mode: 644
     - watch_in:
       - cmd: daemon-reload
+    - context:
+        config: {{ config }}
   service.running:
     - name: borgwrapper-backup@{{ name }}.timer
     - enable: True
@@ -60,11 +63,14 @@ borgwrapper_{{ name }}_verify_timer:
   file.managed:
     - name: /etc/systemd/system/borgwrapper-verify@.timer
     - source: salt://borgwrapper/files/borgwrapper-verify@.timer
+    - template: jinja
     - user: root
     - group: root
     - mode: 644
     - watch_in:
       - cmd: daemon-reload
+    - context:
+        config: {{ config }}
   service.running:
     - name: borgwrapper-verify@{{ name }}.timer
     - enable: True

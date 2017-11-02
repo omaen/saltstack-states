@@ -11,7 +11,6 @@ icinga2:
       new_ticket: {}
   ido_mysql:
     package: icinga2-ido-mysql
-    db_user: icinga2
   icingaweb2:
     package: icingaweb2
     authentication:

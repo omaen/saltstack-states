@@ -1,20 +1,16 @@
 {% import_yaml 'borgwrapper/defaults.yaml' as defaults %}
 
-{% set os_family_map = salt['grains.filter_by']({
-        'Debian': {
-            'bin': '/usr/local/bin/borgwrapper',
-            'config_file': '/etc/borgwrapper/config.sh'
-        },
-    },
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
     grain='os_family',
-    merge=salt['pillar.get']('borgwrapper:lookup'))
+    merge=salt['pillar.get']('borgwrapper:lookup'),
+    base='borgwrapper'
+    )
 %}
 
-{% do defaults.borgwrapper.update(os_family_map) %}
-
 {% set borgwrapper = salt['pillar.get'](
-        'borgwrapper',
-        default=defaults.borgwrapper,
-        merge=True
+    'borgwrapper',
+    default=base_settings,
+    merge=True
     )
 %}
