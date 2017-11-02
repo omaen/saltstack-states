@@ -1,5 +1,3 @@
-{% if pillar['traffic_control'] is defined %}
-
 tc-gen:
   pkg.installed:
     - name: ethtool
@@ -11,5 +9,3 @@ tc-gen:
     - mode: 700
     - require:
       - pkg: tc-gen
-
-{% endif %}
