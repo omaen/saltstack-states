@@ -7,11 +7,12 @@ fwgen:
       - python3-pip
       - python3-yaml
   pip.installed:
-    {% if fwgen.version %}
+  {% if fwgen.version %}
     - name: fwgen{{ fwgen.version }}
-    {% else %}
+  {% else %}
     - name: fwgen
-    {% endif %}
+    - upgrade: True
+  {% endif %}
     - bin_env: /usr/bin/pip3
     - require:
       - pkg: fwgen
