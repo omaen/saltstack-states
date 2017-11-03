@@ -3,6 +3,7 @@ fwgen:
   pkg.installed:
     - pkgs:
       - ipset
+      - conntrack
       - python-pip  # Only included to stop pip salt module from complaining
       - python3-pip
       - python3-yaml
