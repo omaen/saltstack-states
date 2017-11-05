@@ -24,3 +24,4 @@ include:
   - kernel
   - iptables
   - fwgen
+  - udev

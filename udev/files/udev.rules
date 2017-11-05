@@ -1,0 +1,11 @@
+#
+# This file is managed by Salt. Changes will be overwritten!
+#
+{%- for pattern, params in config.items() %}
+{% if params['comment'] is defined %}
+{%- for line in params['comment'].splitlines() %}
+# {{ line }}
+{%- endfor %}
+{%- endif %}
+{{ pattern }}
+{%- endfor %}
