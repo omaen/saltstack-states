@@ -9,6 +9,6 @@ udev_rules:
     - group: root
     - mode: 644
     - context:
-        # Pipe via json to avoid issue where newlines are mangled to literal \n
+        # Filter via yaml to avoid issue where newlines are mangled to literal \n
         # for multiline strings (https://github.com/saltstack/salt/issues/30690)
-        config: {{ config|json }}
+        config: {{ config|yaml }}
