@@ -1,3 +1,6 @@
+include:
+  - iptables.remove
+
 {% from 'fwgen/map.jinja' import fwgen with context %}
 {% for namespace in fwgen.namespaces %}
 fwgen_config_{{ namespace }}:
@@ -16,6 +19,8 @@ fwgen_config_{{ namespace }}:
     - require:
       - pip: fwgen
       - file: fwgen_config_{{ namespace }}
+    - require_in:
+      - file: iptables-gen_remove
 {% endfor %}
 
 {% if not fwgen.no_default_firewall %}
@@ -35,4 +40,6 @@ fwgen_config:
     - require:
       - pip: fwgen
       - file: fwgen_config
+    - require_in:
+      - file: iptables-gen_remove
 {% endif %}
