@@ -1,0 +1,8 @@
+dhcp_relay:
+  package: isc-dhcp-relay
+  service: isc-dhcp-relay
+  config_file: /etc/default/isc-dhcp-relay
+  config:
+    servers: []
+    interfaces: []
+    options: []
