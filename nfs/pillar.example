@@ -1,6 +1,8 @@
 nfs:
   server:
     exports:
+      # Order matters for almost everything in the export file so lists
+      # must be used even though the config format gets uglier
       - name: /srv/nfs
         acls:
           - acl: '*'
@@ -21,3 +23,5 @@ nfs:
             options:
               - rw
               - no_subtree_check
+
+# vim: ft=yaml
