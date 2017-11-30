@@ -1,0 +1,16 @@
+{% import_yaml 'foxit-diode/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('foxit_diode:lookup'),
+    base='foxit_diode'
+    )
+%}
+
+{% set foxit_diode = salt['pillar.get'](
+    'foxit_diode',
+    default=base_settings,
+    merge=True
+    )
+%}

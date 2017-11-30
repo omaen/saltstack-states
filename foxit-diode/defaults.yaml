@@ -1,0 +1,4 @@
+foxit_diode:
+  service: fox-datadiode-core
+  config_json: /etc/opt/fox/fox-datadiode-core/configuration.json
+  config: {}
