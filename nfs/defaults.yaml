@@ -1,0 +1,4 @@
+nfs:
+  server:
+    package: nfs-kernel-server
+    exports: []

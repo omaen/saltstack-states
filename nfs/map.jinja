@@ -1,0 +1,16 @@
+{% import_yaml 'nfs/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('nfs:lookup'),
+    base='nfs'
+    )
+%}
+
+{% set nfs = salt['pillar.get'](
+    'nfs',
+    default=base_settings,
+    merge=True
+    )
+%}

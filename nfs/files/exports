@@ -1,0 +1,25 @@
+#
+# This file is managed by Salt. Changes will be overwritten!
+#
+
+{%- macro get_default(default) %}
+    {%- if default -%}
+{{ '-'|indent(4, True) }}{{ default|join(',') }}
+    {%- endif %}
+{%- endmacro -%}
+
+{%- macro get_acls(acls) %}
+    {%- for acl in acls %}
+        {%- if acl.options -%}
+{{ acl.acl|indent(1, True) }}({{ acl.options|join(',') }})
+        {%- else -%}
+{{ acl.acl|indent(1, True) }}
+        {%- endif %}
+    {%- endfor %}
+{%- endmacro %}
+
+{%- for export in config %}
+    {%- set default = get_default(export.get('default', [])) %}
+    {%- set acls = get_acls(export.get('acls', [])) %}
+{{ export.name }}{{ default }}{{ acls|indent(3, True) }}
+{%- endfor %}

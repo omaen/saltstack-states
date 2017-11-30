@@ -1,0 +1,23 @@
+nfs:
+  server:
+    exports:
+      - name: /srv/nfs
+        acls:
+          - acl: '*'
+            options:
+              - ro
+              - fsid=0
+              - no_subtree_check
+      - name: /srv/nfs/temp
+        default:
+          - sync
+          - ro
+          - no_subtree_check
+        acls:
+          - acl: 192.168.1.10
+            options:
+              - no_root_squash
+          - acl: 192.168.1.12
+            options:
+              - rw
+              - no_subtree_check
