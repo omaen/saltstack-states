@@ -9,7 +9,9 @@ common_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ apache2|yaml }}
+        # Filter via json to avoid issues with curly brackets in input
+        # This is probably related to this: https://github.com/saltstack/salt/issues/7650
+        config: {{ apache2|json }}
     - require:
       - pkg: apache2
     - watch_in:
