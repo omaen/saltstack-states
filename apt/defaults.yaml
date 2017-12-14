@@ -18,3 +18,5 @@ apt:
         - deb http://deb.debian.org/debian/ stretch-updates main contrib non-free
         - deb-src http://security.debian.org/debian/ stretch-updates main contrib non-free
       backports: deb http://deb.debian.org/debian/ stretch-backports main contrib non-free
+  proxy:
+    config: /etc/apt/apt.conf.d/00proxy

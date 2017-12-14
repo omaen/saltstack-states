@@ -1,0 +1,12 @@
+#
+# This file is managed by Salt. Changes will be overwritten!
+#
+
+Acquire {
+    http {
+        Proxy "{{ config.url }}";
+        {%- for domain in config.direct %}
+        Proxy::{{ domain }} "DIRECT";
+        {%- endfor %}
+    }
+}
