@@ -1,3 +1,5 @@
+{% from 'sudo/map.jinja' import sudo with context %}
+
 sudoers_local:
   file.managed:
     - name: /etc/sudoers.d/local
@@ -5,7 +7,10 @@ sudoers_local:
     - template: jinja
     - user: root
     - group: root
-    - mode: 644
+    - mode: 440
     - makedirs: True
+    - context:
+        # Filter via json to avoid \ being escaped as \\
+        config: {{ sudo.config|json() }}
     - require:
       - pkg: sudo

@@ -1,4 +1,5 @@
 include:
+  - profile
   - salt.cron_salt-call
   - resolvconf
   - users

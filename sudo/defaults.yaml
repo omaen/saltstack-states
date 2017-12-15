@@ -1,0 +1,4 @@
+sudo:
+  package: sudo
+  config:
+    sudoers: {}

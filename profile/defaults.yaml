@@ -1,0 +1,3 @@
+profile:
+  file: /etc/profile.d/salt.sh
+  config: {}

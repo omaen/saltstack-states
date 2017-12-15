@@ -1,0 +1,16 @@
+{% import_yaml 'sudo/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('sudo:lookup'),
+    base='sudo'
+    )
+%}
+
+{% set sudo = salt['pillar.get'](
+    'sudo',
+    default=base_settings,
+    merge=True
+    )
+%}

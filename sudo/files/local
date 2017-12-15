@@ -1,11 +1,29 @@
 #
 # This file is managed by Salt. Changes will be overwritten!
 #
-
-Defaults env_keep = "http_proxy https_proxy no_proxy"
-
-{%- for name, sudoers in salt['pillar.get']('sudoers', {}).items() %}
-{%- for sudoer in sudoers %}
-{{ sudoer }}
+{%- for k, v in config.items() if k != 'sudoers' %}
+    {%- for v_k, v_v in v.items() %}
+        {%- if v_v %}
+            {%- if v_v is list %}
+{{ k }}     {{ v_k }} = {{ v_v|join(', ') }}
+            {%- else %}
+{{ k }}     {{ v_k }} = {{ v_v }}
+            {%- endif %}
+        {%- else %}
+{{ k }}     {{ v_k }}
+        {%- endif %}
+    {%- endfor %}
 {%- endfor %}
+
+# Sudoers
+{%- for sudoer, params in config.sudoers.items() %}
+    {%- set runas = params.get('runas_user', '') %}
+    {%- if params.get('runas_group', '') %}
+        {%- set runas = '%s:%s' % (runas, params.runas_group) %}
+    {%- endif %}
+    {%- if runas %}
+{{ sudoer }}  {{ params.hosts|join(', ') }} = ({{ runas }}) {{ params.commands|join(', ') }}
+    {%- else %}
+{{ sudoer }}  {{ params.hosts|join(', ') }} = {{ params.commands|join(', ') }}
+    {%- endif %}
 {%- endfor %}
