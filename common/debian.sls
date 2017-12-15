@@ -25,3 +25,4 @@ include:
   - iptables
   - fwgen
   - udev
+  - pip
