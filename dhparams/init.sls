@@ -1,3 +1,5 @@
+{%- if pillar['dhparams'] is defined %}
+
 include:
   - certs
 
@@ -10,3 +12,5 @@ dhparams:
     - mode: 640
     - require:
       - pkg: ssl-cert
+
+{%- endif %}

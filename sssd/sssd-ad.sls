@@ -19,6 +19,7 @@ sssd-ad:
     - watch:
       - file: sssd_conf
 
+{%- if grains['oscodename'] == 'jessie' %}
 nsswitch-sudoers:
   file.replace:
     - name: /etc/nsswitch.conf
@@ -30,3 +31,4 @@ nsswitch-sudoers:
     - name: /sbin/ldconfig
     - watch:
       - file: nsswitch-sudoers
+{%- endif %}
