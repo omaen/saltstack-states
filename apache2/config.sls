@@ -8,7 +8,7 @@ include:
   - .mod-remoteip
 {% endif %}
 {% if apache2.php_fpm %}
-  - php-fpm
+  - php.fpm
   - .mod-mpm_event
   - .mod-proxy_fcgi
 {% endif %}

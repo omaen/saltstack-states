@@ -1,7 +1,40 @@
 php:
   package: php
+  fpm:
+    package: php-fpm
+    service: php7.0-fpm
+    confdir: /etc/php/7.0/fpm
+    config: {}
+  modules:
+    intl:
+      package: php-intl
+    mysql:
+      package: php-mysql
+    ldap:
+      package: php-ldap
+    curl:
+      package: php-curl
+    apcu:
+      package: php-apcu
+  config:
+    modules: {}
 
 Debian:
   {% if grains['oscodename'] == 'jessie' %}
   package: php5
+  fpm:
+    package: php5-fpm
+    service: php5-fpm
+    confdir: /etc/php5/fpm
+  modules:
+    intl:
+      package: php5-intl
+    mysql:
+      package: php5-mysql
+    ldap:
+      package: php5-ldap
+    curl:
+      package: php5-curl
+    apcu:
+      package: php5-apcu
   {% endif %}

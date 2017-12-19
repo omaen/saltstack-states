@@ -30,6 +30,7 @@ borgbackup_backup_dir_symlink:
     - target: {{ borgbackup.server.config.backup_dir }}
     - require:
       - file: borg_backup_dir
+
 {% endif %}
 
 # This is used for reactor setups where the client ssh key is automatically added
