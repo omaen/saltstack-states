@@ -1,6 +1,6 @@
 {% from 'apt/map.jinja' import apt with context %}
 
-{% set os = grains['os_family'] | lower %}
+{% set os = grains['os'] | lower %}
 {% set codename = grains['oscodename'] | lower %}
 sources:
   file.managed:

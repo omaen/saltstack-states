@@ -3,7 +3,11 @@
 50unattended-upgrades:
   file.managed:
     - name: {{ unattended_upgrades.unattended_upgrades_config }}
+    {% if grains['os'] == 'Raspbian' %}
+    - source: salt://unattended-upgrades/files/50unattended-upgrades_raspbian
+    {% else %}
     - source: salt://unattended-upgrades/files/50unattended-upgrades
+    {% endif %}
     - template: jinja
     - user: root
     - group: root
