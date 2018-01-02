@@ -5,23 +5,11 @@ USERS=$(users | wc -w)
 OS=$(which lsb_release > /dev/null && lsb_release -ds)
 APT_UPGRADABLE=$(which aptitude > /dev/null && aptitude -q search ~U | wc -l)
 MEM_TOTAL=$(free -h | awk '/Mem:/ {print $2}')
-CPU_MODEL=$(awk -F ': ' '/model name/ {print $2; exit}' /proc/cpuinfo)
-CPU_SOCKETS=$(awk -F ': ' '/physical id/ {print $2}' /proc/cpuinfo | sort -u | wc -l)
-CPU_CORES=$(awk -F ': ' '/cpu cores/ {print $2; exit}' /proc/cpuinfo)
-CPU_SIBLINGS=$(awk -F ': ' '/siblings/ {print $2; exit}' /proc/cpuinfo)
-CPU_THREADS="N/A"
-CPU_COUNT="N/A"
-
-if [ ${CPU_SIBLINGS} -gt 0 ] && [ ${CPU_CORES} -gt 0 ]; then
-    CPU_THREADS=$(( ${CPU_SIBLINGS} / ${CPU_CORES} ))
-fi
-
-if [ ${CPU_SOCKETS} -gt 0 ] && [ ${CPU_SIBLINGS} -gt 0 ]; then
-    CPU_COUNT=$(( ${CPU_SOCKETS} * ${CPU_SIBLINGS} ))
-fi
-
-[ ${CPU_SOCKETS} -gt 0 ] || CPU_SOCKETS="N/A"
-[ ${CPU_CORES} -gt 0 ] || CPU_CORES="N/A"
+CPU_MODEL=$(lscpu | awk -F ': +' '/^Model name:/ {print $2}')
+CPU_COUNT=$(lscpu | awk -F ': +' '/^CPU\(s\):/ {print $2}')
+CPU_SOCKETS=$(lscpu | awk -F ': +' '/^Socket\(s\):/ {print $2}')
+CPU_CORES=$(lscpu | awk -F ': +' '/^Core\(s\) per socket:/ {print $2}')
+CPU_THREADS=$(lscpu | awk -F ': +' '/^Thread\(s\) per core:/ {print $2}')
 
 printf " Operating system : %s\n" "${OS}"
 printf " CPU              : %s\n" "${CPU_COUNT} x ${CPU_MODEL}"
