@@ -4,7 +4,7 @@ include:
 remote-syslog_conf:
   file.managed:
     - name: /etc/rsyslog.d/remote-syslog.conf
-    - source: salt://syslog/files/remote-syslog.conf.tmpl
+    - source: salt://syslog/files/remote-syslog.conf
     - template: jinja
     - user: root
     - group: root
