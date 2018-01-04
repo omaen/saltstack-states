@@ -1,5 +1,5 @@
 rsyslog:
   package: rsyslog
   service: rsyslog
-  config_file: /etc/rsyslog.d/salt.conf
-  config: {}
+  config_dir: /etc/rsyslog.d
+  configs: {}

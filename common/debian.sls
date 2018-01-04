@@ -4,7 +4,7 @@ include:
   - resolvconf
   - systemd.resolved
   - users
-  - syslog.remote-syslog
+  - rsyslog
   - virtualization.guest-tools
   - timesyncd
   - ifenslave

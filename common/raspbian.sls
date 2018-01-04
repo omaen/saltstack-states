@@ -4,10 +4,8 @@ include:
   - resolvconf
   - systemd.resolved
   - users
-  - syslog.remote-syslog
-  #- virtualization.guest-tools
+  - rsyslog
   - timesyncd
-  #- ifenslave
   - apt
   - less
   - vim
@@ -22,7 +20,6 @@ include:
   - certs
   - autofs
   - network
-  #- fstrim
   #- kernel
   - iptables
   - fwgen

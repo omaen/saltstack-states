@@ -1,14 +1,26 @@
 {% from 'rsyslog/map.jinja' import rsyslog with context %}
 
-rsyslog_config:
+{% for config, params in rsyslog.configs.items() %}
+
+{% if params %}
+rsyslog_{{ config }}:
   file.managed:
-    - name: {{ rsyslog.config_file }}
-    - source: salt://syslog/files/salt.conf
+    - name: {{ rsyslog.config_dir }}/{{ config }}.conf
+    - source: salt://rsyslog/files/{{ config }}.conf
     - template: jinja
     - user: root
     - group: root
     - mode: 644
+    - context:
+        config: {{ params }}
     - watch_in:
       - service: rsyslog
-    - require:
-      - pkg: rsyslog
+{% else %}
+rsyslog_{{ config }}_removed:
+  file.absent:
+    - name: {{ rsyslog.config_dir }}/{{ config }}.conf
+    - watch_in:
+      - service: rsyslog
+{% endif %}
+
+{% endfor %}
