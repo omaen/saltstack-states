@@ -6,7 +6,7 @@
 rsyslog_{{ config }}:
   file.managed:
     - name: {{ rsyslog.config_dir }}/{{ config }}.conf
-    - source: salt://rsyslog/files/{{ config }}.conf
+    - source: salt://rsyslog/files/template.conf
     - template: jinja
     - user: root
     - group: root
