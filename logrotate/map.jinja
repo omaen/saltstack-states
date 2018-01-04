@@ -1,0 +1,14 @@
+{% import_yaml 'logrotate/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+    'Debian': {},
+  }, grain='os_family', merge=salt['pillar.get']('logrotate:lookup'))
+%}
+
+{% do defaults.logrotate.update(os_family_map) %}
+
+{% set logrotate = salt['pillar.get'](
+  'logrotate',
+  default=defaults.logrotate,
+  merge=True)
+%}

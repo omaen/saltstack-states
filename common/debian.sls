@@ -28,3 +28,4 @@ include:
   - fwgen
   - udev
   - pip
+  - logrotate
