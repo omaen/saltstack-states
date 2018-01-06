@@ -31,6 +31,12 @@ iface {{ vrf }} inet manual
 {%- for interface in config.interfaces %}
 {%- set auto_ns_exec = [] %}
 
+{%- set family = interface.get('family', 'inet') %}
+{%- set ip_addr = 'ip' %}
+{%- if family == 'inet6' %}
+    {%- set ip_addr = 'ip -6' %}
+{%- endif %}
+
 # {{ interface.get('description', interface.get('name')) }}
 {%- if not interface.get('name') in already_allowed %}
 allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
@@ -43,7 +49,7 @@ allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
 {%- else %}
     {%- set mode = interface.mode %}
 {%- endif %}
-iface {{ interface.get('name') }} {{ interface.get('family', 'inet') }} {{ mode }}
+iface {{ interface.get('name') }} {{ family }} {{ mode }}
     {%- set params = interface.get('config', {}) %}
 
     {%- if interface.get('vrf') %}
@@ -56,7 +62,7 @@ iface {{ interface.get('name') }} {{ interface.get('family', 'inet') }} {{ mode 
     {%- elif interface.get('namespace') %}
     pre-up ip link set ${IFACE} netns {{ interface.namespace }}
         {%- if params.get('address') %}
-    up {{ ns_exec }} ip addr add {{ params.address }} dev ${IFACE}
+    up {{ ns_exec }} {{ ip_addr }} add {{ params.address }} dev ${IFACE}
     up {{ ns_exec }} ip link set ${IFACE} up
             {%- if params.get('gateway') %}
     up {{ ns_exec }} ip route add default via {{ params.gateway }}
@@ -64,7 +70,7 @@ iface {{ interface.get('name') }} {{ interface.get('family', 'inet') }} {{ mode 
                 {%- do params.pop('gateway') %}
             {%- endif %}
     down {{ ns_exec }} ip link set ${IFACE} down
-    down {{ ns_exec }} ip addr del {{ params.address }} dev ${IFACE}
+    down {{ ns_exec }} {{ ip_addr }} del {{ params.address }} dev ${IFACE}
             {%- do params.pop('address') %}
         {%- else %}
     up {{ ns_exec }} ip link set ${IFACE} up
