@@ -27,11 +27,15 @@ iface {{ vrf }} inet manual
     post-down ip link del ${IFACE}
 {%- endfor %}
 
+{%- set already_allowed = [] %}
 {%- for interface in config.interfaces %}
 {%- set auto_ns_exec = [] %}
 
 # {{ interface.get('description', interface.get('name')) }}
+{%- if not interface.get('name') in already_allowed %}
 allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
+    {%- do already_allowed.append(interface.get('name')) %}
+{%- endif %}
 {%- if interface.get('namespace') %}
     {%- set mode = 'manual' %}
     {%- set ns_exec = 'ip netns exec %s' % interface.namespace %}
@@ -39,7 +43,7 @@ allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
 {%- else %}
     {%- set mode = interface.mode %}
 {%- endif %}
-iface {{ interface.get('name') }} inet {{ mode }}
+iface {{ interface.get('name') }} {{ interface.get('family', 'inet') }} {{ mode }}
     {%- set params = interface.get('config', {}) %}
 
     {%- if interface.get('vrf') %}
