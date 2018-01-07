@@ -1,0 +1,16 @@
+{% import_yaml 'radvd/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('radvd:lookup'),
+    base='radvd'
+    )
+%}
+
+{% set radvd = salt['pillar.get'](
+    'radvd',
+    default=base_settings,
+    merge=True
+    )
+%}

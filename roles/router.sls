@@ -1,2 +1,3 @@
 include:
   - bird
+  - radvd

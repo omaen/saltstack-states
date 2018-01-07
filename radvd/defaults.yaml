@@ -1,0 +1,5 @@
+radvd:
+  package: radvd
+  service: radvd
+  radvd_conf: /etc/radvd.conf
+  config: {}
