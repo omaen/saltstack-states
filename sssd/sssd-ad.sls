@@ -19,7 +19,10 @@ sssd-ad:
     - watch:
       - file: sssd_conf
 
-{%- if grains['oscodename'] == 'jessie' %}
+#
+# This is needed to remove annoing SECURITY mail sent to root everytime you
+# use sudo ("problem with defaults entries"). Verified on both jessie and stretch
+#
 nsswitch-sudoers:
   file.replace:
     - name: /etc/nsswitch.conf
@@ -31,4 +34,3 @@ nsswitch-sudoers:
     - name: /sbin/ldconfig
     - watch:
       - file: nsswitch-sudoers
-{%- endif %}
