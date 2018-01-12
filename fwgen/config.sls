@@ -12,7 +12,7 @@ fwgen_config_{{ namespace }}:
     - group: root
     - mode: 600
   cmd.wait:
-    - name: ip netns exec {{ namespace }} fwgen --no-confirm
+    - name: ip netns exec {{ namespace }} fwgen apply --no-confirm
     - watch:
       - pip: fwgen
       - file: fwgen_config_{{ namespace }}
@@ -33,7 +33,7 @@ fwgen_config:
     - group: root
     - mode: 600
   cmd.wait:
-    - name: fwgen --no-confirm
+    - name: fwgen apply --no-confirm
     - watch:
       - pip: fwgen
       - file: fwgen_config
