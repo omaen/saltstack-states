@@ -29,3 +29,4 @@ include:
   - udev
   - pip
   - logrotate
+  - microcode
