@@ -6,3 +6,4 @@ include:
   - bird
   - iptables
   - fwgen
+  - radvd
