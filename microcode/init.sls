@@ -9,7 +9,6 @@ intel_microcode:
     - onlyif:
       - lscpu | grep -E "^Vendor ID:\s+GenuineIntel$"
     - fromrepo: {{ grains['oscodename'] }}-backports
-    - version: latest
     - require:
       - pkgrepo: repo-backports
 
@@ -19,7 +18,6 @@ amd_microcode:
     - onlyif:
       - lscpu | grep -E "^Vendor ID:\s+AuthenticAMD$"
     - fromrepo: {{ grains['oscodename'] }}-backports
-    - version: latest
     - require:
       - pkgrepo: repo-backports
 
