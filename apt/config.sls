@@ -12,6 +12,8 @@ sources:
     - mode: 644
     - context:
         sources: {{ apt[os][codename].sources }}
+    - require:
+      - pkg: apt-progs
 
 00proxy:
 {% if apt.proxy.url is defined %}
