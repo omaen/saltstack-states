@@ -12,3 +12,18 @@ dhcp_relay_config:
     - mode: 644
     - watch_in:
       - service: dhcp_relay
+
+# Workaround for dhcrelay not resuming operation on an interface if idown/ifup is
+# done after boot
+dhcp_relay_ifup:
+  file.managed:
+    - name: {{ dhcp_relay.ifup }}
+    - source: salt://isc-dhcp-relay/files/ifup
+    - template: jinja
+    - context:
+        config: {{ dhcp_relay }}
+    - user: root
+    - group: root
+    - mode: 755
+    - require:
+      - service: dhcp_relay

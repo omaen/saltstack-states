@@ -2,6 +2,7 @@ dhcp_relay:
   package: isc-dhcp-relay
   service: isc-dhcp-relay
   config_file: /etc/default/isc-dhcp-relay
+  ifup: /etc/network/if-up.d/isc-dhcp-relay
   config:
     servers: []
     interfaces: []
