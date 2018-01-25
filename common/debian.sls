@@ -1,7 +1,6 @@
 include:
   - profile
   - salt.cron_salt-call
-  - resolvconf
   - systemd.resolved
   - users
   - rsyslog
