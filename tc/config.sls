@@ -1,8 +1,10 @@
 {% from 'tc/map.jinja' import tc with context %}
 
-post_commands:
+{% for if_name, commands in tc.config.post_commands.items() %}
+
+{{ if_name }}_post_commands:
   file.managed:
-    - name: {{ tc.post_commands }}
+    - name: {{ tc.config_dir }}/post-commands.{{ if_name }}
     - source: salt://tc/files/post-commands
     - template: jinja
     - user: root
@@ -10,4 +12,6 @@ post_commands:
     - mode: 644
     - makedirs: True
     - context:
-        config: {{ tc.config.post_commands }}
+        config: {{ commands }}
+
+{% endfor %}
