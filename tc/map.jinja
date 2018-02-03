@@ -1,0 +1,16 @@
+{% import_yaml 'tc/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('tc:lookup'),
+    base='tc'
+    )
+%}
+
+{% set tc = salt['pillar.get'](
+    'tc',
+    default=base_settings,
+    merge=True
+    )
+%}

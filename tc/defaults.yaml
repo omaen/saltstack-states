@@ -1,0 +1,4 @@
+tc:
+  post_commands: /etc/tc-gen/post-commands
+  config:
+    post_commands: []

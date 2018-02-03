@@ -6,12 +6,12 @@ include:
 {% for name, params in borgwrapper.configs.iteritems() %}
 {% set config = borgwrapper.config_defaults %}
 {% do config.update(params) %}
-{% set config_file = [borgwrapper.config_dir, name + '.sh'] | join('/') %}
+{% set config_file = [borgwrapper.config_dir, name] | join('/') %}
 
 borgwrapper_{{ name }}_config:
   file.managed:
     - name: {{ config_file }}
-    - source: salt://borgwrapper/files/config.sh
+    - source: salt://borgwrapper/files/config
     - template: jinja
     - user: root
     - group: root

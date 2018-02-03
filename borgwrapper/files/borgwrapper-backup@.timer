@@ -2,10 +2,8 @@
 Description=daily borgwrapper backup timer
 
 [Timer]
-OnCalendar={{ config.schedule.backup.interval }}
-{%- if config.schedule.backup.randomized_delay %}
-RandomizedDelaySec={{ config.schedule.backup.randomized_delay }}
-{%- endif %}
+OnCalendar=daily
+RandomizedDelaySec=6h
 Persistent=true
 
 [Install]

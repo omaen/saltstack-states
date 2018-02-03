@@ -6,7 +6,7 @@ include:
 borgwrapper_bin:
   file.managed:
     - name: {{ borgwrapper.bin }}
-    - source: salt://borgwrapper/files/borgwrapper.sh
+    - source: salt://borgwrapper/files/borgwrapper
     - user: root
     - group: root
     - mode: 750

@@ -1,11 +1,11 @@
 #!/bin/bash
 
-VERSION="1.3.0"
+VERSION="1.5.0"
 
 
 print_usage () {
     cat << EOF
-Usage: $(basename "${BASH_SOURCE[0]}") [OPTIONS] MODE
+Usage: borgwrapper [OPTIONS] MODE
 
 OPTIONS
     -c CONFIG_FILE
@@ -144,7 +144,7 @@ limit_bw () {
     export RATE_LIMIT=$(convert_rate ${BWLIMIT})
     chmod +x ${PV_WRAPPER}
     echo -e '#!/bin/bash\npv -q -L ${RATE_LIMIT} | "$@"' > ${PV_WRAPPER}
-    export BORG_RSH="${PV_WRAPPER} ssh"
+    export BORG_RSH="${PV_WRAPPER} ${BORG_RSH}"
     echo "Limiting bandwith to ${RATE_LIMIT} bytes/s"
 }
 
@@ -170,7 +170,7 @@ exit_clean () {
 
 
 # Default parameters
-CONFIG="/etc/borgwrapper/config.sh"
+CONFIG="/etc/borgwrapper/config"
 DRY_RUN=false
 BORG="/usr/bin/borg"
 LOCKDIR="/run/lock/borgwrapper"
@@ -201,7 +201,10 @@ MODE="${1}"
 
 echo "Loading config from ${CONFIG}"
 source "${CONFIG}" || exit 1
-export BORG_PASSPHRASE
+
+# Set some defaults
+[[ -n ${BORG_RSH} ]] || BORG_RSH="ssh"
+[[ -n ${BWLIMIT} ]] || BWLIMIT="0"
 
 LOCKFILE="${LOCKDIR}/$(echo -n "${BORG_REPO}" | md5sum | cut -d ' ' -f 1).lock"
 mkdir -p "${LOCKDIR}"
@@ -214,8 +217,12 @@ mkdir -p "${LOCKDIR}"
     trap 'error_handler ${LINENO} $?' ERR INT TERM
     set -o errtrace -o pipefail
 
+    # These are needed everywhere
+    export BORG_PASSPHRASE
+    export BORG_RSH
+
     # Enforce bandwidth limit if set
-    [[ -n ${BWLIMIT} ]] && [[ ${BWLIMIT} != "0" ]] && limit_bw
+    [[ ${BWLIMIT} != "0" ]] && limit_bw
 
     if [[ ${MODE} != "exec" ]] && [[ $# -gt 1 ]]; then
         print_usage

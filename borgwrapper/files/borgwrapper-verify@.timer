@@ -2,10 +2,8 @@
 Description=monthly borgwrapper backup verification timer
 
 [Timer]
-OnCalendar={{ config.schedule.verify.interval }}
-{%- if config.schedule.verify.randomized_delay %}
-RandomizedDelaySec={{ config.schedule.verify.randomized_delay }}
-{%- endif %}
+OnCalendar=monthly
+RandomizedDelaySec=14d
 Persistent=true
 
 [Install]

@@ -1,0 +1,6 @@
+#
+# This file is managed by Salt. Changes will be overwritten!
+#
+{% for line in config %}
+{{ line }}
+{%- endfor %}

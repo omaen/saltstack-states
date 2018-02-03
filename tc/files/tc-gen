@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-VERSION="1.2.0"
+VERSION="1.3.0"
 TC=$(command -v tc)
 ETHTOOL=$(command -v ethtool)
 IP=$(command -v ip)
@@ -32,8 +32,6 @@ OPTIONS
     Valid units for rates are k (kbit/s) and M (Mbit/s). If no unit are given
     with the rate Mbit/s is used.
 
-    -u UP_RATE
-    -d DOWN_RATE
     -f IFB_IF_NAME
         If ingress shaping should be used instead of policing define a valid
         ifb interface. Normally ifb0 and ifb1 are available if nothing is
@@ -41,24 +39,51 @@ OPTIONS
     -b BURST_SIZE
         Only used when ingress policing is used. For ingress shaping this is
         ignored.
-    -c "<fwmark>:<rate>:<ceil>:<prio>,<fwmark2>:<rate2>:<ceil2>:<prio2>,..."
+    -c "<handle>:<rate>:<ceil>:<prio>,<handle2>:<rate2>:<ceil2>:<prio2>,..."
         Define extra leaf classes if you want to slice up and guarantee
-        bandwith between different kinds of traffic using fw marks. The default
-        class has a priority of 4. If this is not set all the bandwith is
-        given to the default class which is sufficient for most use cases.
-        These classes are only used for egress shaping.
-        If ceil is not set it will default to UP_RATE. If prio is not
-        set, it will default to the same priority as the default class.
+        bandwith between different kinds of traffic, for exeample by using
+        fw marks on egress. If the fw mark matches the handle the traffic
+        will match.
+        The default class has a priority of 4. If this is not set all the
+        bandwith is given to the default class which is sufficient for most
+        use cases. If ceil is not set it will default to UP_RATE. If prio is
+        not set, it will default to the same priority as the default class.
 
         Example:
             -c "107:50::,109:1400k:7M:2"
 
         The example above creates a leaf class which get all egress traffic
-        with fw mark 107, shaped to a rate of 50 mbit/s with no ceiling and
+        with handle 107, shaped to a rate of 50 mbit/s with no ceiling and
         priority, which means that it may use all the available bandwith if
         available in the root class and has the same priority as the default
-        class. The next leaf class has a fw mark of 109, a rate of 1400 kbit/s,
+        class. The next leaf class has a handle of 109, a rate of 1400 kbit/s,
         a ceil of 7 mbit/s and a priority of 2.
+    -C "<handle>:<rate>:<ceil>:<prio>,<handle2>:<rate2>:<ceil2>:<prio2>,..."
+        Same as -c but for ingress on IFB interface. Note that it is not
+        possible to use fw marks to assign traffic to IFB interface classes,
+        as it is not hooked into netfilter. Instead you need to use tc filter
+        rules, which you normally would add to the post-commands file.
+
+        Example:
+            tc filter add dev ifb0 parent 1: protocol ip prio 20 \
+                u32 \
+                match ip protocol 6 0xff \
+                match ip dport 22 0xffff \
+                classid 1:<handle>
+
+        The example above sends TCP port 22 traffic to the 1:<handle> class.
+        The filter priority is used to define filter processing order, and
+        must not be confused with the class priority, which defines the class'
+        relative priority to other classes when there is a need to prioritize
+        traffic.
+    -d DOWN_RATE
+    -p POST_COMMANDS_FILE
+        Override path to post commands file. By default tc-gen checks if
+        "/etc/tc-gen/post-commands" exists and if so, sources that file after
+        tc-gen have finished setting up its ordinary configuration.
+        Some nice to have environment variables available for that file are
+        TC, IF_NAME, IFB_IF_NAME, UP_RATE, DOWN_RATE and BURST_SIZE
+    -u UP_RATE
     -x
         Clear all traffic control config on interface.
     -V
@@ -167,8 +192,11 @@ get_fq_codel_quantum () {
 get_ecn () {
     # Takes input rate in kbit/s as parameter
     local RATE=$1
+    local ECN_MINRATE=$2
 
-    if [[ ${RATE} -ge 4000 ]]; then
+    [[ -n ${ECN_MINRATE} ]] || ECN_MINRATE=4000
+
+    if [[ ${RATE} -ge ${ECN_MINRATE} ]]; then
         echo "ecn"
     else
         echo "noecn"
@@ -246,46 +274,46 @@ print_config () {
     echo ""
 }
 
-apply_egress_shaping () {
-    # Disable tso and gso for lower bandwiths
-    ${ETHTOOL} --offload ${IF_NAME} $(get_tx_offloads ${UP_RATE}) \
-        > /dev/null 2>&1 || true
+add_prio_classes () {
+    local IF_NAME=$1
+    local CLASS_CONFIG=$2
+    local MAX_RATE=$3
+    local ECN_MINRATE=$4
+
+    # Default values
+    local DEFAULT_CLASS=99
+    local DEFAULT_RATE=${MAX_RATE}
+    local DEFAULT_PRIO=4
 
     # Add root handle and set default leaf
-    ${TC} qdisc add dev ${IF_NAME} root handle 1: htb default 99
+    ${TC} qdisc add dev ${IF_NAME} root handle 1: htb default ${DEFAULT_CLASS}
 
     # Set the overall shaped rate of the interface
     ${TC} class add dev ${IF_NAME} parent 1: classid 1:1 htb \
-        rate ${UP_RATE}kbit \
-        quantum $(get_htb_quantum ${UP_RATE})
-
-    local DEFAULT_RATE=${UP_RATE}
-    local DEFAULT_PRIO=4
+        rate ${MAX_RATE}kbit \
+        quantum $(get_htb_quantum ${MAX_RATE})
 
     if [[ -n ${CLASS_CONFIG} ]]; then
         local CLASSES=( $(echo "${CLASS_CONFIG}" | tr ',' ' ') )
 
         for CLASS in ${CLASSES[@]}; do
             local CONFIG=( $(echo "${CLASS}" | tr ':' ' ') )
-            local FWMARK=${CONFIG[0]}
+            local HANDLE=${CONFIG[0]}
             local CLASS_RATE=$(convert_rate ${CONFIG[1]})
-            local CEIL_RATE=$(convert_rate ${CONFIG[2]})
-            local PRIO=${CONFIG[3]}
-            local CLASS_ID=${FWMARK}
+            local CEIL_RATE=${MAX_RATE}
+            local PRIO=${DEFAULT_PRIO}
+            local CLASS_ID=${HANDLE}
 
-            if [[ -z ${CEIL_RATE} ]]; then
-                CEIL_RATE=${UP_RATE}
-            fi
+            [[ -n ${CONFIG[2]} ]] && CEIL_RATE=$(convert_rate ${CONFIG[2]})
+            [[ -n ${CONFIG[3]} ]] && PRIO=${CONFIG[3]}
 
-            if [[ -z ${PRIO} ]]; then
-                PRIO=${DEFAULT_PRIO}
-            fi
-
-            if [[ ${CEIL_RATE} -gt ${UP_RATE} ]]; then
-                echo "ERROR: ceiling value should not be larger than total up rate"
+            if [[ ${CEIL_RATE} -gt ${MAX_RATE} ]]; then
+                >&2 echo "ERROR: ceiling value should not be larger than total max rate"
                 exit 1
             fi
 
+            # Reduce the leftover default rate accordingly for each class' guaranteed rate
+            # This is used by the calling code, so ensure DEFAULT_RATE is defined there.
             DEFAULT_RATE=$(( ${DEFAULT_RATE} - ${CLASS_RATE} ))
 
             if [[ ${DEFAULT_RATE} -le 0 ]]; then
@@ -305,25 +333,36 @@ apply_egress_shaping () {
                 limit $(get_limit ${CEIL_RATE}) \
                 target $(get_target ${CEIL_RATE} $(get_mtu ${IF_NAME})) \
                 $(get_fq_codel_quantum ${CEIL_RATE}) \
-                $(get_ecn ${CEIL_RATE})
+                $(get_ecn ${CEIL_RATE} ${ECN_MINRATE})
 
-            ${TC} filter add dev ${IF_NAME} parent 1: protocol all \
-                handle ${FWMARK} fw classid 1:${CLASS_ID}
+            ${TC} filter add dev ${IF_NAME} parent 1: protocol all handle ${HANDLE} \
+                fw classid 1:${CLASS_ID}
         done
     fi
 
     # Create class for the default priority
-    ${TC} class add dev ${IF_NAME} parent 1:1 classid 1:99 htb \
+    ${TC} class add dev ${IF_NAME} parent 1:1 classid 1:${DEFAULT_CLASS} htb \
         rate ${DEFAULT_RATE}kbit \
-        ceil ${UP_RATE}kbit prio ${DEFAULT_PRIO} \
-        quantum $(get_htb_quantum ${UP_RATE})
+        ceil ${MAX_RATE}kbit prio ${DEFAULT_PRIO} \
+        quantum $(get_htb_quantum ${MAX_RATE})
 
     # Set qdisc to fq_codel
-    ${TC} qdisc replace dev ${IF_NAME} parent 1:99 handle 99: fq_codel \
-        limit $(get_limit ${UP_RATE}) \
-        target $(get_target ${UP_RATE} $(get_mtu ${IF_NAME})) \
-        $(get_fq_codel_quantum ${UP_RATE}) \
-        $(get_ecn ${UP_RATE})
+    ${TC} qdisc replace dev ${IF_NAME} parent 1:${DEFAULT_CLASS} handle ${DEFAULT_CLASS}: fq_codel \
+        limit $(get_limit ${MAX_RATE}) \
+        target $(get_target ${MAX_RATE} $(get_mtu ${IF_NAME})) \
+        $(get_fq_codel_quantum ${MAX_RATE}) \
+        $(get_ecn ${MAX_RATE} ${ECN_MINRATE})
+}
+
+apply_egress_shaping () {
+    # Disable tso and gso for lower bandwiths
+    ${ETHTOOL} --offload ${IF_NAME} $(get_tx_offloads ${UP_RATE}) \
+        > /dev/null 2>&1 || true
+
+    add_prio_classes \
+        ${IF_NAME} \
+        "${CLASS_CONFIG}" \
+        ${UP_RATE}
 }
 
 apply_ingress_shaping () {
@@ -338,29 +377,17 @@ apply_ingress_shaping () {
     ${MODPROBE} ifb
     ${IP} link set dev ${IFB_IF_NAME} up
 
-    # Add root handle and set default leaf
-    ${TC} qdisc add dev ${IFB_IF_NAME} root handle 1: htb default 99
-
-    # Set the overall shaped rate of the interface
-    ${TC} class add dev ${IFB_IF_NAME} parent 1: classid 1:1 htb \
-        rate ${DOWN_RATE}kbit
-
-    # Create class for the default priority
-    ${TC} class add dev ${IFB_IF_NAME} parent 1:1 classid 1:99 htb \
-        rate ${DOWN_RATE}kbit \
-        ceil ${DOWN_RATE}kbit prio 0 \
-        quantum $(get_htb_quantum ${DOWN_RATE})
-
-    # Set qdisc to fq_codel. Enabling ECN is recommended for ingress
-    ${TC} qdisc replace dev ${IFB_IF_NAME} parent 1:99 handle 99: fq_codel \
-        limit $(get_limit ${DOWN_RATE}) \
-        target $(get_target ${DOWN_RATE} $(get_mtu ${IF_NAME})) \
-        $(get_fq_codel_quantum ${DOWN_RATE}) \
-        ecn
+    # Enabling ECN is recommended for ingress, so ECN_MINRATE is set to 0
+    add_prio_classes \
+        ${IFB_IF_NAME} \
+        "${IFB_CLASS_CONFIG}" \
+        ${DOWN_RATE} \
+        0
 
     # Redirect all ingress traffic to IFB egress. Use prio 99 to make it
     # possible to insert filters earlier in the chain.
-    ${TC} filter add dev ${IF_NAME} parent ffff: protocol all prio 99 u32 \
+    ${TC} filter add dev ${IF_NAME} parent ffff: protocol all prio 99 \
+        u32 \
         match u32 0 0 \
         action mirred egress redirect dev ${IFB_IF_NAME}
 }
@@ -384,11 +411,11 @@ apply_ingress_policing () {
 
     # Police all ingress traffic. Use prio 99 to make it possible to insert
     # filters earlier in the chain.
-    ${TC} filter add dev ${IF_NAME} parent ffff: protocol all prio 99 u32 \
+    ${TC} filter add dev ${IF_NAME} parent ffff: protocol all prio 99 \
+        u32 \
         match u32 0 0 \
-        police rate ${DOWN_RATE}kbit \
-        burst ${BURST_SIZE} \
-        mtu ${MTU} drop flowid :1
+        police rate ${DOWN_RATE}kbit burst ${BURST_SIZE} mtu ${MTU} drop \
+        flowid :1
 }
 
 convert_rate () {
@@ -415,7 +442,7 @@ convert_rate () {
 }
 
 
-while getopts ":i:u:d:b:f:q:c:xV" OPT; do
+while getopts ":i:u:d:b:f:q:c:C:p:xV" OPT; do
     case ${OPT} in
         i)
             IF_NAME="${OPTARG}"
@@ -435,6 +462,12 @@ while getopts ":i:u:d:b:f:q:c:xV" OPT; do
         c)
             CLASS_CONFIG="${OPTARG}"
             ;;
+        C)
+            IFB_CLASS_CONFIG="${OPTARG}"
+            ;;
+        p)
+            POST_COMMANDS="${OPTARG}"
+            ;;
         x)
             CLEAR_CONFIG=1
             ;;
@@ -451,6 +484,11 @@ done
 
 if [[ -z ${IF_NAME} ]]; then
     print_usage
+    exit 1
+fi
+
+if [[ -n ${IFB_CLASS_CONFIG} && -z ${IFB_IF_NAME} ]]; then
+    >&2 echo "ERROR: you must define an IFB interface to use IFB priority classes"
     exit 1
 fi
 
@@ -479,5 +517,8 @@ if [[ -n ${DOWN_RATE} ]]; then
     fi
 fi
 
+# Execute post commands
+[[ -n ${POST_COMMANDS} ]] || POST_COMMANDS="/etc/tc-gen/post-commands"
+[[ -r ${POST_COMMANDS} ]] && . "${POST_COMMANDS}"
 
 trap - ERR INT TERM
