@@ -1,4 +1,4 @@
-host_cert_certs_dir:
+certs_dir:
   file.directory:
     - name: /usr/local/etc/ssl/certs
     - user: root
@@ -6,19 +6,20 @@ host_cert_certs_dir:
     - mode: 755
     - makedirs: True
 
-host_cert_private_dir:
+cert_keys_dir:
   file.directory:
     - name: /usr/local/etc/ssl/private
     - user: root
     - group: ssl-cert
     - mode: 750
     - require:
-      - file: host_cert_certs_dir
+      - file: certs_dir
       - pkg: ssl-cert
 
-{% set count = 1 %}
+
 {% for name in salt['pillar.get']('certs', {}) %}
-host_cert_{{ count }}:
+
+cert_{{ name }}:
   file.managed:
     - name: /usr/local/etc/ssl/certs/{{ name }}.crt
     - contents_pillar: certs:{{ name }}:crt
@@ -26,9 +27,9 @@ host_cert_{{ count }}:
     - group: root
     - mode: 644
     - require:
-      - file: host_cert_certs_dir
+      - file: certs_dir
 
-host_cert_key_{{ count }}:
+cert_key_{{ name }}:
   file.managed:
     - name: /usr/local/etc/ssl/private/{{ name }}.key
     - contents_pillar: certs:{{ name }}:key
@@ -36,6 +37,6 @@ host_cert_key_{{ count }}:
     - group: ssl-cert
     - mode: 640
     - require:
-      - file: host_cert_private_dir
-{% set count = count + 1 %}
+      - file: cert_keys_dir
+
 {% endfor %}
