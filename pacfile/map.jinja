@@ -1,0 +1,16 @@
+{% import_yaml 'pacfile/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('pacfile:lookup'),
+    base='pacfile'
+    )
+%}
+
+{% set pacfile = salt['pillar.get'](
+    'pacfile',
+    default=base_settings,
+    merge=True
+    )
+%}
