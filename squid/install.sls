@@ -5,5 +5,6 @@ squid:
     - name: {{ squid.package }}
   service.running:
     - name: {{ squid.service }}
+    - reload: True
     - require:
       - pkg: squid

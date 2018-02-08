@@ -9,6 +9,8 @@ squid_conf:
     - group: root
     - mode: 640
     - context:
-        config: {{ squid.config }}
+        # Filter via json to keep dictionary ordering from pillar.
+        # This is not essential, but it is more user friendly.
+        config: {{ squid.config|json }}
     - watch_in:
       - service: squid
