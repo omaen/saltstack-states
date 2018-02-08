@@ -1,0 +1,16 @@
+{% import_yaml 'squid/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('squid:lookup'),
+    base='squid'
+    )
+%}
+
+{% set squid = salt['pillar.get'](
+    'squid',
+    default=base_settings,
+    merge=True
+    )
+%}

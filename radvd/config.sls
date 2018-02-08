@@ -12,9 +12,5 @@ radvd_conf:
         # Filter via json to avoid unset dict values becoming 'None'
         # and get some sorting for free
         config: {{ radvd.config|json }}
-    - require:
-      - pkg: radvd
-  service.running:
-    - name: {{ radvd.service }}
-    - watch:
-      - file: radvd_conf
+    - watch_in:
+      - service: radvd
