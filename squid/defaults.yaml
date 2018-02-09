@@ -3,3 +3,5 @@ squid:
   service: squid
   squid_conf: /etc/squid/squid.conf
   config: {}
+  keytab:
+    name: /etc/squid/squid.keytab
