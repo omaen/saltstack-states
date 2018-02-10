@@ -27,3 +27,8 @@ dhcp_relay_ifup:
     - mode: 755
     - require:
       - service: dhcp_relay
+
+# Just keep this for a while until most hosts are updated
+dhcp_relay_ifup_old:
+  file.absent:
+    - name: /etc/network/if-up.d/isc-dhcp-relay

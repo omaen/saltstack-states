@@ -1,11 +1,25 @@
 #!/bin/sh
 
-service="{{ config.service }}"
-config="{{ config.config_file }}"
+name="dhcrelay"
+service_v4="isc-dhcp-relay"
+service_v6="isc-dhcp-relay6"
 
-[ "${ADDRFAM}" = "inet" ] || exit 0
-grep "${IFACE}" "${config}" > /dev/null || exit 0
+if [ "${ADDRFAM}" = "inet" ]; then
+    pgrep -a "${name}" \
+        | grep -vE '\s-6\s|\s-6$' \
+        | grep -E "\s${IFACE}\s|\s${IFACE}$" > /dev/null \
+        || exit 0
 
-if systemctl is-active ${service} > /dev/null; then
-    systemctl restart ${service}
+    if systemctl is-active ${service_v4} > /dev/null; then
+        systemctl restart ${service_v4}
+    fi
+elif [ "${ADDRFAM}" = "inet6" ]; then
+    pgrep -a "${name}" \
+        | grep -E '\s-6\s|\s-6$' \
+        | grep -E "\s${IFACE}\s|\s${IFACE}$" > /dev/null \
+        || exit 0
+
+    if systemctl is-active ${service_v6} > /dev/null; then
+        systemctl restart ${service_v6}
+    fi
 fi
