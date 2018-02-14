@@ -43,3 +43,16 @@ fwgen_config:
     - require_in:
       - file: iptables-gen_remove
 {% endif %}
+
+fwgen_service:
+  file.managed:
+    - name: /etc/systemd/system/fwgen.service
+    - source: salt://fwgen/files/fwgen.service
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+  service.enabled:
+    - name: fwgen
+    - require:
+      - file: fwgen_service
