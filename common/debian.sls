@@ -1,7 +1,7 @@
 include:
   - profile
   - salt.cron_salt-call
-  - systemd.resolved
+  - systemd-resolved
   - users
   - rsyslog
   - virtualization.guest-tools

@@ -1,0 +1,14 @@
+{% import_yaml 'systemd-resolved/defaults.yaml' as defaults %}
+
+{% set os_family_map = salt['grains.filter_by']({
+    'Debian': {},
+  }, grain='os_family', merge=salt['pillar.get']('systemd_resolved:lookup'))
+%}
+
+{% do defaults.systemd_resolved.update(os_family_map) %}
+
+{% set systemd_resolved = salt['pillar.get'](
+  'systemd_resolved',
+  default=defaults.systemd_resolved,
+  merge=True)
+%}

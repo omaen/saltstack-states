@@ -51,17 +51,6 @@ allow-{{ interface.get('allow', 'auto') }} {{ interface.get('name') }}
 {%- endif %}
 iface {{ interface.get('name') }} {{ family }} {{ mode }}
     {%- set params = interface.get('config', {}) %}
-
-    {%- if family == 'inet6' %}
-        {%- set ifname = (interface.get('name')|replace('.', '/')).split(':')[0] %}
-    {#-
-    It is important to run this after the interface is up, as the interface
-    does not necessarily exist during boot, causing the network configuration
-    to fail
-    #}
-    up sysctl -q -w net.ipv6.conf.{{ ifname }}.accept_ra_rt_info_max_plen=64
-    {%- endif %}
-
     {%- if interface.get('vrf') %}
     pre-up ip link set dev ${IFACE} vrf {{ interface.vrf }}
         {%- if params.get('gateway') %}

@@ -1,0 +1,6 @@
+systemd_resolved:
+  service: systemd-resolved
+  libnss_package: libnss-resolve
+  resolved_conf: /etc/systemd/resolved.conf
+  resolv_conf: /lib/systemd/resolv.conf
+  config: {}
