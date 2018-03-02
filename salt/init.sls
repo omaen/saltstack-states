@@ -1,2 +1,3 @@
 include:
-  - salt.package
+  - .package
+  - .config

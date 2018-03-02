@@ -36,6 +36,11 @@ enable_logging
 apt-get update || print_log
 apt-get install salt-minion -y || print_log
 salt-call state.apply --retcode-passthrough
+
+# Also ensure salt-minion is running
+if ! systemctl is-active salt-minion; then
+    systemctl restart salt-minion
+fi
 trap - ERR INT TERM
 
 cleanup

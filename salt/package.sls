@@ -1,3 +1,5 @@
+{% from 'salt/map.jinja' import salt_config with context %}
+
 {% if grains['oscodename'] == 'jessie' %}
 include:
   - apt.repo-backports
@@ -5,7 +7,12 @@ include:
 
 salt-minion:
   pkg.installed:
-    - name: salt-minion
+    - pkgs:
+      - salt-minion
+# Extra requirement for proxy usage
+{% if 'proxy_host' in salt_config.config.minion %}
+      - python-pycurl
+{% endif %}
 {% if grains['oscodename'] == 'jessie' %}
     - fromrepo: jessie-backports
     - require:
@@ -13,5 +20,5 @@ salt-minion:
 {% endif %}
   service.running:
     - name: salt-minion
-    - require:
+    - watch:
       - pkg: salt-minion
