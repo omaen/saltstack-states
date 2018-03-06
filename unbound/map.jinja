@@ -1,0 +1,16 @@
+{% import_yaml 'unbound/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('unbound:lookup'),
+    base='unbound'
+    )
+%}
+
+{% set unbound = salt['pillar.get'](
+    'unbound',
+    default=base_settings,
+    merge=True
+    )
+%}
