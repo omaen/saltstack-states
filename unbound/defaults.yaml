@@ -2,4 +2,5 @@ unbound:
   package: unbound
   service: unbound
   unbound_conf: /etc/unbound/unbound.conf.d/salt.conf
+  anycast_addrs: []
   config: {}
