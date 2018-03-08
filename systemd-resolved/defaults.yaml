@@ -3,4 +3,5 @@ systemd_resolved:
   libnss_package: libnss-resolve
   resolved_conf: /etc/systemd/resolved.conf
   resolv_conf: /lib/systemd/resolv.conf
+  disable_dhclient_updates: false
   config: {}

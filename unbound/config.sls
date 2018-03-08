@@ -30,7 +30,7 @@ unbound.service:
   file.absent:
     - name: /etc/systemd/system/{{ unbound.service }}.service
 {% endif %}
-  cmd.run:
+  cmd.wait:
     - name: systemctl daemon-reload
     - watch:
       - file: unbound.service

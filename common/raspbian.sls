@@ -19,6 +19,8 @@ include:
   - certs
   - autofs
   - network
+  - resolvconf
+  - rdnssd
   #- kernel
   - iptables
   - fwgen

@@ -21,6 +21,8 @@ include:
   - certs
   - autofs
   - network
+  - resolvconf
+  - rdnssd
   - fstrim
   - kernel
   - iptables
