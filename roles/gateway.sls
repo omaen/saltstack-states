@@ -7,4 +7,3 @@ include:
   - iptables
   - fwgen
   - radvd
-  - keepalived

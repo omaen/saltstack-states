@@ -1,7 +1,13 @@
 include:
+  - network
+{%- if grains['oscodename'] == 'jessie' %}
+  - resolvconf
+  - rdnssd
+{%- else %}
+  - systemd-resolved
+{%- endif %}
   - profile
   #- salt.cron_salt-call
-  - systemd.resolved
   - users
   - rsyslog
   - timesyncd
@@ -18,9 +24,6 @@ include:
   - sysctl
   - certs
   - autofs
-  - network
-  - resolvconf
-  - rdnssd
   #- kernel
   - iptables
   - fwgen
