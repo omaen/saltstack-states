@@ -9,7 +9,8 @@ dnsmasq-config:
     - group: root
     - mode: 644
     - context:
-        config: {{ dnsmasq.config }}
+        # filter via json to preserve None as actual None, not string
+        config: {{ dnsmasq.config|json }}
     - watch_in:
       - service: dnsmasq
     - require:

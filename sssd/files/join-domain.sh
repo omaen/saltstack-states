@@ -9,6 +9,12 @@ computer_ou="{{ pillar['ad']['computer_ou'] }}"
 retry_count=1
 
 
+# Do not continue if DNS is not working to prevent the script from removing
+# a working keytab and join just because there are some DNS issues
+if ! host -t srv _kerberos._tcp.${realm}; then
+    exit 1
+fi
+
 [ -f /etc/krb5.keytab ] && rm /etc/krb5.keytab
 
 kinit ${user}@${realm} -k -t "${keytab}"
@@ -19,7 +25,7 @@ kinit ${user}@${realm} -k -t "${keytab}"
 # Also, net ads join fail if the computer object already exists _and_ the host is
 # trusted for kerberos delegation. In those cases it only deletes the computer
 # account, so as a workaround it is run again to actually successfully join the computer.
-# This is not needed when using an admin account. For the saltstack users however, a single
+# This is not needed when using an admin account. For the saltstack user however, a single
 # join wont work even when it is given full control of all objects within its delegated OU.
 counter=0
 while ! net ads join createcomputer="${computer_ou}" -k -U ${user}@${realm} < /dev/null; do
