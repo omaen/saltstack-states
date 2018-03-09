@@ -4,4 +4,5 @@ docker:
   repo: deb https://download.docker.com/linux/debian {{ grains['oscodename'] }} stable
   key_url: https://download.docker.com/linux/debian/gpg
   config:
+    weekly_cleanup: false
     daemon: {}

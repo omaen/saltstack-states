@@ -4,6 +4,8 @@ include:
   - resolvconf
   - rdnssd
 {%- else %}
+  - resolvconf.remove
+  - rdnssd.remove
   - systemd-resolved
 {%- endif %}
   - profile

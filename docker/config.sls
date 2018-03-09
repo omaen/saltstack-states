@@ -1,12 +1,15 @@
 {% from 'docker/map.jinja' import docker with context %}
 
-docker-cleanup:
+/etc/cron.weekly/docker-cleanup:
+{% if docker.config.weekly_cleanup %}
   file.managed:
-    - name: /etc/cron.weekly/docker-cleanup
     - source: salt://docker/files/docker-cleanup
     - user: root
     - group: root
     - mode: 755
+{% else %}
+  file.absent
+{% endif %}
 
 daemon.json:
   file.managed:
