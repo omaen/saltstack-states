@@ -16,6 +16,8 @@ php:
       package: php-curl
     apcu:
       package: php-apcu
+    memcache:
+      package: php-memcache
   config:
     modules: {}
 
@@ -37,4 +39,6 @@ Debian:
       package: php5-curl
     apcu:
       package: php5-apcu
+    memcache:
+      package: php5-memcache
   {% endif %}

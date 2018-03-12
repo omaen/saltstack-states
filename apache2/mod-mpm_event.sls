@@ -1,6 +1,3 @@
-include:
-  - apache2.disable-mod_php
-
 disable-mpm_prefork:
   cmd.run:
     - name: a2dismod mpm_prefork
@@ -10,6 +7,8 @@ disable-mpm_prefork:
     - require:
       - pkg: apache2
 
+# This only works if libapache2-mod-php is not enabled, but as this package
+# may be required by other packages leave that deconflicting up to a human
 mod-mpm_event:
   cmd.run:
     - name: a2enmod mpm_event
@@ -19,4 +18,3 @@ mod-mpm_event:
     - require:
       - pkg: apache2
       - cmd: disable-mpm_prefork
-      - pkg: disable-mod_php
