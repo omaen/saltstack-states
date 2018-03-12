@@ -1,6 +1,5 @@
 apache2:
   php_conf_path: /etc/php/7.0/apache2
-  libapache2_mod_php: libapache2-mod-php
   php_fpm_socket: /var/run/php/php7.0-fpm.sock
   php_fpm: False
   remote_ip_internal_proxy: False
@@ -10,6 +9,5 @@ apache2:
 Debian:
   {% if grains['oscodename'] == 'jessie' %}
   php_conf_path: /etc/php5/apache2
-  libapache2_mod_php: libapache2-mod-php5
   php_fpm_socket: /var/run/php5-fpm.sock
   {% endif %}
