@@ -3,3 +3,4 @@ include:
   - mailx
   - aliases
   - dovecot
+  - imapproxy

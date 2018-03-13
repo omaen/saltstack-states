@@ -1,0 +1,23 @@
+imapproxy:
+  package: imapproxy
+  service: imapproxy
+  imapproxy_conf: /etc/imapproxy.conf
+  config:
+    server_hostname: localhost
+    connect_retries: 10
+    connect_delay: 5
+    cache_size: 3072
+    listen_port: 1143
+    server_port: 143
+    cache_expiration_time: 300
+    proc_username: nobody
+    proc_groupname: nogroup
+    stat_filename: /var/run/pimpstats
+    protocol_log_filename: /var/log/imapproxy_protocol.log
+    syslog_facility: LOG_MAIL
+    send_tcp_keepalives: 'no'
+    enable_select_cache: 'no'
+    foreground_mode: 'no'
+    force_tls: 'no'
+    chroot_directory: /var/lib/imapproxy/chroot
+    enable_admin_commands: 'no'

@@ -1,0 +1,16 @@
+{% import_yaml 'imapproxy/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('imapproxy:lookup'),
+    base='imapproxy'
+    )
+%}
+
+{% set imapproxy = salt['pillar.get'](
+    'imapproxy',
+    default=base_settings,
+    merge=True
+    )
+%}

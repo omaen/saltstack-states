@@ -18,6 +18,8 @@ php:
       package: php-apcu
     memcache:
       package: php-memcache
+    zip:
+      package: php-zip
   config:
     modules: {}
 
@@ -41,4 +43,6 @@ Debian:
       package: php5-apcu
     memcache:
       package: php5-memcache
+    zip:
+      package: php5-zip
   {% endif %}
