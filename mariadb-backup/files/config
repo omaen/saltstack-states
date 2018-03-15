@@ -1,8 +1,0 @@
-#
-# This file is managed by Salt. Changes will be overwritten!
-#
-
-BACKUP_DIR="{{ config.backup_dir }}"
-KEEP_DAILY={{ config.keep_daily }}
-KEEP_MONTHLY={{ config.keep_monthly }}
-MYSQLDUMP="{{ config.mysqldump }}"

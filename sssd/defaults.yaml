@@ -1,0 +1,10 @@
+sssd:
+  packages:
+    sssd-ad: sssd-ad
+    sssd-tools: sssd-tools
+    libpam-sss: libpam-sss
+    libnss-sss: libnss-sss
+    sssd-common: sssd-common
+  service: sssd
+  sssd_conf: /etc/sssd/sssd.conf
+  config: {}

@@ -1,8 +1,0 @@
-mariadb_backup:
-  bin: /usr/local/bin/mariadb-backup
-  config_file: /etc/mariadb-backup/config
-  config:
-    backup_dir: '${HOME}/mariadb-backup'
-    keep_daily: 7
-    keep_monthly: 6
-    mysqldump: /usr/bin/mysqldump
