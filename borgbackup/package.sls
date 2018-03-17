@@ -1,4 +1,4 @@
-{% if grains['oscodename'] == 'jessie' %}
+{% if grains['oscodename'] in ['jessie', 'stretch'] %}
 include:
   - apt.repo-backports
 {% endif %}
@@ -8,8 +8,9 @@ include:
 borgbackup:
   pkg.installed:
     - name: {{ borgbackup.borgbackup }}
-{% if grains['oscodename'] == 'jessie' %}
-    - fromrepo: jessie-backports
+{% if grains['oscodename'] in ['jessie', 'stretch'] %}
+    - version: latest
+    - fromrepo: {{ grains['oscodename'] }}-backports
     - require:
       - pkgrepo: repo-backports
 {% endif %}
