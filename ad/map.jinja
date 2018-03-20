@@ -1,0 +1,16 @@
+{% import_yaml 'ad/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('ad:lookup'),
+    base='ad'
+    )
+%}
+
+{% set ad = salt['pillar.get'](
+    'ad',
+    default=base_settings,
+    merge=True
+    )
+%}

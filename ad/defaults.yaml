@@ -1,0 +1,3 @@
+ad:
+  config:
+    user_keytab: /tmp/salt.keytab

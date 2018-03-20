@@ -2,10 +2,10 @@
 
 set -e
 
-user="{{ pillar['ad']['domain_join_user'] }}"
-realm="{{ pillar['ad']['realm'] }}"
-keytab="{{ pillar['ad']['domain_join_keytab'] }}"
-computer_ou="{{ pillar['ad']['computer_ou'] }}"
+user="{{ config.domain_join_user }}"
+realm="{{ config.realm }}"
+keytab="{{ config.domain_join_keytab }}"
+computer_ou="{{ config.computer_ou }}"
 retry_count=1
 
 
@@ -36,7 +36,7 @@ while ! net ads join createcomputer="${computer_ou}" -k -U ${user}@${realm} < /d
     sleep 3
 done
 
-{%- for spn in salt['pillar.get']('keytab:service_principals', []) %}
+{%- for spn in config.get('service_principals', []) %}
 net ads keytab add {{ spn }} -k
 {%- endfor %}
 kdestroy

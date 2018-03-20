@@ -1,9 +1,9 @@
 {% from 'sssd/map.jinja' import sssd with context %}
 
 include:
+  - ad
   - .config
   - .mkhomedir
-  - .join-domain
 
 sssd-ad:
   pkg.installed:
@@ -17,6 +17,6 @@ sssd-ad:
     - require:
       - pkg: sssd-ad
       - file: sssd_conf
-      - cmd: net-ads-join
+      - cmd: domain_joined
     - watch:
       - file: sssd_conf

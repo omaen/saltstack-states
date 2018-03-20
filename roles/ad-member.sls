@@ -1,2 +1,2 @@
 include:
-  - ad.member
+  - sssd.sssd-ad

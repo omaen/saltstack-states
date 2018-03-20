@@ -1,9 +1,5 @@
 {% from 'samba/map.jinja' import samba with context %}
 
-samba-common:
-  pkg.installed:
-    - name: samba-common-bin
-
 {% if samba.config.get('shares', []) %}
 samba:
   pkg.installed:
@@ -12,6 +8,8 @@ samba:
     - name: smbd
     - require:
       - pkg: samba
+    - watch:
+      - file: smb_conf
 
 {% if salt['pillar.get']('roles:domain-member') %}
 winbind:
@@ -23,6 +21,8 @@ winbind:
     - name: winbind
     - require:
       - pkg: winbind
+    - watch:
+      - file: smb_conf
 {% endif %}
 {% endif %}
 
