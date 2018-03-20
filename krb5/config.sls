@@ -10,3 +10,16 @@ krb5_conf:
     - mode: 644
     - context:
         config: {{ krb5.config }}
+
+krb5_keytab:
+  group.present:
+    - name: keytab
+  file.managed:
+    - name: /etc/krb5.keytab
+    - user: root
+    - group: keytab
+    - mode: 640
+    - replace: False
+    - create: False
+    - require:
+      - group: krb5_keytab

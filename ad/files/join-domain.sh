@@ -2,9 +2,9 @@
 
 set -e
 
-user="{{ config.domain_join_user }}"
+user="{{ config.user }}"
 realm="{{ config.realm }}"
-keytab="{{ config.domain_join_keytab }}"
+keytab="{{ config.user_keytab }}"
 computer_ou="{{ config.computer_ou }}"
 retry_count=1
 
@@ -27,9 +27,9 @@ kinit ${user}@${realm} -k -t "${keytab}"
 # account, so as a workaround it is run again to actually successfully join the computer.
 # This is not needed when using an admin account. For the saltstack user however, a single
 # join wont work even when it is given full control of all objects within its delegated OU.
-counter=0
+count=0
 while ! net ads join createcomputer="${computer_ou}" -k -U ${user}@${realm} < /dev/null; do
-    if [ $counter -eq $retry_count ]; then
+    if [ $count -ge $retry_count ]; then
         exit 1
     fi
     count=$((count + 1))
