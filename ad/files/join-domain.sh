@@ -36,7 +36,7 @@ while ! net ads join createcomputer="${computer_ou}" -k -U ${user}@${realm} < /d
     sleep 3
 done
 
-{%- for spn in config.get('service_principals', []) %}
+{%- for spn in config.service_principals %}
 net ads keytab add {{ spn }} -k
 {%- endfor %}
 kdestroy

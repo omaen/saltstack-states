@@ -1,3 +1,4 @@
 ad:
   config:
     user_keytab: /tmp/salt.keytab
+    service_principals: []
