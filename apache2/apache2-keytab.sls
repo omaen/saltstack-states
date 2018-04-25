@@ -1,6 +1,6 @@
 include:
   - apache2
-  - krb5.keytab-group
+  - krb5
 
 user_apache2:
   user.present:
