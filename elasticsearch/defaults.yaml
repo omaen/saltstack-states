@@ -3,5 +3,8 @@ elasticsearch:
   service: elasticsearch
   repo:
     5_x: deb https://artifacts.elastic.co/packages/5.x/apt stable main
+    6_x: deb https://artifacts.elastic.co/packages/6.x/apt stable main
   key_url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-  config: {}
+  config:
+    path.data: /var/lib/elasticsearch
+    path.logs: /var/log/elasticsearch

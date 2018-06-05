@@ -5,9 +5,9 @@ include:
 
 logstash-repo:
   pkgrepo.managed:
-    - name: {{ logstash.repo['5_x'] }}
+    - name: {{ logstash.repo['6_x'] }}
     - key_url: {{ logstash.key_url }}
-    - file: /etc/apt/sources.list.d/elastic-5_x.list
+    - file: /etc/apt/sources.list.d/elastic-6_x.list
     - clean_file: True
 
 logstash:

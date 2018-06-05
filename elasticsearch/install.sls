@@ -5,9 +5,9 @@ include:
 
 elasticsearch-repo:
   pkgrepo.managed:
-    - name: {{ elasticsearch.repo['5_x'] }}
+    - name: {{ elasticsearch.repo['6_x'] }}
     - key_url: {{ elasticsearch.key_url }}
-    - file: /etc/apt/sources.list.d/elastic-5_x.list
+    - file: /etc/apt/sources.list.d/elastic-6_x.list
     - clean_file: True
 
 elasticsearch:

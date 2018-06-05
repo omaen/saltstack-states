@@ -3,6 +3,7 @@ logstash:
   service: logstash
   repo:
     5_x: deb https://artifacts.elastic.co/packages/5.x/apt stable main
+    6_x: deb https://artifacts.elastic.co/packages/6.x/apt stable main
   key_url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
   config: {
     patterns_dir: '["/etc/logstash/patterns"]'
