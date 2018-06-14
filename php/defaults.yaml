@@ -20,6 +20,8 @@ php:
       package: php-memcache
     zip:
       package: php-zip
+    gd:
+      package: php-gd
   config:
     modules: {}
 
@@ -45,4 +47,6 @@ Debian:
       package: php5-memcache
     zip:
       package: php5-zip
+    gd:
+      package: php5-gd
   {% endif %}
