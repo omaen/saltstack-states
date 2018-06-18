@@ -1,0 +1,16 @@
+{% import_yaml 'profile/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('profile:lookup'),
+    base='profile'
+    )
+%}
+
+{% set profile = salt['pillar.get'](
+    'profile',
+    default=base_settings,
+    merge=True
+    )
+%}
