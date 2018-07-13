@@ -1,0 +1,17 @@
+conntrackd:
+  config_file: /etc/conntrackd/conntrackd.conf
+  package: conntrackd
+  service: conntrackd
+  config:
+    # Defaults from Debian Stretch (with Stats removed to avoid conflicts)
+    General:
+      HashSize: 8192
+      HashLimit: 65535
+      Syslog: 'on'
+      LockFile: /var/lock/conntrackd.lock
+      UNIX:
+        Path: /var/run/conntrackd.sock
+        Backlog: 20
+      SocketBufferSize: 262142
+      SocketBufferSizeMaxGrown: 655355
+      Systemd: 'on'
