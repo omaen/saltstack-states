@@ -7,11 +7,9 @@
 include:
 {% if grains['virtual'] | lower == 'vmware' %}
   - vmware.vmware-tools
-  - .elevator
   - .packages
 {% elif grains['virtual'] | lower in ['kvm', 'qemu'] %}
   - kvm.qemu-guest-agent
-  - .elevator
   - .packages
 {% endif %}
   - fstrim
