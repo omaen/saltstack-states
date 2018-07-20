@@ -3,20 +3,24 @@
 maintenance_mode () {
     case "$1" in
         on)
-            systemctl stop bird
             systemctl stop keepalived
+            systemctl stop bird
 
-            # Ensure there is enough time for ospf routers this host have adjacencies to
-            # detect this host as dead, before continuing the shutdown. With an hello interval of 1
-            # dead count of 4, 5 seconds should be enough.
+            # Ensure there is enough time for established OSPF adjacencies to detect this host as
+            # dead, before continuing the shutdown. With an hello interval of 1, and dead count
+            # of 4, 5 seconds should be enough.
             # It is important that the routes are persisted after bird shutdown in the bird kernel
-            # configuration to avoid dropped packages in the interval between ospf shutdown and
+            # configuration to avoid dropped packages in the interval between OSPF shutdown and
             # dead adjacency detection.
-            sleep 5
+            sleep {{ config.routing_down_wait }}
             ;;
         off)
-            systemctl start keepalived
             systemctl start bird
+
+            # Keepalived should not be started until bird has established all adjacencies.
+            # This is handled by an ekstra sleep in a custom systemd service definition for
+            # keepalived as this is also needed during boot.
+            systemctl start keepalived
             ;;
         *)
             >&2 echo "Valid modes: on|off"

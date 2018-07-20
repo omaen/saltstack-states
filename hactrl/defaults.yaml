@@ -1,0 +1,8 @@
+hactrl:
+  config:
+    # With an hello interval of 1 and dead count of 4, 5 seconds should be enough for the adjacent
+    # host to stop sending traffic to this router
+    routing_down_wait: 5
+    # By default bird waits 4*hello before starting to establish OSPF adjacencies during startup,
+    # so 15 seconds should be enough with a hello interval of 1
+    routing_up_wait: 15
