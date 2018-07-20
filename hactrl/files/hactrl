@@ -1,0 +1,48 @@
+#!/bin/bash
+
+maintenance_mode () {
+    case "$1" in
+        on)
+            systemctl stop bird
+            systemctl stop keepalived
+
+            # Ensure there is enough time for ospf routers this host have adjacencies to
+            # detect this host as dead, before continuing the shutdown. With an hello interval of 1
+            # dead count of 4, 5 seconds should be enough.
+            # It is important that the routes are persisted after bird shutdown in the bird kernel
+            # configuration to avoid dropped packages in the interval between ospf shutdown and
+            # dead adjacency detection.
+            sleep 5
+            ;;
+        off)
+            systemctl start keepalived
+            systemctl start bird
+            ;;
+        *)
+            >&2 echo "Valid modes: on|off"
+            exit 1
+            ;;
+    esac
+}
+
+
+case $1 in
+    maintenance)
+        shift
+        maintenance_mode "$@"
+        ;;
+    shutdown)
+        shift
+        maintenance_mode on
+        shutdown "$@"
+        ;;
+    reboot)
+        shift
+        maintenance_mode on
+        reboot "$@"
+        ;;
+    *)
+        echo "Usage: hactrl maintenance|shutdown|reboot ARGS"
+        exit 1
+        ;;
+esac
