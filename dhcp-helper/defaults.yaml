@@ -1,0 +1,8 @@
+dhcp_helper:
+  package: dhcp-helper
+  service: dhcp-helper
+  config_file: /etc/default/dhcp-helper
+  ifup: /etc/network/if-up.d/dhcp-helper
+  config:
+    options:
+      - -b eth0

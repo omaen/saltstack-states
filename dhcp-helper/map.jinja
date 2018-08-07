@@ -1,0 +1,16 @@
+{% import_yaml 'dhcp-helper/defaults.yaml' as defaults %}
+
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('dhcp_helper:lookup'),
+    base='dhcp_helper'
+    )
+%}
+
+{% set dhcp_helper = salt['pillar.get'](
+    'dhcp_helper',
+    default=base_settings,
+    merge=True
+    )
+%}

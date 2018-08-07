@@ -1,0 +1,14 @@
+#!/bin/sh
+
+name="dhcp-helper"
+service="dhcp-helper"
+
+if [ "${ADDRFAM}" = "inet" ]; then
+    pgrep -a "${name}" \
+        | grep -E "\s${IFACE}\s|\s${IFACE}$" > /dev/null \
+        || exit 0
+
+    if systemctl is-active ${service} > /dev/null; then
+        systemctl restart ${service}
+    fi
+fi
