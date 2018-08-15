@@ -5,5 +5,6 @@ dhcp_helper:
     - name: {{ dhcp_helper.package }}
   service.running:
     - name: {{ dhcp_helper.service }}
+    - enable: True
     - require:
       - pkg: dhcp_helper
