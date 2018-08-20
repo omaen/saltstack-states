@@ -9,6 +9,7 @@ keepalived:
     - name: {{ keepalived.service }}
 
 keepalived.service:
+{% if keepalived.service_config %}
   file.managed:
     - name: /etc/systemd/system/keepalived.service
     - source: salt://keepalived/files/keepalived.service
@@ -21,6 +22,12 @@ keepalived.service:
         config: {{ keepalived.service_config }}
     - require:
       - pkg: keepalived
+{% else %}
+  file.absent:
+    - name: /etc/systemd/system/keepalived.service
+    - require:
+      - pkg: keepalived
+{% endif %}
   cmd.wait:
     - name: systemctl daemon-reload
     - watch:

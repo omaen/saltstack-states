@@ -4,7 +4,7 @@
 
 [Unit]
 Description=Keepalive Daemon (LVS and VRRP)
-After=network-online.target
+After=syslog.target network-online.target
 Wants=network-online.target
 # Only start if there is a configuration file
 ConditionFileNotEmpty=/etc/keepalived/keepalived.conf
@@ -14,7 +14,7 @@ Type=forking
 KillMode=process
 # Read configuration variable file if it is present
 EnvironmentFile=-/etc/default/keepalived
-{%- for i in config.ExecStartPre %}
+{%- for i in config.get('ExecStartPre', []) %}
 ExecStartPre={{ i }}
 {%- endfor %}
 ExecStart=/usr/sbin/keepalived $DAEMON_ARGS
