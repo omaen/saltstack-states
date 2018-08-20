@@ -1,20 +1,16 @@
 {% import_yaml 'conntrackd/defaults.yaml' as defaults %}
 
-{% set os_family_map = salt['grains.filter_by']({
-		'Debian': {
-			'package': 'conntrackd',
-			'service': 'conntrackd'
-		},
-	},
-	grain='os_family',
-	merge=salt['pillar.get']('conntrackd:lookup'))
+{% set base_settings = salt['grains.filter_by'](
+    defaults,
+    grain='os_family',
+    merge=salt['pillar.get']('conntrackd:lookup'),
+    base='conntrackd'
+    )
 %}
 
-{% do defaults.conntrackd.update(os_family_map) %}
-
 {% set conntrackd = salt['pillar.get'](
-		'conntrackd',
-		default=defaults.conntrackd,
-		merge=True
-	)
+    'conntrackd',
+    default=base_settings,
+    merge=True
+    )
 %}
