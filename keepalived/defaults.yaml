@@ -2,4 +2,6 @@ keepalived:
   config_file: /etc/keepalived/keepalived.conf
   package: keepalived
   service: keepalived
+  service_config:
+    ExecStartPre: []
   config: {}

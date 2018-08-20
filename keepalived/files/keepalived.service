@@ -1,3 +1,7 @@
+#
+# This file is managed by Salt. Changes will be overwritten!
+#
+
 [Unit]
 Description=Keepalive Daemon (LVS and VRRP)
 After=network-online.target
@@ -10,8 +14,9 @@ Type=forking
 KillMode=process
 # Read configuration variable file if it is present
 EnvironmentFile=-/etc/default/keepalived
-# Wait for routing adjacencies to be established during boot and maintenance mode deactivation
-ExecStartPre=/bin/sleep {{ config.routing_up_wait }}
+{%- for i in config.ExecStartPre %}
+ExecStartPre={{ i }}
+{%- endfor %}
 ExecStart=/usr/sbin/keepalived $DAEMON_ARGS
 ExecReload=/bin/kill -HUP $MAINPID
 
