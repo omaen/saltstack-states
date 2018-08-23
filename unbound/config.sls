@@ -1,5 +1,8 @@
 {% from 'unbound/map.jinja' import unbound with context %}
 
+include:
+  - systemd.daemon-reload
+
 unbound_conf:
   file.managed:
     - name: {{ unbound.unbound_conf }}
@@ -30,10 +33,7 @@ unbound.service:
   file.absent:
     - name: /etc/systemd/system/{{ unbound.service }}.service
 {% endif %}
-  cmd.wait:
-    - name: systemctl daemon-reload
-    - watch:
-      - file: unbound.service
     - watch_in:
+      - cmd: daemon-reload
       - service: unbound
 
