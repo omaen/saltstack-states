@@ -1,0 +1,7 @@
+#!/bin/sh
+
+service="keepalived.service"
+
+if systemctl is-active ${service} > /dev/null; then
+    systemctl reload ${service}
+fi

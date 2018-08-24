@@ -15,7 +15,7 @@ keepalived_conf:
         # Filter via json to get some sane ordering
         config: {{ keepalived.config|json }}
     - watch_in:
-      - service: {{ keepalived.service }}
+      - service: keepalived
 
 keepalived.service:
 {% if salt.pillar.get('keepalived:service_config') %}
@@ -36,4 +36,16 @@ keepalived.service:
 {% endif %}
     - watch_in:
       - cmd: daemon-reload
+      - service: keepalived
+
+# Workaround for keepalived not setting vip when running ifup manually when
+# keepalived is already running
+keepalived_ifup:
+  file.managed:
+    - name: {{ keepalived.ifup }}
+    - source: salt://keepalived/files/ifup
+    - user: root
+    - group: root
+    - mode: 755
+    - require:
       - service: keepalived
