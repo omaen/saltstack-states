@@ -1,5 +1,8 @@
 {% from 'apt/map.jinja' import apt with context %}
 
+include:
+  - certs
+
 {% set os = grains['os'] | lower %}
 {% set codename = grains['oscodename'] | lower %}
 sources:
