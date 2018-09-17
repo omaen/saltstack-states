@@ -1,0 +1,23 @@
+{% import_yaml 'frr/defaults.yaml' as defaults %}
+{% import_yaml 'frr/os_family_map.yaml' as os_family_map %}
+{% import_yaml 'frr/oscodename_map.yaml' as oscodename_map %}
+
+{% set default_settings = salt['grains.filter_by'](
+    defaults,
+    merge=salt['grains.filter_by'](
+        os_family_map,
+        grain='os_family',
+        merge=salt['grains.filter_by'](
+            oscodename_map,
+            grain='oscodename',
+            merge=salt['pillar.get']('frr:lookup')
+        ),
+    ),
+    base='frr'
+) %}
+
+{% set frr = salt['pillar.get'](
+  'frr',
+  default=default_settings,
+  merge=True)
+%}
