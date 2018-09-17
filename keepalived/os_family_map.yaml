@@ -1,0 +1,19 @@
+Debian:
+  config_file: /etc/keepalived/keepalived.conf
+  package: keepalived
+  service: keepalived
+  ifup: /etc/network/if-up.d/keepalived
+  service_config:
+    Unit:
+      Description: Keepalive Daemon (LVS and VRRP)
+      After: syslog.target network-online.target
+      Wants: network-online.target
+      ConditionFileNotEmpty: /etc/keepalived/keepalived.conf
+    Service:
+      Type: forking
+      KillMode: process
+      EnvironmentFile: -/etc/default/keepalived
+      ExecStart: /usr/sbin/keepalived $DAEMON_ARGS
+      ExecReload: /bin/kill -HUP $MAINPID
+    Install:
+      WantedBy: multi-user.target
