@@ -1,7 +1,7 @@
 {% from 'keepalived/map.jinja' import keepalived with context %}
 
 include:
-  - systemd.daemon-reload
+  - systemctl.daemon-reload
 
 keepalived_conf:
   file.managed:
@@ -34,6 +34,7 @@ keepalived.service:
   file.absent:
     - name: /etc/systemd/system/keepalived.service
 {% endif %}
+    - name: systemctl daemon-reload
     - watch_in:
       - cmd: daemon-reload
       - service: keepalived

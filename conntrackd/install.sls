@@ -1,5 +1,8 @@
 {% from 'conntrackd/map.jinja' import conntrackd with context %}
 
+include:
+  - systemctl.daemon-reload
+
 conntrackd:
   pkg.installed:
     - name: {{ conntrackd.package }}
@@ -18,7 +21,6 @@ conntrackd.service:
     - group: root
     - require:
       - pkg: conntrackd
-  cmd.wait:
-    - name: systemctl daemon-reload
-    - watch:
-      - file: conntrackd.service
+    - watch_in:
+      - cmd: daemon-reload
+      - service: conntrackd

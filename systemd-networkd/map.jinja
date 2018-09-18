@@ -1,0 +1,13 @@
+{% import_yaml 'systemd-networkd/defaults.yaml' as defaults %}
+
+{% set default_settings = salt['grains.filter_by'](
+    defaults,
+    merge=salt['pillar.get']('systemd_networkd:lookup'),
+    base='systemd_networkd')
+%}
+
+{% set systemd_networkd = salt['pillar.get'](
+  'systemd_networkd',
+  default=default_settings,
+  merge=True)
+%}

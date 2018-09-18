@@ -1,7 +1,7 @@
 {% from 'borgwrapper/map.jinja' import borgwrapper with context %}
 
 include:
-  - systemd.daemon-reload
+  - systemctl.daemon-reload
 
 {% for name, params in borgwrapper.configs.iteritems() %}
 {% set config = borgwrapper.config_defaults %}
