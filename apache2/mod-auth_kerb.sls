@@ -9,9 +9,9 @@ mod-auth_kerb:
       - user: user_apache2
   cmd.run:
     - name: a2enmod auth_kerb
-    - unless: apache2ctl -M | grep ' auth_kerb_module '
+    - unless: ls /etc/apache2/mods-enabled/auth_kerb.load
     - require:
       - pkg: apache2
       - pkg: mod-auth_kerb
     - watch_in:
-      - service: apache2
+      - service: apache2-restart

@@ -5,9 +5,8 @@ mod-passenger:
       - pkg: apache2
   cmd.run:
     - name: a2enmod passenger
-    - unless: apache2ctl -M | grep ' passenger_module '
+    - unless: ls /etc/apache2/mods-enabled/passenger.load
     - require:
-      - pkg: apache2
       - pkg: mod-passenger
     - watch_in:
-      - service: apache2
+      - service: apache2-restart

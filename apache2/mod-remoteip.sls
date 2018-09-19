@@ -1,8 +1,8 @@
 mod-remoteip:
   cmd.run:
     - name: a2enmod remoteip
-    - unless: apache2ctl -M | grep ' remoteip_module '
-    - watch_in:
-      - service: apache2
+    - unless: ls /etc/apache2/mods-enabled/remoteip.load
     - require:
       - pkg: apache2
+    - watch_in:
+      - service: apache2-restart

@@ -5,9 +5,8 @@ mod-svn:
       - pkg: apache2
   cmd.run:
     - name: a2enmod dav_svn
-    - unless: apache2ctl -M | grep ' dav_svn_module '
+    - unless: ls /etc/apache2/mods-enabled/dav_svn.load
     - require:
-      - pkg: apache2
       - pkg: mod-svn
     - watch_in:
-      - service: apache2
+      - service: apache2-restart

@@ -1,8 +1,8 @@
 mod-proxy_http:
   cmd.run:
     - name: a2enmod proxy_http
-    - unless: apache2ctl -M | grep ' proxy_http_module '
-    - watch_in:
-      - service: apache2
+    - unless: ls /etc/apache2/mods-enabled/proxy_http.load
     - require:
       - pkg: apache2
+    - watch_in:
+      - service: apache2-restart

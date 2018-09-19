@@ -3,3 +3,4 @@ apt-progs:
     - pkgs:
       - aptitude
       - apt-transport-https
+      - ca-certificates

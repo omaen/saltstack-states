@@ -1,8 +1,5 @@
 {%- if pillar['dhparams'] is defined %}
 
-include:
-  - certs
-
 dhparams:
   file.managed:
     - name: /etc/ssl/private/dhparams.pem

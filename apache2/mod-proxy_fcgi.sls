@@ -1,8 +1,8 @@
 mod-proxy_fcgi:
   cmd.run:
     - name: a2enmod proxy_fcgi
-    - unless: apache2ctl -M | grep ' proxy_fcgi_module '
-    - watch_in:
-      - service: apache2
+    - unless: ls /etc/apache2/mods-enabled/proxy_fcgi.load
     - require:
       - pkg: apache2
+    - watch_in:
+      - service: apache2-restart

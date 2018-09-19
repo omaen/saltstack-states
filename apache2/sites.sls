@@ -19,12 +19,12 @@ apache2_site_{{ site }}:
     - require:
       - pkg: apache2
     - watch_in:
-      - service: apache2-reload
+      - service: apache2
   cmd.run:
     - name: a2ensite {{ site }}
     - unless: apache2ctl -S | grep 'sites-enabled/{{ site }}.conf'
     - require:
       - file: apache2_site_{{ site }}
     - watch_in:
-      - service: apache2-reload
+      - service: apache2
 {% endfor %}

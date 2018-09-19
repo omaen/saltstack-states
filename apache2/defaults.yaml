@@ -1,4 +1,5 @@
 apache2:
+  certificates: {}
   php_conf_path: /etc/php/7.0/apache2
   php_fpm_socket: /var/run/php/php7.0-fpm.sock
   php_fpm: False
