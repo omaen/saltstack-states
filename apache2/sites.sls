@@ -22,7 +22,7 @@ apache2_site_{{ site }}:
       - service: apache2
   cmd.run:
     - name: a2ensite {{ site }}
-    - unless: apache2ctl -S | grep 'sites-enabled/{{ site }}.conf'
+    - unless: ls /etc/apache2/sites-enabled/{{ site }}.conf
     - require:
       - file: apache2_site_{{ site }}
     - watch_in:
