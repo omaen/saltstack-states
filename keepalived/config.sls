@@ -34,7 +34,6 @@ keepalived.service:
   file.absent:
     - name: /etc/systemd/system/keepalived.service
 {% endif %}
-    - name: systemctl daemon-reload
     - watch_in:
       - cmd: daemon-reload
       - service: keepalived
