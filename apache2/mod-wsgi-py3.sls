@@ -5,7 +5,7 @@ mod-wsgi-py3:
       - pkg: apache2
   cmd.run:
     - name: a2enmod wsgi
-    - unless: unless: ls /etc/apache2/mods-enabled/wsgi.load
+    - unless: ls /etc/apache2/mods-enabled/wsgi.load
     - require:
       - pkg: mod-wsgi-py3
     - watch_in:
