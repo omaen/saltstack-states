@@ -11,7 +11,7 @@ samba:
     - watch:
       - file: smb_conf
 
-{% if salt['pillar.get']('roles:domain-member') %}
+{% if samba.config.get('global', {}).get('security') == 'ads' %}
 winbind:
   pkg.installed:
     - name: winbind
