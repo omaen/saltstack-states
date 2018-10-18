@@ -30,6 +30,7 @@ apache2_public_cert_{{ k }}:
   file.managed:
     - name: /etc/apache2/ssl/{{ k }}.crt
     - contents_pillar: apache2:certificates:{{ k }}:public_cert
+    - follow_symlinks: False
     - user: root
     - group: root
     - mode: 644
@@ -42,6 +43,7 @@ apache2_private_key_{{ k }}:
   file.managed:
     - name: /etc/apache2/ssl/{{ k }}.key
     - contents_pillar: apache2:certificates:{{ k }}:private_key
+    - follow_symlinks: False
     - user: root
     - group: root
     - mode: 600
