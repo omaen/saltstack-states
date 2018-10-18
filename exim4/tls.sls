@@ -10,11 +10,11 @@ tls_config:
     - require:
       - file: exim4_conf
 
-{% if salt['pillar.get']('exim4:certificate', False) %}
-tls_cert:
+exim4_public_cert:
   file.managed:
     - name: /etc/exim4/exim.crt
-    - contents_pillar: 'exim4:certificate'
+    - contents_pillar: exim4:certificate:public_cert
+    - follow_symlinks: False
     - user: root
     - group: root
     - mode: 644
@@ -25,17 +25,17 @@ tls_cert:
     - require_in:
       - file: tls_config
 
-tls_key:
+exim4_private_key:
   file.managed:
     - name: /etc/exim4/exim.key
-    - contents_pillar: 'exim4:key'
-    - user: root
+    - contents_pillar: exim4:certificate:private_key
+    - follow_symlinks: False
+    - user: Debian-exim
     - group: Debian-exim
-    - mode: 640
+    - mode: 600
     - watch_in:
       - service: exim4
     - require:
       - pkg: exim4
     - require_in:
       - file: tls_config
-{% endif %}
