@@ -1,0 +1,4 @@
+Debian:
+  config_file: /etc/ddclient.conf
+  package: ddclient
+  service: ddclient

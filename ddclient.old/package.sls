@@ -1,6 +1,9 @@
 ddclient:
   pkg.installed:
-    - name: ddclient
+    - pks:
+      - ddclient
+      # Needed for cloudflare protocol
+      - libjson-any-perl
   service.running:
     - name: ddclient
     - require:

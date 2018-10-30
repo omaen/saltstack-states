@@ -1,7 +1,7 @@
-{% if salt['pillar.get']('ddclient', False) %}
+{% if pillar['ddclient'] is defined %}
 
 include:
-  - ddclient.package
-  - ddclient.config
+  - .install
+  - .config
 
 {% endif %}
