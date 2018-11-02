@@ -1,4 +1,3 @@
 #!/bin/sh
 
-# Do not include --volumes here to prevent accidental data loss
-docker system prune --all --force
+docker system prune --volumes --all --force
