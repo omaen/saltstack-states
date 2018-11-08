@@ -1,3 +1,7 @@
 salt_config:
+  auto_apply_schedule:
+    enable: false
+    hours: 24
+    splay: 3600
   config:
     minion: {}
