@@ -1,0 +1,18 @@
+{% import_yaml 'vlmcsd/defaults.yaml' as defaults %}
+{% import_yaml 'vlmcsd/os_family_map.yaml' as os_family_map %}
+
+{% set default_settings = salt['grains.filter_by'](
+    defaults,
+    merge=salt['grains.filter_by'](
+        os_family_map,
+        grain='os_family',
+        merge=salt['pillar.get']('vlmcsd:lookup')
+    ),
+    base='vlmcsd'
+) %}
+
+{% set vlmcsd = salt['pillar.get'](
+  'vlmcsd',
+  default=default_settings,
+  merge=True)
+%}

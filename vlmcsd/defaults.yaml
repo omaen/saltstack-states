@@ -1,0 +1,4 @@
+vlmcsd:
+  archive_url: https://github.com/Wind4/vlmcsd/releases/download/svn1112/binaries.tar.gz
+  archive_hash: 0b0420b1376a71003d043dd951893bcf
+  upgrade: False

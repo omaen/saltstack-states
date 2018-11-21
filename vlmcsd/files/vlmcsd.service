@@ -1,0 +1,11 @@
+[Unit]
+Description=KMS Emulator
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/vlmcsd -D -e -T0
+User=kms
+Group=kms
+
+[Install]
+WantedBy=multi-user.target
