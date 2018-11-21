@@ -40,3 +40,5 @@ vlmcsd.service:
     - enable: True
     - require:
       - file: vlmcsd.service
+    - watch:
+      - archive: vlmcsd
