@@ -9,14 +9,6 @@ computer_ou="{{ config.computer_ou }}"
 retry_count=1
 
 
-# Do not continue if DNS is not working to prevent the script from removing
-# a working keytab and join just because there are some DNS issues
-if ! host -t srv _kerberos._tcp.${realm}; then
-    exit 1
-fi
-
-[ -f /etc/krb5.keytab ] && rm /etc/krb5.keytab
-
 kinit ${user}@${realm} -k -t "${keytab}"
 
 # net ads tries to ask for password before trying the kerberos credentials when

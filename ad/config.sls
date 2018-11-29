@@ -33,7 +33,9 @@ domain_joined:
     - name: join-domain.sh
     - source: salt://ad/files/join-domain.sh
     - template: jinja
-    - unless: net ads testjoin < /dev/null
+    # Do not use "net ads testjoin" here, as it will also fail during intermittent
+    # errors in the network and DNS, causing unnecessary rejoins
+    - unless: test -f /etc/krb5.keytab
     - context:
         config: {{ ad.config }}
     - require:
