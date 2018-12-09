@@ -1,7 +1,7 @@
 {% from 'samba/map.jinja' import samba with context %}
 
-{% if samba.config.get('shares', []) %}
 samba:
+{% if samba.config.get('shares', []) %}
   pkg.installed:
     - name: samba
   service.running:
@@ -11,8 +11,8 @@ samba:
     - watch:
       - file: smb_conf
 
-{% if samba.config.get('global', {}).get('security') == 'ads' %}
 winbind:
+  {% if samba.config.get('global', {}).get('security') == 'ads' %}
   pkg.installed:
     - name: winbind
     - require:
@@ -23,7 +23,15 @@ winbind:
       - pkg: winbind
     - watch:
       - file: smb_conf
-{% endif %}
+  {% else %}
+  pkg.purged:
+    - name: winbind
+  {% endif %}
+{% else %}
+  pkg.purged:
+    - pkgs:
+      - winbind
+      - samba
 {% endif %}
 
 {% if samba.config.get('disable_netbios', False) %}
