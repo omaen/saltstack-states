@@ -5,7 +5,7 @@ set -e
 user="{{ config.user }}"
 realm="{{ config.realm }}"
 keytab="{{ config.user_keytab }}"
-computer_ou="{{ config.computer_ou }}"
+computer_ou="{{ config.computer_ou_samba }}"
 retry_count=1
 
 

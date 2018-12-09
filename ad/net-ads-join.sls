@@ -16,7 +16,7 @@ keytab:
   cmd.run:
     - name: base64 -d {{ ad.config.user_keytab }}.base64 > {{ ad.config.user_keytab }}
     - prereq:
-      - cmd: domain_joined
+      - cmd: domain_join
 
 # Hopefully this will be fixed in later releases of Debian
 samba-private-dir:
@@ -26,12 +26,12 @@ samba-private-dir:
     - group: root
     - mode: 755
 
-domain_joined:
+domain_join:
   pkg.installed:
     - name: samba-dsdb-modules
   cmd.script:
-    - name: join-domain.sh
-    - source: salt://ad/files/join-domain.sh
+    - name: net-ads-join
+    - source: salt://ad/files/net-ads-join.sh
     - template: jinja
     - unless: net ads testjoin < /dev/null
     - context:
@@ -40,7 +40,7 @@ domain_joined:
       - file: smb_conf
       - file: samba-private-dir
       - pkg: krb5-user
-      - pkg: domain_joined
+      - pkg: domain_join
     - require_in:
       - file: krb5_keytab
 

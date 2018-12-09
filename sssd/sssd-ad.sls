@@ -17,6 +17,6 @@ sssd-ad:
     - require:
       - pkg: sssd-ad
       - file: sssd_conf
-      - cmd: domain_joined
+      - cmd: domain_join
     - watch:
       - file: sssd_conf
