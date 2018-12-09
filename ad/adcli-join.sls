@@ -22,7 +22,7 @@ domain_join:
     - name: adcli-join
     - source: salt://ad/files/adcli-join.sh
     - template: jinja
-    - unless: test -f /etc/krb5.keytab
+    - unless: 'kinit -k $(hostname | tr [:lower:] [:upper:])$'
     - context:
         config: {{ ad.config }}
     - require:
