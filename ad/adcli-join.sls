@@ -18,6 +18,8 @@ keytab:
       - cmd: domain_join
 
 domain_join:
+  pkg.installed:
+    - name: adcli
   cmd.script:
     - name: adcli-join
     - source: salt://ad/files/adcli-join.sh
@@ -27,6 +29,7 @@ domain_join:
         config: {{ ad.config }}
     - require:
       - pkg: krb5-user
+      - pkg: domain_join
     - require_in:
       - file: krb5_keytab
 
