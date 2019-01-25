@@ -25,3 +25,16 @@ gitlab_private_key_{{ k }}:
     - watch_in:
       - cmd: gitlab_reconfigure
 {% endfor %}
+
+gitlab.rb:
+  file.managed:
+    - name: /etc/gitlab/gitlab.rb
+    - source: salt://gitlab/files/gitlab.rb
+    - template: jinja
+    - context:
+        config: {{ gitlab.config }}
+    - user: root
+    - group: root
+    - mode: 600
+    - watch_in:
+      - cmd: gitlab_reconfigure
