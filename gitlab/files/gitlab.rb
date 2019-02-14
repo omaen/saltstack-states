@@ -11,7 +11,7 @@
         {%- endfor %}
 {{ ']'|indent(indent - indent_base, true) }}
     {%- else -%}
-'{{ value }}'
+{{ value }}
     {%- endif %}
 {%- endmacro -%}
 

@@ -1,4 +1,5 @@
 foxit_diode:
   service: fox-datadiode-core
   config_json: /etc/opt/fox/fox-datadiode-core/configuration.json
+  licence_file: /var/opt/fox/fox-datadiode-core/datadiode.lic
   config: {}
