@@ -12,7 +12,6 @@ fwgen:
     - name: fwgen{{ fwgen.version }}
   {% else %}
     - name: fwgen
-    - upgrade: True
   {% endif %}
     - bin_env: /usr/bin/pip3
     - require:
