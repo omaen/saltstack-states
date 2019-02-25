@@ -1,0 +1,7 @@
+nftables:
+  pkg: nftables
+  use_backports: False
+  config: '/etc/nftables.conf'
+  service:
+    name: nftables
+  ruleset: {}
