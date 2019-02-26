@@ -4,6 +4,10 @@
 # Your changes will be overwritten.
 #
 {% if ruleset %}
+flush ruleset
+
+include "{{ include_dir }}/*.ruleset"
+
 {{ ruleset }}
 {%- else %}
 flush ruleset
