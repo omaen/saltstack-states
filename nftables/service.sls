@@ -10,3 +10,6 @@ nftables-service:
     - reload: True
     - watch:
       - file: nftables-config
+{% for include in nftables.include %}
+      - file: nftables-include-{{ include }}
+{% endfor %}
