@@ -4,7 +4,7 @@
 {%- for block, params in config.items() %}
 
 [{{ block }}]
-{%- for key, value in params.items() %}
+    {%- for key, value in params.items() %}
 {{ key }} = "{{ value }}"
-{%- endfor %}
+    {%- endfor %}
 {%- endfor %}

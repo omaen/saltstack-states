@@ -1,52 +1,28 @@
 php:
-  package: php
+  pkg: php
   fpm:
-    package: php-fpm
+    pkg: php-fpm
     service: php7.0-fpm
     confdir: /etc/php/7.0/fpm
     config: {}
   modules:
     intl:
-      package: php-intl
+      pkg: php-intl
     mysql:
-      package: php-mysql
+      pkg: php-mysql
     ldap:
-      package: php-ldap
+      pkg: php-ldap
     curl:
-      package: php-curl
+      pkg: php-curl
     apcu:
-      package: php-apcu
+      pkg: php-apcu
     memcache:
-      package: php-memcache
+      pkg: php-memcache
     zip:
-      package: php-zip
+      pkg: php-zip
     gd:
-      package: php-gd
+      pkg: php-gd
+    pgsql:
+      pkg: php-pgsql
   config:
     modules: {}
-
-Debian:
-  {% if grains['oscodename'] == 'jessie' %}
-  package: php5
-  fpm:
-    package: php5-fpm
-    service: php5-fpm
-    confdir: /etc/php5/fpm
-  modules:
-    intl:
-      package: php5-intl
-    mysql:
-      package: php5-mysql
-    ldap:
-      package: php5-ldap
-    curl:
-      package: php5-curl
-    apcu:
-      package: php5-apcu
-    memcache:
-      package: php5-memcache
-    zip:
-      package: php5-zip
-    gd:
-      package: php5-gd
-  {% endif %}
