@@ -1,0 +1,26 @@
+#!/bin/bash
+
+METHOD=$1
+URL=$2
+BODY="$3"
+USERNAME="director-api-user"
+PASSWORD="pKKo9VsNZdPhTGT3jaQB"
+ICINGAWEB_URL="https://icinga2.proikt.com/icingaweb2"
+test -z "$PASSWORD" || USERNAME="$USERNAME:$PASSWORD"
+
+if [[ -z ${BODY} ]]; then
+    curl \
+        --insecure \
+        -u "${USERNAME}" \
+        -i "${ICINGAWEB_URL}/$URL" \
+        -H 'Accept: application/json' \
+        -X "${METHOD}"
+else
+    curl \
+        --insecure \
+        -u "${USERNAME}" \
+        -i "${ICINGAWEB_URL}/${URL}" \
+        -H 'Accept: application/json' \
+        -X "${METHOD}" \
+        -d "${BODY}"
+fi

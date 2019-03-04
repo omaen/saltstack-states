@@ -5,11 +5,9 @@ include:
 
 php-fpm:
   pkg.installed:
-    - name: {{ php.fpm.pkg }}
+    - name: {{ php.fpm.package }}
   service.running:
     - name: {{ php.fpm.service }}
-    - enable: True
-    - reload: True
     - require:
       - pkg: php-fpm
     {% if php.config.modules %}

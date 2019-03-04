@@ -5,7 +5,6 @@ sssd:
     libpam-sss: libpam-sss
     libnss-sss: libnss-sss
     sssd-common: sssd-common
-    nsupdate: dnsutils
   service: sssd
   sssd_conf: /etc/sssd/sssd.conf
   config: {}

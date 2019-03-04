@@ -1,15 +1,9 @@
 {% from 'icinga2/map.jinja' import icinga2 with context %}
 
-{% if icinga2.use_backports %}
-include:
-  - apt.repo-backports
-{% endif %}
-
 icinga2:
   pkg.installed:
-    - name: {{ icinga2.pkg }}
-{% if icinga2.use_backports %}
-    - fromrepo: {{ grains['oscodename']|lower }}-backports
+    - name: {{ icinga2.package }}
+  service.running:
+    - name: {{ icinga2.service }}
     - require:
-      - pkgrepo: repo-backports
-{% endif %}
+      - pkg: icinga2

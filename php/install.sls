@@ -2,4 +2,4 @@
 
 php:
   pkg.installed:
-    - name: {{ php.pkg }}
+    - name: {{ php.package }}

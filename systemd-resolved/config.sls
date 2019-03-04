@@ -1,8 +1,5 @@
 {% from 'systemd-resolved/map.jinja' import systemd_resolved with context %}
 
-include:
-  - .install
-
 resolved_conf:
   file.managed:
     - name: {{ systemd_resolved.resolved_conf }}
