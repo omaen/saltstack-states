@@ -24,7 +24,7 @@ domain_join:
     - name: adcli-join
     - source: salt://ad/files/adcli-join.sh
     - template: jinja
-    - unless: 'kinit -k $(hostname | tr [:lower:] [:upper:])$'
+    - unless: 'kinit -k $(echo "{{ grains['host'] }}" | tr [:lower:] [:upper:])$'
     - context:
         config: {{ ad.config }}
     - require:

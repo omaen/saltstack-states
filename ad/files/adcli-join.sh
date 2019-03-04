@@ -21,7 +21,9 @@ fi
 kinit ${user}@${realm} -k -t "${keytab}"
 
 # adcli has some noteable quirks.
-# 1) If you do not add --host-fqdn manually it ends up using the non-fqdn hostname.
+# 1) If you do not add --host-fqdn manually it ends up using the non-fqdn hostname,
+#    unless the static hostname is set to the FQDN, i.e that /etc/hostname contains the FQDN
+#    instead of the shortname. See hostnamectl output.
 #    If the fqdn is not set correctly _no_ servicePrincipleName attributes will be
 #    added to the computer object in AD, so nothing works.
 # 2) By default 'host' and 'RestrictedKrbHost' service names are added. However, if

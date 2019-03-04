@@ -1,0 +1,31 @@
+# Setup variables using grains['osfinger'] based logic.
+# You just need to add the key:values for an `osfinger` that differ
+# from `defaults.yaml` + `os_family.yaml` + `osmap.yaml`.
+# Only add an `osfinger` which is/will be supported by the formula
+# (empty `osfinger`s do not need to be listed, just added here as an example).
+---
+Debian-8:
+  pkg: php5
+  fpm:
+    pkg: php5-fpm
+    service: php5-fpm
+    confdir: /etc/php5/fpm
+  modules:
+    intl:
+      pkg: php5-intl
+    mysql:
+      pkg: php5-mysql
+    ldap:
+      pkg: php5-ldap
+    curl:
+      pkg: php5-curl
+    apcu:
+      pkg: php5-apcu
+    memcache:
+      pkg: php5-memcache
+    zip:
+      pkg: php5-zip
+    gd:
+      pkg: php5-gd
+    pgsql:
+      pkg: php5-pgsql

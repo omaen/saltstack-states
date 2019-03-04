@@ -1,0 +1,12 @@
+/**
+ * This file is managed by salt. Changes will be overwritten!
+ */
+{%- set indent = 4 %}
+{%- for i in config %}
+    {%- for k, v in i.items() %}
+
+{{ k }} {
+{{ v|indent(indent, True) }}
+}
+    {%- endfor %}
+{%- endfor %}
