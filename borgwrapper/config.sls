@@ -3,7 +3,7 @@
 include:
   - systemctl.daemon-reload
 
-{% for name, params in borgwrapper.configs.iteritems() %}
+{% for name, params in borgwrapper.configs.items() %}
 {% set config = borgwrapper.config_defaults %}
 {% do config.update(params) %}
 {% set config_file = [borgwrapper.config_dir, name] | join('/') %}

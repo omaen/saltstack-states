@@ -77,7 +77,7 @@ iface {{ interface.get('name') }} {{ family }} {{ mode }}
         {%- endif %}
     {%- endif %}
 
-    {%- for k, v in params.iteritems() %}
+    {%- for k, v in params.items() %}
         {%- if v is iterable and v is not string %}
             {%- for i in v %}
                 {%- if k in auto_ns_exec %}

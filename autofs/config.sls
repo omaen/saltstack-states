@@ -15,7 +15,7 @@ auto_master:
     - watch_in:
       - service: autofs
 
-{% for map_name, config in autofs.maps.iteritems() %}
+{% for map_name, config in autofs.maps.items() %}
 auto_{{ map_name }}:
   file.managed:
     - name: /etc/auto.{{ map_name }}

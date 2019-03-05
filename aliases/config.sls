@@ -4,7 +4,7 @@ newaliases:
   cmd.wait:
     - name: newaliases
 
-{% for alias, deliver_to in salt['pillar.get']('aliases:aliases', {}).iteritems() %}
+{% for alias, deliver_to in salt['pillar.get']('aliases:aliases', {}).items() %}
 alias_{{ alias }}:
   file.replace:
     - name: {{ aliases.aliases_file }}

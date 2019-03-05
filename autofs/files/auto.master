@@ -1,7 +1,7 @@
 #
 # This file is managed by Salt. Changes will be overwritten!
 #
-{% for map_name, conf in maps.iteritems() %}
+{% for map_name, conf in maps.items() %}
 {{ conf.master.mount_point }} /etc/auto.{{ map_name }}{% if conf.master.get('options', 'None') != 'None' %} {{ conf.master.options }}{% endif %}
 {%- endfor %}
 +auto.master
