@@ -7,4 +7,10 @@ ssh:
     service: ssh
     config_file: /etc/ssh/sshd_config
     authorized_keys: {}
-    config: {}
+    config:
+      ChallengeResponseAuthentication: 'no'
+      UsePAM: 'yes'
+      X11Forwarding: 'yes'
+      PrintMotd: 'no'
+      AcceptEnv: LANG LC_*
+      Subsystem: sftp /usr/lib/openssh/sftp-server
