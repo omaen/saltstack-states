@@ -1,4 +1,10 @@
-jessie:
+# Setup variables using grains['osfinger'] based logic.
+# You just need to add the key:values for an `osfinger` that differ
+# from `defaults.yaml` + `os_family.yaml` + `osmap.yaml`.
+# Only add an `osfinger` which is/will be supported by the formula
+# (empty `osfinger`s do not need to be listed, just added here as an example).
+---
+Debian-8:
   server:
     config:
       Port: 22
@@ -31,13 +37,23 @@ jessie:
       Subsystem: sftp /usr/lib/openssh/sftp-server
       UsePAM: 'yes'
 
-stretch:
+Debian-9:
   server:
     config:
       Port: 22
       ListenAddress:
         - 0.0.0.0
         - '::'
+      ChallengeResponseAuthentication: 'no'
+      UsePAM: 'yes'
+      X11Forwarding: 'yes'
+      PrintMotd: 'no'
+      AcceptEnv: LANG LC_*
+      Subsystem: sftp /usr/lib/openssh/sftp-server
+
+Debian-10:
+  server:
+    config:
       ChallengeResponseAuthentication: 'no'
       UsePAM: 'yes'
       X11Forwarding: 'yes'
