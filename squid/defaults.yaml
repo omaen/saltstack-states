@@ -3,5 +3,8 @@ squid:
   service: squid
   squid_conf: /etc/squid/squid.conf
   config: {}
+  acl_dir: /etc/squid/acls
+  blacklist_update_script: /usr/local/bin/update-squid-blacklists
+  blacklists: {}
   keytab:
     name: /etc/squid/squid.keytab

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+acl_dir="{{ acl_dir }}"
+
+
+mkdir "$acl_dir"
+{%- for k, v in blacklists.items() %}
+/usr/bin/wget -nv -O "${acl_dir}/{{ k }}.txt" "{{ v }}"
+{%- endfor %}
+systemctl reload {{ service }}
