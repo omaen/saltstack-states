@@ -1,0 +1,7 @@
+#!/bin/bash
+
+proxy_server="$1"
+proxy_port="$2"
+test_url="$3"
+
+wget -q -O /dev/null -e http_proxy="http://${proxy_server}:${proxy_port}" "${test_url}"
