@@ -1,5 +1,8 @@
 {% from 'squid/map.jinja' import squid with context %}
 
+include:
+  - .install
+
 squid_conf:
   file.managed:
     - name: {{ squid.squid_conf }}
@@ -39,3 +42,43 @@ squid_keytab_base64:
       - service: squid
 
 {% endif %}
+
+squid_cert_dir:
+  file.directory:
+    - name: {{ squid.cert_dir }}
+    - user: root
+    - group: root
+    - mode: 755
+    - makedirs: True
+    - require:
+      - pkg: squid
+
+{% for k in squid.certificates %}
+
+squid_public_cert_{{ k }}:
+  file.managed:
+    - name: {{ squid.cert_dir}}/{{ k }}.crt
+    - contents_pillar: squid:certificates:{{ k }}:public_cert
+    - follow_symlinks: False
+    - user: proxy
+    - group: proxy
+    - mode: 644
+    - watch_in:
+      - service: squid
+    - require:
+      - file: squid_cert_dir
+
+squid_private_key_{{ k }}:
+  file.managed:
+    - name: {{ squid.cert_dir }}/{{ k }}.key
+    - contents_pillar: squid:certificates:{{ k }}:private_key
+    - follow_symlinks: False
+    - user: proxy
+    - group: proxy
+    - mode: 600
+    - watch_in:
+      - service: squid
+    - require:
+      - file: squid_cert_dir
+
+{% endfor %}

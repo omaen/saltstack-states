@@ -6,5 +6,7 @@ squid:
   acl_dir: /etc/squid/acls
   blacklist_update_script: /usr/local/bin/update-squid-blacklists
   blacklists: {}
+  cert_dir: /etc/squid/ssl
+  certificates: {}
   keytab:
     name: /etc/squid/squid.keytab
