@@ -1,0 +1,5 @@
+aptly:
+  pkg: aptly
+  use_backports: False
+  service:
+    name: aptly
