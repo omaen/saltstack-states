@@ -3,8 +3,8 @@ Description=Discard unused blocks once a week
 Documentation=man:fstrim
 
 [Timer]
-OnCalendar=weekly
-AccuracySec=1h
+OnCalendar=daily
+AccuracySec=6h
 Persistent=true
 
 [Install]
