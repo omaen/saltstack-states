@@ -1,5 +1,5 @@
 [Unit]
-Description=Discard unused blocks
+Description=Discard unused blocks using TRIM/UNMAP
 
 [Service]
 Type=oneshot

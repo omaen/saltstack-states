@@ -1,5 +1,5 @@
 [Unit]
-Description=Discard unused blocks once a week
+Description=Scheduled discarding of unused blocks
 Documentation=man:fstrim
 
 [Timer]
