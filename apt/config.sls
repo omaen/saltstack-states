@@ -11,7 +11,7 @@ sources:
     - group: root
     - mode: 644
     - context:
-        sources: {{ apt[os][codename].sources }}
+        sources: {{ apt[os][codename].sources|tojson }}
     - require:
       - pkg: apt-progs
 
