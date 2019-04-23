@@ -9,6 +9,6 @@ postfix_main_cf:
     - group: root
     - mode: 644
     - context:
-        config: {{ postfix.config }}
+        config: {{ postfix.config|tojson }}
     - watch_in:
       - service: postfix

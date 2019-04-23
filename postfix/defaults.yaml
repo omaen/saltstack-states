@@ -4,5 +4,3 @@ postfix:
   main_cf: /etc/postfix/main.cf
   config:
     relayhost: ''
-
-Debian: {}

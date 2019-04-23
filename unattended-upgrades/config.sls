@@ -13,7 +13,7 @@
     - group: root
     - mode: 644
     - context:
-        config: {{ unattended_upgrades.unattended_upgrades }}
+        config: {{ unattended_upgrades.unattended_upgrades|tojson }}
 
 20auto-upgrades:
   file.managed:
@@ -24,8 +24,7 @@
     - group: root
     - mode: 644
     - context:
-        config: {{ unattended_upgrades.auto_upgrades }}
-
+        config: {{ unattended_upgrades.auto_upgrades|tojson }}
 
 listchanges_conf:
   file.managed:
@@ -36,4 +35,4 @@ listchanges_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ unattended_upgrades.listchanges }}
+        config: {{ unattended_upgrades.listchanges|tojson }}

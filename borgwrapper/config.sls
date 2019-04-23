@@ -18,7 +18,7 @@ borgwrapper_{{ name }}_config:
     - mode: 600
     - makedirs: True
     - context:
-        config: {{ config }}
+        config: {{ config|tojson }}
 
 borgwrapper_{{ name }}_backup_service:
   file.managed:
@@ -41,7 +41,7 @@ borgwrapper_{{ name }}_backup_timer:
     - watch_in:
       - cmd: daemon-reload
     - context:
-        config: {{ config }}
+        config: {{ config|tojson }}
   service.running:
     - name: borgwrapper-backup@{{ name }}.timer
     - enable: True
@@ -70,7 +70,7 @@ borgwrapper_{{ name }}_verify_timer:
     - watch_in:
       - cmd: daemon-reload
     - context:
-        config: {{ config }}
+        config: {{ config|tojson }}
   service.running:
     - name: borgwrapper-verify@{{ name }}.timer
     - enable: True

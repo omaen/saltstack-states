@@ -1,16 +1,21 @@
-{% import_yaml 'postfix/defaults.yaml' as defaults %}
+{#- Get the `topdir` from `tpldir` #}
+{%- set topdir = tpldir.split('/')[0] %}
+{#- Start imports as #}
+{%- import_yaml topdir ~ "/defaults.yaml" as default_settings %}
+{%- import_yaml topdir ~ "/osfamilymap.yaml" as osfamilymap %}
+{%- import_yaml topdir ~ "/osmap.yaml" as osmap %}
+{%- import_yaml topdir ~ "/osfingermap.yaml" as osfingermap %}
 
-{% set base_settings = salt['grains.filter_by'](
-    defaults,
-    grain='os_family',
-    merge=salt['pillar.get']('postfix:lookup'),
-    base='postfix'
+{% set defaults = salt['grains.filter_by'](default_settings,
+    default='postfix',
+    merge=salt['grains.filter_by'](osfamilymap, grain='os_family',
+      merge=salt['grains.filter_by'](osmap, grain='os',
+        merge=salt['grains.filter_by'](osfingermap, grain='osfinger',
+          merge=salt['pillar.get']('postfix:lookup', default={})
+        )
+      )
     )
-%}
+) %}
 
-{% set postfix = salt['pillar.get'](
-    'postfix',
-    default=base_settings,
-    merge=True
-    )
-%}
+{#- Merge the postfix pillar #}
+{% set postfix = salt['pillar.get']('postfix', default=defaults, merge=True) %}

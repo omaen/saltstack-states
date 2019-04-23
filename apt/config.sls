@@ -25,7 +25,7 @@ sources:
     - group: root
     - mode: 644
     - context:
-        config: {{ apt.proxy }}
+        config: {{ apt.proxy|tojson }}
 {% else %}
   file.absent:
     - name: {{ apt.proxy.config }}
