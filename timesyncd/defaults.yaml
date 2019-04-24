@@ -1,6 +1,7 @@
 timesyncd:
   timesyncd_conf: /etc/systemd/timesyncd.conf
   service: systemd-timesyncd
+  enable: True
   config:
     ntp: []
     fallback_ntp: []
