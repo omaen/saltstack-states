@@ -50,7 +50,7 @@ zones_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ icinga2.client.config }}
+        config: {{ icinga2.client.config|tojson }}
     - watch_in:
       - service: icinga2
 

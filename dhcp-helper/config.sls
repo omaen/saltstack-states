@@ -6,7 +6,7 @@ dhcp_helper_config:
     - source: salt://dhcp-helper/files/dhcp-helper
     - template: jinja
     - context:
-        config: {{ dhcp_helper.config }}
+        config: {{ dhcp_helper.config|tojson }}
     - user: root
     - group: root
     - mode: 644
@@ -21,7 +21,7 @@ dhcp_helper_ifup:
     - source: salt://dhcp-helper/files/ifup
     - template: jinja
     - context:
-        config: {{ dhcp_helper }}
+        config: {{ dhcp_helper|tojson }}
     - user: root
     - group: root
     - mode: 755

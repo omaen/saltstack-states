@@ -11,7 +11,7 @@ ipsec_conf:
     - require:
       - pkg: strongswan
     - context:
-        ipsec: {{ strongswan.ipsec }}
+        ipsec: {{ strongswan.ipsec|tojson }}
 
 ipsec_secrets_inc:
   file.managed:
@@ -24,7 +24,7 @@ ipsec_secrets_inc:
     - require:
       - pkg: strongswan
     - context:
-        secrets: {{ strongswan.secrets }}
+        secrets: {{ strongswan.secrets|tojson }}
 
 local_conf:
   file.managed:
@@ -37,4 +37,4 @@ local_conf:
     - require:
       - pkg: strongswan
     - context:
-        config: {{ strongswan.config }}
+        config: {{ strongswan.config|tojson }}

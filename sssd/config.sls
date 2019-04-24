@@ -11,7 +11,7 @@ sssd_conf:
     - group: root
     - mode: 600
     - context:
-        config: {{ sssd.config }}
+        config: {{ sssd.config|tojson }}
     - require:
       - pkg: sssd_conf
 

@@ -13,6 +13,6 @@ conntrackd_conf:
         # "NetlinkBufferSize is either not set or is greater than NetlinkBufferSizeMaxGrowth" when
         # conntrackd starts if "NetlinkBufferSize" is defined before the increased "NetlinkBufferSizeMaxGrowth"
         # limit is configured in the config file
-        config: {{ conntrackd.config|json }}
+        config: {{ conntrackd.config|tojson }}
     - watch_in:
       - service: {{ conntrackd.service }}

@@ -10,7 +10,7 @@ bird_conf:
     - mode: 640
     - context:
         # Filter via json to avoid unset dict values becoming 'None'
-        config: {{ bird.bird_config|json }}
+        config: {{ bird.bird_config|tojson }}
 
 {% if bird.bird_disable %}
   service.dead:
@@ -37,7 +37,7 @@ bird6_conf:
     - mode: 640
     - context:
         # Filter via json to avoid unset dict values becoming 'None'
-        config: {{ bird.bird6_config|json }}
+        config: {{ bird.bird6_config|tojson }}
 
 {% if bird.bird6_disable %}
   service.dead:

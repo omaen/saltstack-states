@@ -10,7 +10,7 @@ timesyncd_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ timesyncd.config }}
+        config: {{ timesyncd.config|tojson }}
   service.running:
     - name: {{ timesyncd.service }}
     - watch:

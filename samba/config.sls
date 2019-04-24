@@ -13,6 +13,6 @@ smb_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ samba.config }}
+        config: {{ samba.config|tojson }}
     - require:
       - pkg: samba-common

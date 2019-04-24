@@ -9,6 +9,6 @@ imapproxy_conf:
     - group: root
     - mode: 640
     - context:
-        config: {{ imapproxy.config }}
+        config: {{ imapproxy.config|tojson }}
     - watch_in:
       - service: imapproxy

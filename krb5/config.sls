@@ -9,7 +9,7 @@ krb5_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ krb5.config }}
+        config: {{ krb5.config|tojson }}
 
 krb5_keytab:
   group.present:

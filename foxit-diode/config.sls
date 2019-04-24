@@ -16,7 +16,7 @@ foxit_config_json:
     - source: salt://foxit-diode/files/configuration.json
     - template: jinja
     - context:
-        config: {{ foxit_diode.config }}
+        config: {{ foxit_diode.config|tojson }}
     - user: root
     - group: root
     - mode: 644

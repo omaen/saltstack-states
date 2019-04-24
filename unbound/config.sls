@@ -12,7 +12,7 @@ unbound_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ unbound.config }}
+        config: {{ unbound.config|tojson }}
     - watch_in:
       - service: unbound
 
@@ -28,7 +28,7 @@ unbound.service:
     - group: root
     - mode: 644
     - context:
-        config: {{ unbound.anycast_addrs }}
+        config: {{ unbound.anycast_addrs|tojson }}
 {% else %}
   file.absent:
     - name: /etc/systemd/system/{{ unbound.service }}.service

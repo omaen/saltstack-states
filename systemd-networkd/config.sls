@@ -14,7 +14,7 @@ systemd-networkd.service:
     - user: root
     - group: root
     - context:
-        config: {{ v }}
+        config: {{ v|tojson }}
     - watch_in:
       - service: systemd-networkd.service
 {% endfor %}
@@ -29,7 +29,7 @@ systemd-networkd.service:
     - user: root
     - group: root
     - context:
-        config: {{ v }}
+        config: {{ v|tojson }}
     - watch_in:
       - service: systemd-networkd.service
 {% endfor %}

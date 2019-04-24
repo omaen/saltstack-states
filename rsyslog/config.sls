@@ -12,7 +12,7 @@ rsyslog_{{ config }}:
     - group: root
     - mode: 644
     - context:
-        config: {{ params }}
+        config: {{ params|tojson }}
     - watch_in:
       - service: rsyslog
 {% else %}

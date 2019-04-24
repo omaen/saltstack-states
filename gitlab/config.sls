@@ -32,7 +32,7 @@ gitlab.rb:
     - source: salt://gitlab/files/gitlab.rb
     - template: jinja
     - context:
-        config: {{ gitlab.config }}
+        config: {{ gitlab.config|tojson }}
     - user: root
     - group: root
     - mode: 600

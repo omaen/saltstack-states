@@ -9,7 +9,7 @@ snmpd_conf:
     - group: root
     - mode: 600
     - context:
-        config: {{ snmpd.config }}
+        config: {{ snmpd.config|tojson }}
     - require:
       - pkg: {{ snmpd.package }}
     - watch_in:

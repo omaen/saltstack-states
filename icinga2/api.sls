@@ -32,7 +32,7 @@ icinga2-api-users:
     - mode: 644
     - context:
         # json is needed to avoid issue with newlines becoming literal \n in the output
-        config: {{ icinga2.config.api_users|json }}
+        config: {{ icinga2.config.api_users|tojson }}
     - require:
       - cmd: icinga2-api-enabled
     - watch_in:

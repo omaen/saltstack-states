@@ -12,8 +12,7 @@ keepalived_conf:
     - group: root
     - mode: 600
     - context:
-        # Filter via json to get some sane ordering
-        config: {{ keepalived.config|json }}
+        config: {{ keepalived.config|tojson }}
     - watch_in:
       - service: keepalived
 
@@ -28,8 +27,7 @@ keepalived.service:
     - user: root
     - group: root
     - context:
-        # Filter via json to get some sane ordering
-        config: {{ keepalived.service_config|json }}
+        config: {{ keepalived.service_config|tojson }}
 {% else %}
   file.absent:
     - name: /etc/systemd/system/keepalived.service

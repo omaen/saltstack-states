@@ -12,6 +12,6 @@
     - mode: 644
     - makedirs: True
     - context:
-        config: {{ commands }}
+        config: {{ commands|tojson }}
 
 {% endfor %}

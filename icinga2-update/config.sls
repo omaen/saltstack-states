@@ -12,7 +12,7 @@ icinga2-update_config:
     - mode: 600
     - makedirs: True
     - context:
-        config: {{ icinga2_update.config }}
+        config: {{ icinga2_update.config|tojson }}
 {% else %}
 
 remove_icinga2-update_config:

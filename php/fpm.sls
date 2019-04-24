@@ -28,6 +28,6 @@ php-fpm-config:
     - group: root
     - mode: 644
     - context:
-        config: {{ php.fpm.config }}
+        config: {{ php.fpm.config|tojson }}
     - watch_in:
       - service: php-fpm

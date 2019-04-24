@@ -17,4 +17,4 @@ ntp_conf:
     - require:
       - pkg: ntp
     - context:
-        config: {{ ntp.config }}
+        config: {{ ntp.config|tojson }}

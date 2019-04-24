@@ -10,5 +10,4 @@
 ## In addition to these I often use these official salt formulas
 * https://github.com/saltstack-formulas/salt-formula
 * https://github.com/saltstack-formulas/nginx-formula
-* https://github.com/saltstack-formulas/keepalived-formula
 * https://github.com/saltstack-formulas/postgres-formula

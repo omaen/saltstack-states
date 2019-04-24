@@ -10,7 +10,7 @@ sshd_config:
     - mode: 644
     - context:
         # Filter via json to avoid backslashes in pillar values being doubled
-        config: {{ ssh.server.config|json }}
+        config: {{ ssh.server.config|tojson }}
     - watch_in:
       - service: ssh-server
     - require:

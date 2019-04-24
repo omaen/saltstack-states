@@ -20,6 +20,6 @@ daemon.json:
     - group: root
     - mode: 644
     - context:
-        config: {{ docker.config.daemon }}
+        config: {{ docker.config.daemon|tojson }}
     - watch_in:
       - service: docker

@@ -11,6 +11,6 @@ interfaces:
     - group: root
     - mode: 644
     - context:
-        config: {{ network }}
+        config: {{ network|tojson }}
 
 {% endif %}

@@ -9,7 +9,7 @@ frr_daemons:
     - group: frr
     - mode: 644
     - context:
-        config: {{ frr.daemons }}
+        config: {{ frr.daemons|tojson }}
     - watch_in:
       - service: frr
 
@@ -22,6 +22,6 @@ frr.conf:
     - group: frr
     - mode: 640
     - context:
-       config: {{ frr.config }}
+       config: {{ frr.config|tojson }}
     - watch_in:
       - service: frr

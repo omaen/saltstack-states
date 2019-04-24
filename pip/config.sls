@@ -10,7 +10,7 @@ pip_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ pip.config }}
+        config: {{ pip.config|tojson }}
 {% else %}
   file.absent:
     - name: /etc/pip.conf

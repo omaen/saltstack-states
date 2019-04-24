@@ -9,7 +9,7 @@ dovecot_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ dovecot.config }}
+        config: {{ dovecot.config|tojson }}
     - require:
       - pkg: dovecot
     - watch_in:

@@ -11,6 +11,6 @@ radvd_conf:
     - context:
         # Filter via json to avoid unset dict values becoming 'None'
         # and get some sorting for free
-        config: {{ radvd.config|json }}
+        config: {{ radvd.config|tojson }}
     - watch_in:
       - service: radvd

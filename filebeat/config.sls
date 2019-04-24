@@ -9,7 +9,7 @@ filebeat_yml:
     - group: root
     - mode: 644
     - context:
-      config: {{ filebeat.config }}
+        config: {{ filebeat.config|tojson }}
     - watch_in:
       - service: filebeat
     - require:

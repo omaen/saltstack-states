@@ -10,7 +10,7 @@ profile_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ profile.config }}
+        config: {{ profile.config|tojson }}
 {% else %}
   file.absent:
     - name: {{ profile.file }}

@@ -9,7 +9,7 @@ output-elasticsearch_conf:
     - group: root
     - mode: 644
     - context:
-      config: {{ logstash.config }}
+        config: {{ logstash.config|tojson }}
     - require:
       - pkg: logstash
     - watch_in:

@@ -10,7 +10,7 @@ dnsmasq-config:
     - mode: 644
     - context:
         # filter via json to preserve None as actual None, not string
-        config: {{ dnsmasq.config|json }}
+        config: {{ dnsmasq.config|tojson }}
     - watch_in:
       - service: dnsmasq
     - require:

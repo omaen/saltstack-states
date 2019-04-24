@@ -9,4 +9,4 @@ hactrl:
     - user: root
     - group: staff
     - context:
-        config: {{ hactrl.config }}
+        config: {{ hactrl.config|tojson }}

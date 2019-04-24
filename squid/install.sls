@@ -24,7 +24,7 @@ squid_blacklists:
     - mode: 750
     - context:
         acl_dir: {{ squid.acl_dir }}
-        blacklists: {{ squid.blacklists }}
+        blacklists: {{ squid.blacklists|tojson }}
         service: {{ squid.service }}
 
 squid_blacklist_update_service:

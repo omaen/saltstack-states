@@ -14,7 +14,7 @@ squid_conf:
     - context:
         # Filter via json to keep dictionary ordering from pillar.
         # This is not essential, but it is more user friendly.
-        config: {{ squid.config|json }}
+        config: {{ squid.config|tojson }}
     - watch_in:
       - service: squid
 

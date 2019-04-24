@@ -9,7 +9,7 @@ sysctl_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ sysctl.config }}
+        config: {{ sysctl.config|tojson }}
   cmd.wait:
     - name: sysctl -p {{ sysctl.config_file }}
     - watch:

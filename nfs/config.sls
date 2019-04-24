@@ -18,7 +18,7 @@ nfs-exports:
     - group: root
     - mode: 644
     - context:
-        config: {{ nfs.server.exports }}
+        config: {{ nfs.server.exports|tojson }}
     - require:
       - file: exports.d
   cmd.wait:
