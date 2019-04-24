@@ -1,7 +1,5 @@
 {% from 'timesyncd/map.jinja' import timesyncd with context %}
 
-{% if timesyncd.enable %}
-
 timesyncd_conf:
   file.managed:
     - name: {{ timesyncd.timesyncd_conf }}
@@ -20,5 +18,3 @@ timesyncd_conf:
   cmd.run:
     - name: timedatectl set-ntp true
     - onlyif: "timedatectl status | grep 'NTP enabled: no'"
-
-{% endif %}
