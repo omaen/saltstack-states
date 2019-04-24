@@ -26,7 +26,7 @@ domain_join:
     - template: jinja
     - unless: 'kinit -k $(echo "{{ grains['host'] }}" | tr [:lower:] [:upper:])$'
     - context:
-        config: {{ ad.config }}
+        config: {{ ad.config|tojson }}
     - require:
       - pkg: krb5-user
       - pkg: domain_join

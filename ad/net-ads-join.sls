@@ -35,7 +35,7 @@ domain_join:
     - template: jinja
     - unless: net ads testjoin < /dev/null
     - context:
-        config: {{ ad.config }}
+        config: {{ ad.config|tojson }}
     - require:
       - file: smb_conf
       - file: samba-private-dir
