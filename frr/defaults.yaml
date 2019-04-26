@@ -1,4 +1,6 @@
 frr:
+  service: frr
+  daemons: []
   config:
     hostname: {{ grains['host'] }}
     log: syslog informational

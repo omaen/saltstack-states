@@ -1,17 +1,15 @@
 {% from 'frr/map.jinja' import frr with context %}
 
-frr_daemons:
-  file.managed:
+{% for daemon in frr.daemons %}
+frr_daemon_{{ daemon }}:
+  file.line:
     - name: /etc/frr/daemons
-    - source: salt://frr/files/daemons
-    - template: jinja
-    - user: frr
-    - group: frr
-    - mode: 644
-    - context:
-        config: {{ frr.daemons|tojson }}
+    - content: {{ daemon }}=yes
+    - match: {{ daemon }}=
+    - mode: replace
     - watch_in:
       - service: frr
+{% endfor %}
 
 frr.conf:
   file.managed:

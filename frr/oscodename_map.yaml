@@ -1,5 +1,0 @@
-stretch:
-  package_urls:
-    frr: https://github.com/FRRouting/frr/releases/download/frr-5.0.1/frr_5.0.1-1.debian9.1_amd64.deb
-    frr-pythontools: https://github.com/FRRouting/frr/releases/download/frr-5.0.1/frr-pythontools_5.0.1-1.debian9.1_all.deb
-  daemons: {}
