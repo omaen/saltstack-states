@@ -9,7 +9,7 @@ resolved_conf:
     - group: root
     - mode: 644
     - context:
-        config: {{ systemd_resolved.config }}
+        config: {{ systemd_resolved.config|tojson }}
     - watch_in:
       - service: systemd-resolved
 
