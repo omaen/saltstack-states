@@ -20,14 +20,11 @@ keepalived.service:
 {% if salt.pillar.get('keepalived:service_config') %}
   file.managed:
     - name: /etc/systemd/system/keepalived.service
-    - source: salt://systemd/files/service.tmpl
-    - template: jinja
+    - contents_pillar: keepalived:service_config
     - onlyif: systemctl is-enabled keepalived.service
     - mode: 644
     - user: root
     - group: root
-    - context:
-        config: {{ keepalived.service_config|tojson }}
 {% else %}
   file.absent:
     - name: /etc/systemd/system/keepalived.service
