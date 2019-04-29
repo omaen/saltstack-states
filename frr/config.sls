@@ -11,6 +11,7 @@ frr_daemon_{{ daemon }}:
       - service: frr
 {% endfor %}
 
+{% if frr.config %}
 frr.conf:
   file.managed:
     - name: /etc/frr/frr.conf
@@ -23,3 +24,4 @@ frr.conf:
        config: {{ frr.config|tojson }}
     - watch_in:
       - service: frr
+{% endif %}

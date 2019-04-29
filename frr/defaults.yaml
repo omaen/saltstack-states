@@ -1,9 +1,4 @@
 frr:
   service: frr
   daemons: []
-  config:
-    hostname: {{ grains['host'] }}
-    log: syslog informational
-    service: integrated-vtysh-config
-    username: cumulus nopassword
-    line vty: {}
+  config: {}
