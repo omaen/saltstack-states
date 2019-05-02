@@ -1,10 +1,20 @@
 elasticsearch:
   package: elasticsearch
+  java_package: default-jre-headless
   service: elasticsearch
   repo:
-    5_x: deb https://artifacts.elastic.co/packages/5.x/apt stable main
-    6_x: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    5.x: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    6.x: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    7.x: deb https://artifacts.elastic.co/packages/7.x/apt stable main
   key_url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-  config:
-    path.data: /var/lib/elasticsearch
-    path.logs: /var/log/elasticsearch
+  repo_version: 7.x
+  version:
+  user: elasticsearch
+  group: elasticsearch
+  elasticsearch_yml: /etc/elasticsearch/elasticsearch.yml
+  jvm_options_file: /etc/elasticsearch/jvm.options
+  jvm_options: {}
+  environment: {}
+  service_config: {}
+  config: {}
+  disk_mounts: {}

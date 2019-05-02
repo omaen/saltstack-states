@@ -1,0 +1,34 @@
+elasticsearch:
+  repo_version: 6.x
+  version: 6.7.2
+  disk_mounts:
+    /dev/sdb:
+      mount_point: /data
+      options:
+        - noatime
+  service_config:
+    Service:
+      LimitMEMLOCK: infinity
+  environment:
+    MAX_LOCKED_MEMORY: unlimited
+    # Java is bundled with 7.x, so this is only for 6.x with separate java install
+    JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
+  jvm_options:
+    -Xms: 1g
+    -Xmx: 1g
+  config:
+    cluster.name: graylog
+    path.data: /data/elasticsearch
+    network.host:
+      - _site_
+      - _global_
+    bootstrap.memory_lock: 'true'
+    # Replace discovery.zen.ping.unicast.hosts with cluster.initial_master_nodes in 7.x
+    discovery.zen.ping.unicast.hosts:
+      # DNS are somewhat unreliable because of local caching, especially during reboots,
+      # so i prefer to use IP addresses
+      - 192.0.2.30
+      - 192.0.2.31
+      - 192.0.2.32
+    # This is no longer needed in 7.x
+    discovery.zen.minimum_master_nodes: 2
