@@ -1,17 +1,21 @@
 elasticsearch:
+  oss_package: elasticsearch-oss
   package: elasticsearch
   java_package: default-jre-headless
   service: elasticsearch
   repo:
-    5.x: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    5.x: deb https://artifacts.elastic.co/packages/5.x/apt stable main
     6.x: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    oss-6.x: deb https://artifacts.elastic.co/packages/oss-6.x/apt stable main
     7.x: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+    oss-7.x: deb https://artifacts.elastic.co/packages/oss-7.x/apt stable main
   key_url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-  repo_version: 7.x
+  repo_version: oss-7.x
   version:
   user: elasticsearch
   group: elasticsearch
   elasticsearch_yml: /etc/elasticsearch/elasticsearch.yml
+  healthcheck_url: http://localhost:9200/_cluster/health
   jvm_options_file: /etc/elasticsearch/jvm.options
   jvm_options: {}
   environment: {}

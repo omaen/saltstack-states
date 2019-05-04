@@ -24,17 +24,19 @@ include:
 
 {% for k, v in elasticsearch.config.items() %}
 'elasticsearch.yml: {{ k }}':
-  file.line:
+  file.replace:
     - name: {{ elasticsearch.elasticsearch_yml }}
-    - mode: replace
-    - match: '{{ k }}:'
+    - pattern: '^(#+)?{{ k|regex_escape }}:.*$'
 {% if v is list %}
-    - content: '{{ k }}: [{{ v|join(", ") }}]'
+    - repl: '{{ k }}: [{{ v|join(", ") }}]'
 {% else %}
-    - content: '{{ k }}: {{ v }}'
+    - repl: '{{ k }}: {{ v }}'
 {% endif %}
+    - append_if_not_found: True
     - watch_in:
       - service: elasticsearch
+    - prereq_in:
+      - cmd: cluster-health-ok
 {% endfor %}
 
 {% for k, v in elasticsearch.environment.items() %}
@@ -47,6 +49,8 @@ include:
     - watch_in:
       - service: elasticsearch
 {% endfor %}
+    - prereq_in:
+      - cmd: cluster-health-ok
 
 {% for k, v in elasticsearch.jvm_options.items() %}
 'jvm.options: {{ k }}':
@@ -58,6 +62,8 @@ include:
     - watch_in:
       - service: elasticsearch
 {% endfor %}
+    - prereq_in:
+      - cmd: cluster-health-ok
 
 {% if elasticsearch.config['path.data'] is defined %}
 elasticsearch-data:

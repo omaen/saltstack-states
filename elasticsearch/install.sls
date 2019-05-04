@@ -1,5 +1,8 @@
 {%- from tpldir ~ "/map.jinja" import elasticsearch with context %}
 
+include:
+  - .cluster-health
+
 {% for k in elasticsearch.disk_mounts %}
 {{ k }}:
   blockdev.formatted:
@@ -24,7 +27,7 @@ elasticsearch-repo:
     - file: /etc/apt/sources.list.d/elasticsearch.list
     - clean_file: True
 
-{% if elasticsearch.repo_version in ['5.x', '6.x'] %}
+{% if elasticsearch.repo_version in ['5.x', '6.x', 'oss-6.x'] %}
 elasticsearch-java:
   pkg.installed:
     - name: {{ elasticsearch.java_package }}
@@ -34,13 +37,19 @@ elasticsearch-java:
 
 elasticsearch:
   pkg.installed:
+    {% if elasticsearch.repo_version.startswith('oss-') %}
+    - name: {{ elasticsearch.oss_package }}
+    {% else %}
     - name: {{ elasticsearch.package }}
+    {% endif %}
     {% if elasticsearch.version %}
     - version: {{ elasticsearch.version }}
     {% endif %}
     - hold: True
     - require:
       - pkgrepo: elasticsearch-repo
+    - prereq_in:
+      - cmd: cluster-health-ok
   service.running:
     - name: {{ elasticsearch.service }}
     - enable: True

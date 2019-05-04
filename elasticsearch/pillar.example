@@ -20,6 +20,7 @@ elasticsearch:
     cluster.name: graylog
     path.data: /data/elasticsearch
     network.host:
+      - _local_
       - _site_
       - _global_
     bootstrap.memory_lock: 'true'
