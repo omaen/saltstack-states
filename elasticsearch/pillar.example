@@ -1,5 +1,5 @@
 elasticsearch:
-  repo_version: 6.x
+  repo_version: oss-6.x
   version: 6.7.2
   disk_mounts:
     /dev/sdb:
@@ -16,6 +16,7 @@ elasticsearch:
   jvm_options:
     -Xms: 1g
     -Xmx: 1g
+  healthcheck_url: http://localhost:9200/_cluster/health
   config:
     cluster.name: graylog
     path.data: /data/elasticsearch
