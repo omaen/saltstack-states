@@ -1,0 +1,6 @@
+exabgp:
+  pkg: exabgp
+  service: exabgp
+  service_enable: False
+  exabgp_conf: /etc/exabgp/exabgp.conf
+  config: {}
