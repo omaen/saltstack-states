@@ -1,4 +1,0 @@
-filebeat:
-  package: filebeat
-  service: filebeat
-  config: {}

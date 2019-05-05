@@ -1,0 +1,7 @@
+beats:
+  filebeat:
+    package: filebeat
+    service: filebeat
+    filebeat_yml: /etc/filebeat/filebeat.yml
+    version:
+    config: {}
