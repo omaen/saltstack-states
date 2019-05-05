@@ -35,8 +35,6 @@ include:
     - append_if_not_found: True
     - watch_in:
       - service: elasticsearch
-    - prereq_in:
-      - cmd: cluster-health-ok
 {% endfor %}
 
 {% for k, v in elasticsearch.environment.items() %}
@@ -49,8 +47,6 @@ include:
     - watch_in:
       - service: elasticsearch
 {% endfor %}
-    - prereq_in:
-      - cmd: cluster-health-ok
 
 {% for k, v in elasticsearch.jvm_options.items() %}
 'jvm.options: {{ k }}':
@@ -62,8 +58,6 @@ include:
     - watch_in:
       - service: elasticsearch
 {% endfor %}
-    - prereq_in:
-      - cmd: cluster-health-ok
 
 {% if elasticsearch.config['path.data'] is defined %}
 elasticsearch-data:
