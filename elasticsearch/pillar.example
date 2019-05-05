@@ -1,5 +1,9 @@
-elasticsearch:
+elastic:
   repo_version: oss-6.x
+
+elasticsearch:
+  # Java is not needed on 7.x and onwards
+  install_java: True
   version: 6.7.2
   disk_mounts:
     /dev/sdb:

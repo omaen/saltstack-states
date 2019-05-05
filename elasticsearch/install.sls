@@ -1,6 +1,7 @@
 {%- from tpldir ~ "/map.jinja" import elasticsearch with context %}
 
 include:
+  - elastic.repo
   - .cluster-health
 
 {% for k in elasticsearch.disk_mounts %}
@@ -20,14 +21,7 @@ include:
       - pkg: elasticsearch
 {% endfor %}
 
-elasticsearch-repo:
-  pkgrepo.managed:
-    - name: {{ elasticsearch.repo[elasticsearch.repo_version] }}
-    - key_url: {{ elasticsearch.key_url }}
-    - file: /etc/apt/sources.list.d/elasticsearch.list
-    - clean_file: True
-
-{% if elasticsearch.repo_version in ['5.x', '6.x', 'oss-6.x'] %}
+{% if elasticsearch.install_java %}
 elasticsearch-java:
   pkg.installed:
     - name: {{ elasticsearch.java_package }}
@@ -37,17 +31,13 @@ elasticsearch-java:
 
 elasticsearch:
   pkg.installed:
-    {% if elasticsearch.repo_version.startswith('oss-') %}
-    - name: {{ elasticsearch.oss_package }}
-    {% else %}
     - name: {{ elasticsearch.package }}
-    {% endif %}
     {% if elasticsearch.version %}
     - version: {{ elasticsearch.version }}
     {% endif %}
     - hold: True
     - require:
-      - pkgrepo: elasticsearch-repo
+      - pkgrepo: elastic-repo
     - prereq_in:
       - cmd: cluster-health-ok
   service.running:

@@ -26,15 +26,18 @@ include:
 'elasticsearch.yml: {{ k }}':
   file.replace:
     - name: {{ elasticsearch.elasticsearch_yml }}
-    - pattern: '^(#+)?{{ k|regex_escape }}:.*$'
+    - pattern: '^#*{{ k|regex_escape }}:.*$'
 {% if v is list %}
     - repl: '{{ k }}: [{{ v|join(", ") }}]'
 {% else %}
     - repl: '{{ k }}: {{ v }}'
 {% endif %}
     - append_if_not_found: True
+    - count: 1
     - watch_in:
       - service: elasticsearch
+    - require:
+      - pkg: elasticsearch
 {% endfor %}
 
 {% for k, v in elasticsearch.environment.items() %}
@@ -46,6 +49,8 @@ include:
     - content: '{{ k }}={{ v }}'
     - watch_in:
       - service: elasticsearch
+    - require:
+      - pkg: elasticsearch
 {% endfor %}
 
 {% for k, v in elasticsearch.jvm_options.items() %}
@@ -57,6 +62,8 @@ include:
     - content: {{ k }}{{ v }}
     - watch_in:
       - service: elasticsearch
+    - require:
+      - pkg: elasticsearch
 {% endfor %}
 
 {% if elasticsearch.config['path.data'] is defined %}

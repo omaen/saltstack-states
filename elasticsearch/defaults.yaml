@@ -1,16 +1,10 @@
 elasticsearch:
-  oss_package: elasticsearch-oss
-  package: elasticsearch
+  # Use oss package by default. Requires oss repo.
+  package: elasticsearch-oss
+  # Java is not needed for 7.x onwards, so make this the default
+  install_java: False
   java_package: default-jre-headless
   service: elasticsearch
-  repo:
-    5.x: deb https://artifacts.elastic.co/packages/5.x/apt stable main
-    6.x: deb https://artifacts.elastic.co/packages/6.x/apt stable main
-    oss-6.x: deb https://artifacts.elastic.co/packages/oss-6.x/apt stable main
-    7.x: deb https://artifacts.elastic.co/packages/7.x/apt stable main
-    oss-7.x: deb https://artifacts.elastic.co/packages/oss-7.x/apt stable main
-  key_url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-  repo_version: oss-7.x
   version:
   user: elasticsearch
   group: elasticsearch
