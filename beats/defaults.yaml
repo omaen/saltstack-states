@@ -1,7 +1,15 @@
 beats:
   filebeat:
+    disable_service: False
     package: filebeat
     service: filebeat
     filebeat_yml: /etc/filebeat/filebeat.yml
+    version:
+    config: {}
+  auditbeat:
+    disable_service: False
+    package: auditbeat
+    service: auditbeat
+    auditbeat_yml: /etc/auditbeat/auditbeat.yml
     version:
     config: {}

@@ -1,43 +1,43 @@
 {%- from tpldir ~ "/map.jinja" import beats with context %}
-{% set filebeat = beats.filebeat %}
+{% set auditbeat = beats.auditbeat %}
 
 include:
   - elastic.repo
 
-filebeat:
+auditbeat:
   pkg.installed:
-    - name: {{ filebeat.package }}
-    {% if filebeat.version %}
-    - version: {{ filebeat.version }}
+    - name: {{ auditbeat.package }}
+    {% if auditbeat.version %}
+    - version: {{ auditbeat.version }}
     {% endif %}
     - hold: True
     - require:
       - pkgrepo: elastic-repo
-{% if filebeat.disable_service %}
+{% if auditbeat.disable_service %}
   service.dead:
-    - name: {{ filebeat.service }}
+    - name: {{ auditbeat.service }}
     - enable: False
 {% else %}
   service.running:
-    - name: {{ filebeat.service }}
+    - name: {{ auditbeat.service }}
     - enable: True
 {% endif %}
     - require:
-      - pkg: filebeat
+      - pkg: auditbeat
 
-{% if filebeat.config %}
-filebeat_yml:
+{% if auditbeat.config %}
+auditbeat_yml:
   file.managed:
-    - name: {{ filebeat.filebeat_yml }}
+    - name: {{ auditbeat.auditbeat_yml }}
     - source: salt://beats/files/beats.yml.tmpl
     - template: jinja
     - user: root
     - group: root
     - mode: 600
     - context:
-        config: {{ filebeat.config|tojson }}
+        config: {{ auditbeat.config|tojson }}
     - watch_in:
-      - service: filebeat
+      - service: auditbeat
     - require:
-      - pkg: filebeat
+      - pkg: auditbeat
 {% endif %}
