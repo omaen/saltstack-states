@@ -1,22 +1,21 @@
+{%- from tpldir ~ "/map.jinja" import users with context %}
+
 include:
   - sudo
 
-root_user:
-  user.present:
-    - name: root
-    - password: {{ salt['pillar.get']('users:root:password', '!') }}
-    - remove_groups: False
-
-{% for username in salt['pillar.get']('users', []) %}
+{% for username, params in users.items() %}
 user_{{ username }}:
   user.present:
     - name: {{ username }}
-    - password: {{ salt['pillar.get']('users:%s:password' % username) }}
-    - shell: {{ salt['pillar.get']('users:%s:shell' % username, '/bin/bash') }}
+    # Use tojson to avoid issues with ! being interpreted as a YAML tag
+    - password: {{ params.get('password', '!')|tojson }}
+  {% if params.get('shell') %}
+    - shell: {{ params.get('shell') }}
+  {% endif %}
     - groups:
-{% for group in salt['pillar.get']('users:%s:groups' % username) %}
+  {% for group in params.get('groups', []) %}
       - {{ group }}
-{% endfor %}
+  {% endfor %}
     - remove_groups: False
     - require:
       - pkg: sudo
