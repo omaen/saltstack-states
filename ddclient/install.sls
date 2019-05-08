@@ -1,4 +1,4 @@
-{% from 'ddclient/map.jinja' import ddclient with context %}
+{%- from tpldir ~ "/map.jinja" import ddclient with context %}
 
 ddclient:
   pkg.installed:

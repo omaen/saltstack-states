@@ -1,4 +1,7 @@
-{% from 'ddclient/map.jinja' import ddclient with context %}
+{%- from tpldir ~ "/map.jinja" import ddclient with context %}
+
+include:
+  - .install
 
 ddclient_conf:
   file.managed:
@@ -9,8 +12,8 @@ ddclient_conf:
     - group: root
     - mode: 600
     - context:
-        global: {{ ddclient.global }}
-        host_definitions: {{ ddclient.host_definitions }}
+        global: {{ ddclient.global|tojson }}
+        host_definitions: {{ ddclient.host_definitions|tojson }}
     - require:
       - pkg: ddclient
     - watch_in:
