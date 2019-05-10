@@ -33,7 +33,7 @@ domain_join:
     - name: net-ads-join
     - source: salt://ad/files/net-ads-join.sh
     - template: jinja
-    - unless: net ads testjoin < /dev/null
+    - unless: '[ -f /etc/krb5.keytab ] && net ads testjoin < /dev/null'
     - context:
         config: {{ ad.config|tojson }}
     - require:
