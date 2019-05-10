@@ -13,3 +13,10 @@ beats:
     auditbeat_yml: /etc/auditbeat/auditbeat.yml
     version:
     config: {}
+  packetbeat:
+    disable_service: False
+    package: packetbeat
+    service: packetbeat
+    packetbeat_yml: /etc/packetbeat/packetbeat.yml
+    version:
+    config: {}
