@@ -3,10 +3,12 @@
 #
 
 Acquire {
-    http {
-        Proxy "{{ config.url }}";
-        {%- for domain in config.direct %}
+{%- for protocol, params in config.items() %}
+    {{ protocol }} {
+        Proxy "{{ params.url }}";
+        {%- for domain in params.direct %}
         Proxy::{{ domain }} "DIRECT";
         {%- endfor %}
     }
+{%- endfor %}
 }
