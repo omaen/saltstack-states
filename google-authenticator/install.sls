@@ -6,9 +6,13 @@ google-authenticator:
   file.managed:
     - name: /usr/share/pam-configs/google-authenticator
     - source: salt://google-authenticator/files/pam-config
+    - template: jinja
     - user: root
     - group: root
     - mode: 644
+    - context:
+        exceptions_file: {{ google_authenticator.exceptions_file }}
+        nullok: {{ google_authenticator.allow_unconfigured }}
     - require:
       - pkg: google-authenticator
   cmd.wait:
