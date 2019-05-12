@@ -1,0 +1,5 @@
+# To allow some networks to authenticate without 2FA add them here.
+# LOCAL is always allowed without 2FA for host internal and console access.
+google_authenticator:
+  exceptions:
+    - 10.0.0.0/24

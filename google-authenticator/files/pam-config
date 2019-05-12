@@ -1,0 +1,8 @@
+Name: Google Authenticator
+Default: yes
+Priority: 0
+
+Auth-Type: Additional
+Auth:
+    [success=1 default=ignore] pam_access.so accessfile=/etc/security/skip-2fa.conf
+    required pam_google_authenticator.so

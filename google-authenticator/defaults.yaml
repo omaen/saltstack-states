@@ -1,0 +1,4 @@
+google_authenticator:
+  package: libpam-google-authenticator
+  exceptions_file: /etc/security/google-authenticator-2fa.conf
+  exceptions: []
