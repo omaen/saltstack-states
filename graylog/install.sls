@@ -1,12 +1,12 @@
 {%- from tpldir ~ "/map.jinja" import graylog with context %}
 
 graylog-repo:
-  pkg.installed:
-    - sources:
-      - {{ graylog.repo_package }}: {{ graylog.repo_package_url }}
-  cmd.run:
-    - name: apt-get update
-    - onchanges:
+  pkgrepo.managed:
+    - name: {{ graylog.repo }}
+    - key_url: {{ graylog.key_url }}
+    - file: /etc/apt/sources.list.d/graylog.list
+    - clean_file: True
+    - require:
       - pkg: graylog-repo
 
 graylog-java:
@@ -19,7 +19,7 @@ graylog:
     - hold: True
     - require:
       - pkg: graylog-java
-      - cmd: graylog-repo
+      - pkgrepo: graylog-repo
   service.running:
     - name: {{ graylog.service }}
     - enable: True
