@@ -10,7 +10,6 @@ sudoers_local:
     - mode: 440
     - makedirs: True
     - context:
-        # Filter via json to avoid \ being escaped as \\
         config: {{ sudo.config|tojson }}
     - require:
       - pkg: sudo

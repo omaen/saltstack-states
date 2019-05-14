@@ -1,0 +1,8 @@
+Name: Google Authenticator
+Default: yes
+Priority: 0
+
+Auth-Type: Additional
+Auth:
+    [success=1 default=ignore] pam_access.so accessfile={{ exceptions_file }}
+    required pam_google_authenticator.so{%- if nullok %} nullok{%- endif %}

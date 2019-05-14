@@ -1,8 +1,12 @@
-{% from 'apt/map.jinja' import apt with context %}
+{%- from tpldir ~ "/map.jinja" import apt with context %}
 
-{%- set codename = grains['oscodename'] | lower %}
 repo-backports:
+{% if apt.backports %}
   pkgrepo.managed:
-    - name: {{ apt.debian[codename].backports }}
+    - name: {{ apt.backports }}
     - file: /etc/apt/sources.list.d/backports.list
     - clean_file: True
+{% else %}
+  file.absent:
+    - name: /etc/apt/sources.list.d/backports.list
+{% endif %}

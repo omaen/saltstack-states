@@ -1,0 +1,9 @@
+elastic:
+  repo:
+    5.x: deb https://artifacts.elastic.co/packages/5.x/apt stable main
+    6.x: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    oss-6.x: deb https://artifacts.elastic.co/packages/oss-6.x/apt stable main
+    7.x: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+    oss-7.x: deb https://artifacts.elastic.co/packages/oss-7.x/apt stable main
+  key_url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  repo_version: oss-7.x

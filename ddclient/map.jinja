@@ -1,18 +1,21 @@
-{% import_yaml 'ddclient/defaults.yaml' as defaults %}
-{% import_yaml 'ddclient/os_family_map.yaml' as os_family_map %}
+{#- Get the `topdir` from `tpldir` #}
+{%- set topdir = tpldir.split('/')[0] %}
+{#- Start imports as #}
+{%- import_yaml topdir ~ "/defaults.yaml" as default_settings %}
+{%- import_yaml topdir ~ "/osfamilymap.yaml" as osfamilymap %}
+{%- import_yaml topdir ~ "/osmap.yaml" as osmap %}
+{%- import_yaml topdir ~ "/osfingermap.yaml" as osfingermap %}
 
-{% set default_settings = salt['grains.filter_by'](
-    defaults,
-    merge=salt['grains.filter_by'](
-        os_family_map,
-        grain='os_family',
-        merge=salt['pillar.get']('ddclient:lookup')
-    ),
-    base='ddclient'
+{% set defaults = salt['grains.filter_by'](default_settings,
+    default='ddclient',
+    merge=salt['grains.filter_by'](osfamilymap, grain='os_family',
+      merge=salt['grains.filter_by'](osmap, grain='os',
+        merge=salt['grains.filter_by'](osfingermap, grain='osfinger',
+          merge=salt['pillar.get']('ddclient:lookup', default={})
+        )
+      )
+    )
 ) %}
 
-{% set ddclient = salt['pillar.get'](
-  'ddclient',
-  default=default_settings,
-  merge=True)
-%}
+{#- Merge the ddclient pillar #}
+{% set ddclient = salt['pillar.get']('ddclient', default=defaults, merge=True) %}

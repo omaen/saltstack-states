@@ -1,0 +1,14 @@
+graylog:
+  repo: deb https://packages.graylog2.org/repo/debian/ stable 3.0
+  key_url: https://packages.graylog2.org/repo/debian/keyring.gpg
+  package: graylog-server
+  service: graylog-server
+  java_package: default-jre-headless
+  server_conf: /etc/graylog/server/server.conf
+  config: {}
+  sidecar:
+    package_url: https://github.com/Graylog2/collector-sidecar/releases/download/1.0.1/graylog-sidecar_1.0.1-1_amd64.deb
+    package: graylog-sidecar
+    service: graylog-sidecar
+    sidecar_yml: /etc/graylog/sidecar/sidecar.yml
+    config: {}

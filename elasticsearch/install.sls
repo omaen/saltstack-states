@@ -1,23 +1,47 @@
-{% from 'elasticsearch/map.jinja' import elasticsearch with context %}
+{%- from tpldir ~ "/map.jinja" import elasticsearch with context %}
 
 include:
-  - java.java-8-jre
+  - elastic.repo
+  - .cluster-health
 
-elasticsearch-repo:
-  pkgrepo.managed:
-    - name: {{ elasticsearch.repo['6_x'] }}
-    - key_url: {{ elasticsearch.key_url }}
-    - file: /etc/apt/sources.list.d/elastic-6_x.list
-    - clean_file: True
+{% for k in elasticsearch.disk_mounts %}
+{{ k }}:
+  blockdev.formatted:
+    - fs_type: {{ elasticsearch.disk_mounts[k].get('fs_type', 'ext4') }}
+  mount.mounted:
+    - name: {{ elasticsearch.disk_mounts[k].get('mount_point') }}
+    - device: {{ k }}
+    - fstype: {{ elasticsearch.disk_mounts[k].get('fs_type', 'ext4') }}
+    - opts: {{ elasticsearch.disk_mounts[k].get('options', [])|tojson }}
+    - persist: True
+    - mkmnt: True
+    - require:
+      - blockdev: {{ k }}
+    - require_in:
+      - pkg: elasticsearch
+{% endfor %}
+
+{% if elasticsearch.install_java %}
+elasticsearch-java:
+  pkg.installed:
+    - name: {{ elasticsearch.java_package }}
+    - require_in:
+      - pkg: elasticsearch
+{% endif %}
 
 elasticsearch:
   pkg.installed:
     - name: {{ elasticsearch.package }}
+    {% if elasticsearch.version %}
+    - version: {{ elasticsearch.version }}
+    {% endif %}
     - hold: True
     - require:
-      - pkgrepo: elasticsearch-repo
-      - pkg: java-8-jre
+      - pkgrepo: elastic-repo
+    - prereq_in:
+      - cmd: cluster-health-ok
   service.running:
     - name: {{ elasticsearch.service }}
+    - enable: True
     - require:
       - pkg: elasticsearch

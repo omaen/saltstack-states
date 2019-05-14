@@ -1,0 +1,15 @@
+mongodb:
+  service: mongod
+  repo_keyserver: hkp://keyserver.ubuntu.com:80
+  repo_keyid: 9DA31620334BD75D9DCB49F368818C72E52529D4
+  repo_key_url:
+  repo:
+    4.0: deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.0 main
+  packages:
+    - mongodb-org
+    - mongodb-org-server
+    - mongodb-org-shell
+    - mongodb-org-mongos
+    - mongodb-org-tools
+  repo_version: 4.0
+  version:

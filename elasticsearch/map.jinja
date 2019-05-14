@@ -1,15 +1,21 @@
-{% import_yaml 'elasticsearch/defaults.yaml' as defaults %}
+{#- Get the `topdir` from `tpldir` #}
+{%- set topdir = tpldir.split('/')[0] %}
+{#- Start imports as #}
+{%- import_yaml topdir ~ "/defaults.yaml" as default_settings %}
+{%- import_yaml topdir ~ "/osfamilymap.yaml" as osfamilymap %}
+{%- import_yaml topdir ~ "/osmap.yaml" as osmap %}
+{%- import_yaml topdir ~ "/osfingermap.yaml" as osfingermap %}
 
-{% set os_family_map = salt['grains.filter_by']({
-    'Debian': {
-    },
-  }, grain='os_family', merge=salt['pillar.get']('elasticsearch:lookup'))
-%}
+{% set defaults = salt['grains.filter_by'](default_settings,
+    default='elasticsearch',
+    merge=salt['grains.filter_by'](osfamilymap, grain='os_family',
+      merge=salt['grains.filter_by'](osmap, grain='os',
+        merge=salt['grains.filter_by'](osfingermap, grain='osfinger',
+          merge=salt['pillar.get']('elasticsearch:lookup', default={})
+        )
+      )
+    )
+) %}
 
-{% do defaults.elasticsearch.update(os_family_map) %}
-
-{% set elasticsearch = salt['pillar.get'](
-  'elasticsearch',
-  default=defaults.elasticsearch,
-  merge=True)
-%}
+{#- Merge the elasticsearch pillar #}
+{% set elasticsearch = salt['pillar.get']('elasticsearch', default=defaults, merge=True) %}

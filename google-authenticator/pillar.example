@@ -1,0 +1,9 @@
+google_authenticator:
+  # By default users that have not set up 2FA will not be able to login unless they login
+  # from a location in the exceptions list.
+  #allow_unconfigured: False
+
+  # To allow some networks to authenticate without 2FA add them here.
+  # LOCAL is always allowed without 2FA for host internal and console access.
+  exceptions:
+    - 10.0.0.0/24

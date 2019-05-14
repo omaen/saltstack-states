@@ -1,7 +1,0 @@
-gitlab_runner:
-  package: gitlab-runner
-  service: gitlab-runner
-  repo: deb https://packages.gitlab.com/runner/gitlab-runner/debian/ {{ grains['oscodename'] }} main
-  key_url: https://packages.gitlab.com/runner/gitlab-runner/gpgkey
-  config:
-    concurrent: 1
